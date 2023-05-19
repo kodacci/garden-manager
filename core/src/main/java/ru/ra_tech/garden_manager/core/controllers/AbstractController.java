@@ -1,0 +1,56 @@
+package ru.ra_tech.garden_manager.core.controllers;
+
+import io.vavr.control.Either;
+import io.vavr.control.Option;
+import lombok.val;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.ErrorResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
+import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
+
+public abstract class AbstractController {
+    private record EmptyResponse() {}
+
+    private ResponseEntity<?> toError(ErrorResponse error) {
+        val headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
+        return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
+    }
+
+    protected <T> ResponseEntity<?> toResponse(Either<? extends ErrorResponse, T> result, HttpStatus status) {
+        return result.fold(
+                    this::toError,
+                    data -> new ResponseEntity<>(data, status)
+                );
+    }
+
+    protected <T> ResponseEntity<?> toResponse(Either<? extends ErrorResponse, T> result) {
+        return toResponse(result, HttpStatus.OK);
+    }
+
+    protected <T> ResponseEntity<?> toEmptyResponse(Either<? extends  ErrorResponse, T> result) {
+        return result.fold(
+                this::toError,
+                data -> new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK)
+        );
+    }
+
+    private Either<ErrorResponse, Integer> getPrincipalId(Object principal) {
+        return principal instanceof JwtPrincipal
+                ? Either.right(((JwtPrincipal) principal).id())
+                : Either.left(new UnauthorizedResponse());
+    }
+
+    protected Either<ErrorResponse, Integer> getUserId() {
+        return Option.of(SecurityContextHolder.getContext().getAuthentication())
+                .toEither((ErrorResponse) new UnauthorizedResponse())
+                .map(Authentication::getPrincipal)
+                .flatMap(this::getPrincipalId);
+    }
+}

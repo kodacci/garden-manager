@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>garden-manager</artifactId>
+    <groupId>ru.ra-tech</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>garden-manager-database</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>database</name>
+  <packaging>jar</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ru.ra-tech</groupId>
+      <artifactId>garden-manager-failure</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <jdbc>
+            <url>${env.DATABASE_URL}</url>
+            <username>${env.DATABASE_USERNAME}</username>
+            <password>${env.DATABASE_PASSWORD}</password>
+          </jdbc>
+          <generator>
+            <database>
+              <inputSchema>public</inputSchema>
+            </database>
+            <target>
+              <packageName>ru.ra_tech.garden_manager.database.schema</packageName>
+              <directory>src/main/java</directory>
+            </target>
+          </generator>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>

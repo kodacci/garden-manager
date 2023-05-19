@@ -1,0 +1,99 @@
+package ru.ra_tech.garden_manager.core.configuration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.val;
+import org.jooq.DSLContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.ra_tech.garden_manager.core.security.JwtAuthenticationProcessingFilter;
+import ru.ra_tech.garden_manager.core.security.JwtAuthenticationProvider;
+import ru.ra_tech.garden_manager.core.security.JwtProvider;
+import ru.ra_tech.garden_manager.core.services.CustomUserDetailsService;
+import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
+
+@Configuration
+public class WebSecurityConfiguration {
+    @Bean
+    public AuthenticationManager authenticationManager(
+            PasswordEncoder encoder,
+            UserDetailsService service,
+            AuthUserRepository userRepo,
+            JwtProvider jwtProvider
+    ) {
+        val dao = new DaoAuthenticationProvider();
+        dao.setPasswordEncoder(encoder);
+        dao.setUserDetailsService(service);
+
+        return new ProviderManager(dao, new JwtAuthenticationProvider(userRepo, jwtProvider));
+    }
+
+    @Bean
+    public AuthUserRepository authUserRepository(DSLContext dsl) {
+        return new AuthUserRepository(dsl);
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(AuthUserRepository repository) {
+        return new CustomUserDetailsService(repository);
+    }
+
+    @Bean
+    public JwtProvider jwtAuthenticationProvider() {
+        return new JwtProvider();
+    }
+
+    @Bean
+    public JwtAuthenticationProcessingFilter jwtFilter(
+            AuthenticationManager authManager,
+            ObjectMapper mapper
+    ) {
+        return new JwtAuthenticationProcessingFilter(authManager, mapper);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(
+            HttpSecurity http,
+            JwtAuthenticationProcessingFilter jwtFilter
+    ) throws Exception {
+        return http
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests(
+                    auth -> auth
+                            .requestMatchers("/api/**")
+                            .hasAuthority("GARDEN_USER")
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                .requestMatchers(HttpMethod.POST)
+                .requestMatchers("/api/*/auth/**", "/api/v1/users");
+    }
+}
