@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.1.1</version>
     </parent>
 
     <groupId>ru.ra-tech</groupId>
     <artifactId>garden-manager</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>garden-manager</name>
 
@@ -46,10 +46,6 @@
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
         <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
         <coverage.agent> </coverage.agent>
-
-        <database.url>jdbc:postgresql://localhost:5432/garden_manager</database.url>
-        <database.username>postgres</database.username>
-        <database.password>postgrespw</database.password>
     </properties>
 
     <dependencyManagement>
