@@ -13,8 +13,3 @@ Configuration:
       level: debug
       AppenderRef:
         - ref: Console
-#    Logger:
-#      - name: ru.ra_tech.garden_manager
-#        level: debug
-#        AppenderRef:
-#          - ref: Console
