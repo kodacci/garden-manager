@@ -3,39 +3,62 @@ package ru.ra_tech.garden_manager.core.api;
 import lombok.Getter;
 import lombok.val;
 import org.jooq.DSLContext;
+import org.jooq.impl.QOM;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 import ru.ra_tech.garden_manager.core.MainApplication;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
+import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
+@Getter
 @SpringBootTest(
-        classes = { MainApplication.class },
+        classes = { MainApplication.class, DatabaseConfiguration.class },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 public class AbstractApiTest {
     @Autowired
-    @Getter
     private TestRestTemplate restTemplate;
     @Autowired
-    @Getter
     private JwtProvider jwtProvider;
     @Autowired
-    @Getter
     private DSLContext dsl;
+    @Autowired
+    private ServletWebServerApplicationContext servletCtx;
+
+    private final RestTemplate customRestTemplate = new RestTemplate();
+
+    {
+        customRestTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        customRestTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            @Override
+            public boolean hasError(ClientHttpResponse response) throws IOException {
+                HttpStatusCode statusCode = response.getStatusCode();
+                return statusCode.is5xxServerError();
+            }
+        });
+    }
 
     protected <T> void assertHttpResponse(ResponseEntity<T> response, HttpStatus desiredStatus, MediaType desiredType) {
         assertThat(response.getStatusCode()).isEqualTo(desiredStatus);

@@ -7,12 +7,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LogoutResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.dto.ProblemResponse;
 import ru.ra_tech.garden_manager.core.security.TokenType;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.*;
 import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
@@ -123,17 +132,18 @@ public class AuthApiTest extends AbstractApiTest {
         assertToken(body.refreshToken(), TokenType.REFRESH, user.login(), tokenId);
     }
 
-//    @Test
-//    @DisplayName("Should return error on auth with non existent user on POST on /api/v1/auth/login")
-//    public void shouldRejectAuth() {
-//        val request = new LoginRequest("nonExistent", "abc12345");
-//        val response = getRestTemplate().postForEntity(LOGIN_URL, request, ProblemResponse.class);
-//
-//        assertProblemResponse(response, HttpStatus.UNAUTHORIZED);
-//
-//        val body = response.getBody();
-//        assertThat(body).isNotNull().isInstanceOf(ProblemResponse.class);
-//        assertThat(body.title()).isEqualTo("Unauthorized");
-//        assertThat(body.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
-//    }
+    @Test
+    @DisplayName("Should return error on auth with non existent user on POST on /api/v1/auth/login")
+    public void shouldRejectAuth() {
+        val url = String.format("http://localhost:%d%s", getServletCtx().getWebServer().getPort(), LOGIN_URL);
+        val request = new LoginRequest("nonExistent", "abc12345");
+        val response = getCustomRestTemplate().postForEntity(url, request, ProblemResponse.class);
+
+        assertProblemResponse(response, HttpStatus.UNAUTHORIZED);
+
+        val body = response.getBody();
+        assertThat(body).isNotNull().isInstanceOf(ProblemResponse.class);
+        assertThat(body.title()).isEqualTo("Unauthorized");
+        assertThat(body.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
 }
