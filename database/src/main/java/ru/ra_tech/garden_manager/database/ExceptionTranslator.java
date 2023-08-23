@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.core.persistence;
+package ru.ra_tech.garden_manager.database;
 
 import lombok.val;
 import org.jooq.ExecuteContext;

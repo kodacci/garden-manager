@@ -21,6 +21,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>ru.ra-tech</groupId>
+      <artifactId>garden-manager-failure</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
     </dependency>
@@ -29,14 +34,51 @@
       <artifactId>vavr</artifactId>
     </dependency>
     <dependency>
-      <groupId>ru.ra-tech</groupId>
-      <artifactId>garden-manager-failure</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>tomcat-jdbc</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jooq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <configuration>
+          <changeLogFile>db/changelog-root.yaml</changeLogFile>
+          <url>${env.DATABASE_URL}</url>
+          <username>${env.DATABASE_USERNAME}</username>
+          <password>${env.DATABASE_PASSWORD}</password>
+          <verbose>true</verbose>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.jooq</groupId>
         <artifactId>jooq-codegen-maven</artifactId>

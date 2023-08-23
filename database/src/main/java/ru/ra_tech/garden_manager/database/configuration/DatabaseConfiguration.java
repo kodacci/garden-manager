@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.core.configuration;
+package ru.ra_tech.garden_manager.database.configuration;
 
 import lombok.val;
 import org.jooq.DSLContext;
@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import ru.ra_tech.garden_manager.core.persistence.ExceptionTranslator;
+import ru.ra_tech.garden_manager.database.ExceptionTranslator;
+import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
+import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 
 import javax.sql.DataSource;
 
 @Configuration
-public class PersistenceConfiguration {
+public class DatabaseConfiguration {
     @Autowired
     private DataSource dataSource;
 
@@ -46,5 +48,15 @@ public class PersistenceConfiguration {
     @Bean
     public DSLContext dsl(DefaultConfiguration configuration) {
         return new DefaultDSLContext(configuration);
+    }
+
+    @Bean
+    public GardenRepository gardenRepository(DSLContext dsl) {
+        return new GardenRepository(dsl);
+    }
+
+    @Bean
+    public UserRepository userRepository(DSLContext dsl) {
+        return new UserRepository(dsl);
     }
 }

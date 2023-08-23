@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
 
     <groupId>ru.ra-tech</groupId>
@@ -29,9 +29,9 @@
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
         <junit.version>5.9.2</junit.version>
-        <spring.boot.version>3.0.6</spring.boot.version>
+        <spring.boot.version>3.1.2</spring.boot.version>
         <lombok.version>1.18.26</lombok.version>
-        <liquibase.version>4.20.0</liquibase.version>
+        <liquibase.version>4.23.1</liquibase.version>
         <!--    MAVEN -->
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
         <maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
@@ -165,6 +165,16 @@
                 <artifactId>jooq</artifactId>
                 <version>${jooq.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -260,6 +270,11 @@
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
                     <version>${nexus.staging.maven.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-mave-plugin</artifactId>
+                    <version>${liquibase.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
