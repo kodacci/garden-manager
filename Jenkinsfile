@@ -17,8 +17,10 @@ pipeline {
 
         stage('Build') {
             steps {
-                println("Building project version: " + BUILD_VERSION)
-                sh './mvnw -DskipTests clean package'
+                script {
+                    println("Building project version: " + BUILD_VERSION)
+                    sh './mvnw -DskipTests clean package'
+                }
             }
         }
     }
