@@ -30,12 +30,14 @@ pipeline {
         }
 
         stage('Test') {
-            script {
-                println("Starting build verification")
-                withMaven {
-                    sh 'mvn verify'
+            steps: {
+                script {
+                    println("Starting build verification")
+                    withMaven {
+                        sh 'mvn verify'
+                    }
+                    println("Verification finished")
                 }
-                println("Verification finished")
             }
         }
     }
