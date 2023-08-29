@@ -19,9 +19,10 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + BUILD_VERSION)
-                }
-                withMaven(maven: 'Maven 3.5.2') {
-                    sh 'mvn -DskipTests clean package'
+
+                    withMaven(maven: 'Maven 3.5.2') {
+                        sh 'mvn -DskipTests clean package'
+                    }
                 }
             }
         }
