@@ -2,7 +2,7 @@ PROJECT_VERSION = "1.0.0-SNAPSHOT"
 BUILD_VERSION = ""
 
 pipeline {
-    agent { label 'built-in' }
+    agent { label 'jenkins-agent1' }
 
     stages {
         stage('Generate Version') {
@@ -20,7 +20,7 @@ pipeline {
                 script {
                     println("Building project version: " + BUILD_VERSION)
 
-                    withMaven(maven: 'Maven 3.5.2') {
+                    withMaven {
                         sh 'mvn -DskipTests clean package'
                     }
                 }
