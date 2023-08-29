@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage('Test') {
-            steps: {
+            steps {
                 script {
                     println("Starting build verification")
                     withMaven {
