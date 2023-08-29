@@ -1,16 +1,16 @@
-PROJECT_VERSION = "1.0.0-SNAPSHOT"
-BUILD_VERSION = ""
-
 pipeline {
     agent { label 'jenkins-agent1' }
 
     stages {
-        stage('Generate Version') {
+        stage('Determine Version') {
             steps {
                 script {
-                    BUILD_VERSION = "${PROJECT_VERSION}-${env.BUILD_NUMBER}"
-                    println("PROJECT_VERSION: " + PROJECT_VERSION)
-                    println("BUILD_VERSION: " + BUILD_VERSION)
+                    withMaven {
+                        PROJECT_VERSION = sh 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout'
+                        BUILD_VERSION = "${PROJECT_VERSION}-${env.BUILD_NUMBER}"
+                        println("PROJECT_VERSION: " + PROJECT_VERSION)
+                        println("BUILD_VERSION: " + BUILD_VERSION)
+                    }
                 }
             }
         }
@@ -23,7 +23,19 @@ pipeline {
                     withMaven {
                         sh 'mvn -DskipTests clean package'
                     }
+
+                    println("Build finished")
                 }
+            }
+        }
+
+        stage('Test') {
+            script {
+                println("Starting build verification")
+                withMaven {
+                    sh 'mvn verify'
+                }
+                println("Verification finished")
             }
         }
     }
