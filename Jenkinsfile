@@ -2,7 +2,7 @@ PROJECT_VERSION = "1.0.0-SNAPSHOT"
 BUILD_VERSION = ""
 
 pipeline {
-    agent { label 'jenkins-agent1' }
+    agent { label 'built-in' }
 
     stages {
         stage('Generate Version') {
