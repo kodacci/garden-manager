@@ -44,7 +44,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    withMaven(mavenSettingsConfig: 'maven-config-ra-tech') {
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         sh 'mvn deploy'
                     }
                 }
