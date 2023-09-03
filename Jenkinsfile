@@ -1,3 +1,5 @@
+def PROJECT_VERSION
+
 pipeline {
     agent { label 'jenkins-agent1' }
 
@@ -6,8 +8,8 @@ pipeline {
             steps {
                 script {
                     withMaven {
-                        def PROJECT_VERSION = sh 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout'
-                        echo "Project version: ${PROJECT_VERSION}"
+                        PROJECT_VERSION = sh(returnStatus: true, script: 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout').trim()
+                        echo "Project version: '${PROJECT_VERSION}'"
                     }
                 }
             }
@@ -16,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    println("Building project version: " + BUILD_VERSION)
+                    println("Building project version: " + PROJECT_VERSION)
 
                     withMaven {
                         sh 'mvn -DskipTests clean package'
@@ -42,9 +44,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    println("Deploying snapshot")
+
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         sh 'mvn deploy'
                     }
+
+                    println("Deploying snapshot finished")
                 }
             }
         }

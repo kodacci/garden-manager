@@ -61,6 +61,10 @@
             <id>nexus-snapshots</id>
             <url>http://nexus.ra-tech.pro/repository/maven-snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>nexus</id>
+            <url>http://nexus.ra-tech.pro/repository/maven-releases</url>
+        </repository>
     </distributionManagement>
 
     <dependencyManagement>
@@ -327,8 +331,7 @@
                 </executions>
                 <configuration>
                     <serverId>nexus</serverId>
-                    <nexusUrl>nexus.ra-tech.pro</nexusUrl>
-                    <skipStaging>true</skipStaging>
+                    <nexusUrl>http://nexus.ra-tech.pro</nexusUrl>
                 </configuration>
             </plugin>
         </plugins>
