@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     withMaven {
-                        PROJECT_VERSION = sh 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout'
+                        PROJECT_VERSION = sh 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout'
                         BUILD_VERSION = "${PROJECT_VERSION}-${env.BUILD_NUMBER}"
                         println("PROJECT_VERSION: " + PROJECT_VERSION)
                         println("BUILD_VERSION: " + BUILD_VERSION)
