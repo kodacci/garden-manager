@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     withMaven {
-                        PROJECT_VERSION = sh(returnStatus: true, script: 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout').trim()
+                        PROJECT_VERSION = sh(returnStdout: true, script: 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout').trim()
                         echo "Project version: '${PROJECT_VERSION}'"
                     }
                 }
