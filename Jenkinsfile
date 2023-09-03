@@ -3,13 +3,19 @@ def PROJECT_VERSION
 pipeline {
     agent { label 'jenkins-agent1' }
 
+    options {
+        ansiColor('xterm')
+    }
+
     stages {
         stage('Determine Version') {
             steps {
                 script {
                     withMaven {
                         PROJECT_VERSION = sh(returnStdout: true, script: 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout').trim()
+                        sh 'PROJECT_VERSION=$(mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout)'
                         echo "Project version: '${PROJECT_VERSION}'"
+                        echo env.PROJECT_VERSION
                     }
                 }
             }
