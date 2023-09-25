@@ -11,7 +11,7 @@
 
     <groupId>ru.ra-tech</groupId>
     <artifactId>garden-manager</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <name>garden-manager</name>
 
@@ -25,6 +25,7 @@
     </modules>
 
     <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
@@ -43,6 +44,7 @@
         <maven.site.plugin.version>4.0.0-M8</maven.site.plugin.version>
         <maven.project.info.reports.plugin.version>3.4.3</maven.project.info.reports.plugin.version>
         <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
+        <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
         <!--    -->
         <hikaricp.version>5.0.1</hikaricp.version>
         <springdoc.openapi.version>2.1.0</springdoc.openapi.version>
@@ -63,7 +65,7 @@
         </snapshotRepository>
         <repository>
             <id>nexus</id>
-            <url>http://nexus.ra-tech.pro/repository/maven-releases</url>
+            <url>http://nexus.ra-tech.pro/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
@@ -247,9 +249,9 @@
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
+<!--                    <configuration>-->
+<!--                        <skip>true</skip>-->
+<!--                    </configuration>-->
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
@@ -283,8 +285,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus.staging.maven.plugin.version}</version>
+                    <artifactId>nxrm3-maven-plugin</artifactId>
+                    <version>${nxrm3.maven.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.liquibase</groupId>
@@ -319,8 +321,15 @@
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <artifactId>nxrm3-maven-plugin</artifactId>
+                <extensions>true</extensions>
                 <executions>
+                    <execution>
+                        <id>default-prepare-deploy</id>
+                        <goals>
+                            <goal>prepare-deploy</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>default-deploy</id>
                         <phase>deploy</phase>
@@ -332,9 +341,10 @@
                 <configuration>
                     <serverId>nexus</serverId>
                     <nexusUrl>http://nexus.ra-tech.pro</nexusUrl>
+                    <repository>maven-releases</repository>
+                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

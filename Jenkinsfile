@@ -12,10 +12,11 @@ pipeline {
             steps {
                 script {
                     withMaven {
-                        PROJECT_VERSION = sh(returnStdout: true, script: 'mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout').trim()
-                        sh 'PROJECT_VERSION=$(mvn help:evaluate "-Dexpression=project.version" -q -DforceStdout)'
+                        PROJECT_VERSION = sh(
+                                returnStdout: true,
+                                script: 'mvn help:evaluate "-Dexpression=project.version" --batch-mode -q -DforceStdout'
+                        ).trim()
                         echo "Project version: '${PROJECT_VERSION}'"
-                        echo env.PROJECT_VERSION
                     }
                 }
             }
@@ -47,29 +48,14 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                script {
-                    println("Deploying snapshot")
-
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh 'mvn deploy'
-                    }
-
-                    println("Deploying snapshot finished")
-                }
-            }
-        }
-
-        stage('Deploy release') {
-            when {
-                branch 'release/*'
-            }
+        stage('Deploy to Nexus') {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh 'mvn nexus-staging:release'
+                        sh 'mvn -DskipTests deploy'
                     }
+
+                    println("Deploying to nexus finished")
                 }
             }
         }
