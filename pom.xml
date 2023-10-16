@@ -29,10 +29,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
-        <junit.version>5.9.2</junit.version>
-        <spring.boot.version>3.1.2</spring.boot.version>
-        <lombok.version>1.18.26</lombok.version>
-        <liquibase.version>4.23.1</liquibase.version>
         <!--    MAVEN -->
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
         <maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
@@ -45,7 +41,11 @@
         <maven.project.info.reports.plugin.version>3.4.3</maven.project.info.reports.plugin.version>
         <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
-        <!--    -->
+        <!--  Third party dependencies  -->
+        <junit.version>5.9.2</junit.version>
+        <spring.boot.version>3.1.2</spring.boot.version>
+        <lombok.version>1.18.26</lombok.version>
+        <liquibase.version>4.23.1</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
         <springdoc.openapi.version>2.1.0</springdoc.openapi.version>
         <postgresql.version>42.6.0</postgresql.version>
