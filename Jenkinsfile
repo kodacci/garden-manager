@@ -16,7 +16,8 @@ pipeline {
                                 encoding: 'UTF-8',
                                 returnStdout: true,
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
-                        ).trim().replaceAll("[^\\x00-\\x7F]", "")
+                        ).trim()
+                        PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
                         echo "Project version: '${PROJECT_VERSION}'"
                     }
                 }
