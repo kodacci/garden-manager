@@ -13,6 +13,7 @@ pipeline {
                 script {
                     withMaven {
                         PROJECT_VERSION = sh(
+                                encoding: 'UTF-8',
                                 returnStdout: true,
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
