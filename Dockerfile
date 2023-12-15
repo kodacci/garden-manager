@@ -1,4 +1,11 @@
 # syntax=docker/dockerfile:1
+ARG DATABASE_URL
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+ARG TEST_DATABASE_URL
+ARG TEST_DATABASE_USERNAME
+ARG TEST_DATABASE_PASSWORD
+
 FROM maven:3.9.4-eclipse-temurin-17-alpine as build
 LABEL authors="kodacci"
 
