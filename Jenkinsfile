@@ -14,7 +14,7 @@ pipeline {
                     withMaven {
                         PROJECT_VERSION = sh(
                                 returnStdout: true,
-                                script: 'mvn help:evaluate "-Dexpression=project.version" --batch-mode -q -DforceStdout'
+                                script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         echo "Project version: '${PROJECT_VERSION}'"
                     }
