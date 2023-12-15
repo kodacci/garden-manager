@@ -66,7 +66,15 @@ pipeline {
             steps {
                 script {
                     docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert') {
-                        def image = docker.build "garden-manager:$PROJECT_VERSION"
+                        def image = docker.build(
+                                "garden-manager:$PROJECT_VERSION",
+                                "-e DATABASE_URL=${DATABASE_URL}",
+                                "-e DATABASE_USERNAME=${DATABASE_USER}",
+                                "-e DATABASE_PASSWORD=${DATABASE_PASSWORD}",
+                                "-e TEST_DATABASE_URL=${TEST_DATABASE_URL}",
+                                "-e TEST_DATABASE_USERNAME=${TEST_DATABASE_USER}",
+                                "-e TEST_DATABASE_PASSWORD=${TEST_DATABASE_PASSWORD}"
+                        )
                         docker.withRegistry('https://nexus.ra-tech.pro/repository/docker-snaphots') {
                             image.push()
                         }
