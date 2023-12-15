@@ -59,5 +59,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Build docker image') {
+            steps {
+                script {
+                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert') {
+                        def image = docker.build "garden-manager:$PROJECT_VERSION"
+                        docker.withRegistry('https://nexus.ra-tech.pro/repository/docker-snaphots') {
+                            image.push()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
