@@ -17,6 +17,7 @@ pipeline {
                                 returnStdout: true,
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
+                        PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 3)
                         echo "Project version: '${PROJECT_VERSION}'"
                     }
                 }
