@@ -65,7 +65,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert') {
+                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert').with {
                         def image = docker.build(
                                 "ru.ra-tech.garden-manager:$PROJECT_VERSION",
                                 "--build-arg DATABASE_URL=${DATABASE_URL} " +
@@ -76,9 +76,12 @@ pipeline {
                                         "--build-arg TEST_DATABASE_PASSWORD=${TEST_DATABASE_PASSWORD} " +
                                         "."
                         )
-                        docker.withRegistry('https://nexus.ra-tech.pro/repository/docker-snaphots') {
-                            image.push()
-                        }
+
+                        def name = 'ru.ra-tech.garden-manager'
+                        def tag = "$PROJECT_VERSION"
+                        def nexus = 'https://nexus.ra-tech.pro/repository/docker-snapshots/garden-manager'
+                        sh "docker tag ${image.imageName()} $nexus/garden-manager:$tag"
+                        sh "docker push $nexus/garden-manager:$tag"
                     }
                 }
             }
