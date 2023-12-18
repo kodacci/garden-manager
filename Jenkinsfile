@@ -65,7 +65,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert').with {
+                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert') {
                         def image = docker.build(
                                 "ru.ra-tech.garden-manager:$PROJECT_VERSION",
                                 "--build-arg DATABASE_URL=${DATABASE_URL} " +
