@@ -91,6 +91,7 @@
           </execution>
         </executions>
         <configuration>
+          <skip>${skip.jooq.generation}</skip>
           <jdbc>
             <url>${env.DATABASE_URL}</url>
             <username>${env.DATABASE_USERNAME}</username>

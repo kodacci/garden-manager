@@ -77,13 +77,8 @@ pipeline {
                                         "."
                         )
 
-                        def nexus = 'https://nexus.ra-tech.pro:8887'
-                        docker.withRegistry(nexus, 'nexus_tur') {
+                        docker.withRegistry('https://nexus.ra-tech.pro:8887', 'nexus_deployer') {
                             image.push()
-//                            def name = 'ru.ra-tech.garden-manager'
-//                            def tag = "$PROJECT_VERSION"
-//                            sh "docker tag ${image.imageName()} $nexus/garden-manager:$tag"
-//                            sh "docker push $nexus/garden-manager:$tag"
                         }
                     }
                 }
