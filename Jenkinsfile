@@ -77,7 +77,7 @@ pipeline {
                                         "."
                         )
 
-                        def nexus = 'https://nexus.ra-tech.pro/repository/docker-snapshots/garden-manager'
+                        def nexus = 'https://nexus.ra-tech.pro:8887'
                         docker.withRegistry(nexus, 'nexus_tur') {
                             image.push()
 //                            def name = 'ru.ra-tech.garden-manager'
