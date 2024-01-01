@@ -43,7 +43,7 @@
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
         <!--  Third party dependencies  -->
         <junit.version>5.9.2</junit.version>
-        <spring.boot.version>3.2.0</spring.boot.version>
+        <spring.boot.version>3.2.1</spring.boot.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.25.0</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
@@ -341,6 +341,14 @@
                     <nexusUrl>https://nexus.ra-tech.pro</nexusUrl>
                     <repository>maven-releases</repository>
                     <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
