@@ -42,9 +42,17 @@ pipeline {
             steps {
                 script {
                     println("Starting build verification")
+
                     withMaven {
                         sh 'mvn verify'
                     }
+                    jacoco(
+                            execPattern: '**/target/*.exec',
+                            classPattern: '**/target/classes',
+                            sourcePattern: '**/src/main/java',
+                            exclusionPattern: '**/database/schema/**/*,**/src/test'
+                    )
+
                     println("Verification finished")
                 }
             }
@@ -54,7 +62,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn -DskipTests deploy -Dversion=$PROJECT_VERSION-$BUILD_NUMBER"
+                        sh "mvn -DskipTests deploy"
                     }
 
                     println("Deploying to nexus finished")
