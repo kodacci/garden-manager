@@ -9,7 +9,7 @@ import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 
 public record UserData(
         @Positive @NotNull
-        Integer id,
+        Long id,
         @Size(min = 1, max = 255) @NotNull
         String login,
         @Size(min = 1, max = 255) @NotNull

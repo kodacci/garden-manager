@@ -58,7 +58,7 @@ public class Gardens extends TableImpl<GardensRecord> {
     /**
      * The column <code>public.gardens.id</code>.
      */
-    public final TableField<GardensRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<GardensRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.gardens.name</code>.
@@ -73,7 +73,7 @@ public class Gardens extends TableImpl<GardensRecord> {
     /**
      * The column <code>public.gardens.owner</code>.
      */
-    public final TableField<GardensRecord, Integer> OWNER = createField(DSL.name("owner"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<GardensRecord, Long> OWNER = createField(DSL.name("owner"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.gardens.deleted</code>.
@@ -139,8 +139,8 @@ public class Gardens extends TableImpl<GardensRecord> {
     }
 
     @Override
-    public Identity<GardensRecord, Integer> getIdentity() {
-        return (Identity<GardensRecord, Integer>) super.getIdentity();
+    public Identity<GardensRecord, Long> getIdentity() {
+        return (Identity<GardensRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -192,14 +192,14 @@ public class Gardens extends TableImpl<GardensRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Integer, String, String, Integer, Boolean, OffsetDateTime, OffsetDateTime, OffsetDateTime> fieldsRow() {
+    public Row8<Long, String, String, Long, Boolean, OffsetDateTime, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Integer, ? super String, ? super String, ? super Integer, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super Long, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -207,7 +207,7 @@ public class Gardens extends TableImpl<GardensRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Integer, ? super String, ? super String, ? super Integer, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super Long, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

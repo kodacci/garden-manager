@@ -69,7 +69,7 @@ public class AuthUserRepository implements ReadableRepository<String, Option<Aut
                 .mapLeft(this::toFailure);
     }
 
-    public Either<AppFailure, Boolean> clearSession(int userId) {
+    public Either<AppFailure, Boolean> clearSession(long userId) {
         return Try.of(
                 () -> dsl.update(USERS)
                         .set(USERS.TOKENID, (String) null)

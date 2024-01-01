@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 
 public record GardenDto(
-        int id,
+        long id,
         String name,
         @Nullable String address,
         UserDto owner,

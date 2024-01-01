@@ -49,7 +49,7 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> findGarden(@Positive @PathVariable Integer id);
+    ResponseEntity<?> findGarden(@Positive @PathVariable Long id);
 
     @Operation(summary = "List user related gardens")
     @ApiResponses(value = {
@@ -81,8 +81,8 @@ public interface GardensApi extends ApiErrorResponses {
     })
     ResponseEntity<?> addParticipant(
             @Positive @PathVariable
-            Integer id,
+            Long id,
             @Positive @PathVariable
-            Integer participantId
+            Long participantId
     );
 }

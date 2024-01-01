@@ -26,7 +26,7 @@ public class UserService {
         return new ServerErrorResponse(failure);
     }
 
-    public Either<ErrorResponse, UserData> findUser(int id) {
+    public Either<ErrorResponse, UserData> findUser(long id) {
         return repo.findById(id)
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(user -> user.toEither(new EntityNotFoundResponse(USER_ENTITY, id)))
@@ -59,7 +59,7 @@ public class UserService {
                 .map(UserData::of);
     }
 
-    public Either<ErrorResponse, Boolean> deleteUser(int id) {
+    public Either<ErrorResponse, Boolean> deleteUser(long id) {
         return repo.deleteById(id)
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(

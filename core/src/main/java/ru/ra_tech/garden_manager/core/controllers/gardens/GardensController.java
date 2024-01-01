@@ -29,7 +29,7 @@ public class GardensController extends AbstractController implements GardensApi 
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findGarden(Integer id) {
+    public ResponseEntity<?> findGarden(Long id) {
         return toResponse(getUserId().flatMap(userId -> service.findGarden(id, userId)));
     }
 
@@ -41,7 +41,7 @@ public class GardensController extends AbstractController implements GardensApi 
 
     @Override
     @PostMapping(value = "/{id}/add_participant/{participantId}")
-    public ResponseEntity<?> addParticipant(Integer id, Integer participantId) {
+    public ResponseEntity<?> addParticipant(Long id, Long participantId) {
         return toResponse(getUserId().flatMap(userId -> service.addParticipant(id, participantId, userId)));
     }
 }

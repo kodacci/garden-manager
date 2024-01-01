@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
-public class UserRepository extends AbstractRWRepository<Integer, CreateUserDto, UserDto> {
+public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, UserDto> {
 
     public UserRepository(DSLContext dsl) {
         super(dsl, USERS);
@@ -33,7 +33,7 @@ public class UserRepository extends AbstractRWRepository<Integer, CreateUserDto,
     }
 
     @Override
-    public Either<AppFailure, Option<UserDto>> findById(Integer id) {
+    public Either<AppFailure, Option<UserDto>> findById(Long id) {
         return find(USERS.ID.eq(id));
     }
 

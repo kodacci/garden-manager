@@ -58,7 +58,7 @@ public class Users extends TableImpl<UsersRecord> {
     /**
      * The column <code>public.users.id</code>.
      */
-    public final TableField<UsersRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<UsersRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.users.login</code>.
@@ -149,8 +149,8 @@ public class Users extends TableImpl<UsersRecord> {
     }
 
     @Override
-    public Identity<UsersRecord, Integer> getIdentity() {
-        return (Identity<UsersRecord, Integer>) super.getIdentity();
+    public Identity<UsersRecord, Long> getIdentity() {
+        return (Identity<UsersRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -207,14 +207,14 @@ public class Users extends TableImpl<UsersRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Integer, String, String, String, String, String, Boolean, OffsetDateTime, OffsetDateTime, OffsetDateTime> fieldsRow() {
+    public Row10<Long, String, String, String, String, String, Boolean, OffsetDateTime, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Integer, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -222,7 +222,7 @@ public class Users extends TableImpl<UsersRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Integer, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super OffsetDateTime, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

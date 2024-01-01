@@ -9,7 +9,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -24,7 +24,7 @@ databaseChangeLog:
                   type: text
               - column:
                   name: owner
-                  type: int
+                  type: bigint
                   constraints:
                     referencedTableName: users
                     nullable: false
@@ -63,20 +63,20 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: garden
-                  type: int
+                  type: bigint
                   constraints:
                     referencedTableName: gardens
                     nullable: false
               - column:
                   name: participant
-                  type: int
+                  type: bigint
                   constraints:
                     referencedTableName: users
                     nullable: false

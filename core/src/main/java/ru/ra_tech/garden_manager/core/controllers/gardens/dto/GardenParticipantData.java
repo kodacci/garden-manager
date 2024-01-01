@@ -11,7 +11,7 @@ import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
 
 public record GardenParticipantData(
         @NotNull @Positive
-        Integer id,
+        Long id,
         @NotNull @Size(min = 3, max = 255)
         String login,
         @NotNull @Size(min = 1, max = 255)

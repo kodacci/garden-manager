@@ -22,6 +22,7 @@
         <module>database</module>
         <module>failure</module>
         <module>code-coverage</module>
+        <module>db-migrate</module>
     </modules>
 
     <properties>
@@ -45,7 +46,7 @@
         <junit.version>5.9.2</junit.version>
         <spring.boot.version>3.2.1</spring.boot.version>
         <lombok.version>1.18.26</lombok.version>
-        <liquibase.version>4.25.0</liquibase.version>
+        <liquibase.version>4.25.1</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
         <springdoc.openapi.version>2.3.0</springdoc.openapi.version>
         <postgresql.version>42.6.0</postgresql.version>

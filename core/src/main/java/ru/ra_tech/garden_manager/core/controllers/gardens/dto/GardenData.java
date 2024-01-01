@@ -12,7 +12,7 @@ import java.util.List;
 
 public record GardenData(
         @NotNull @Positive
-        Integer id,
+        Long id,
         @NotNull @Size(min = 3, max = 255)
         String name,
         @Nullable

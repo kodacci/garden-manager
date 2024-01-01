@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ru.ra-tech</groupId>
+        <artifactId>garden-manager</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>garden-manager-db-migrate</artifactId>
+    <version>${revision}</version>
+
+    <name>db-migrate</name>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <changeLogFile>db/changelog-root.yaml</changeLogFile>
+                    <url>${env.DATABASE_URL}</url>
+                    <username>${env.DATABASE_USERNAME}</username>
+                    <password>${env.DATABASE_PASSWORD}</password>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

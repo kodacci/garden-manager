@@ -11,24 +11,24 @@ import java.util.List;
 
 public class GardenMappers {
     public static final RecordMapper<
-            Record8<Integer, String, String, Integer, String, String, String, List<GardenParticipantDto>>,
+            Record8<Long, String, String, Long, String, String, String, List<GardenParticipantDto>>,
             GardenDto
             > GARDEN_MAPPER = new GardenMapper();
-    public static final RecordMapper<Record3<Integer, Integer, List<Integer>>, GardenUsersDto> GARDEN_USERS_MAPPER =
+    public static final RecordMapper<Record3<Long, Long, List<Long>>, GardenUsersDto> GARDEN_USERS_MAPPER =
             new GardenUsersMapper();
     public static final RecordMapper<
-            Record5<Integer, String, String, String, String>,
+            Record5<Long, String, String, String, String>,
             GardenParticipantDto
             > GARDEN_PARTICIPANT_MAPPER = new GardenParticipantMapper();
 
     private static class GardenMapper implements
             RecordMapper<
-                    Record8<Integer, String, String, Integer, String, String, String, List<GardenParticipantDto>>,
+                    Record8<Long, String, String, Long, String, String, String, List<GardenParticipantDto>>,
                     GardenDto
                     > {
         @Override
         public GardenDto map(
-                Record8<Integer, String, String, Integer, String, String, String, List<GardenParticipantDto>> record
+                Record8<Long, String, String, Long, String, String, String, List<GardenParticipantDto>> record
         ) {
             return new GardenDto(
                     record.value1(),
@@ -46,22 +46,22 @@ public class GardenMappers {
     }
 
     private static class GardenUsersMapper implements RecordMapper<
-            Record3<Integer, Integer, List<Integer>>,
+            Record3<Long, Long, List<Long>>,
             GardenUsersDto
             > {
         @Override
-        public GardenUsersDto map(Record3<Integer, Integer, List<Integer>> record) {
+        public GardenUsersDto map(Record3<Long, Long, List<Long>> record) {
             return new GardenUsersDto(record.value1(), record.value2(), io.vavr.collection.List.ofAll(record.value3()));
         }
     }
 
     private static class GardenParticipantMapper implements RecordMapper<
-            Record5<Integer, String, String, String, String>,
+            Record5<Long, String, String, String, String>,
             GardenParticipantDto
             > {
 
         @Override
-        public GardenParticipantDto map(Record5<Integer, String, String, String, String> record) {
+        public GardenParticipantDto map(Record5<Long, String, String, String, String> record) {
             return new GardenParticipantDto(
                     record.value1(),
                     record.value2(),

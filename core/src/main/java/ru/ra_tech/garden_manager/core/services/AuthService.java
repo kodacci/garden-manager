@@ -98,7 +98,7 @@ public class AuthService {
                 .map(LoginResponse::new);
     }
 
-    public Either<ErrorResponse, LogoutResponse> logout(int userId) {
+    public Either<ErrorResponse, LogoutResponse> logout(long userId) {
         return repo.clearSession(userId)
                 .mapLeft(this::toServerError)
                 .flatMap(

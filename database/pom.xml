@@ -26,16 +26,18 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
+      <groupId>ru.ra-tech</groupId>
+      <artifactId>garden-manager-db-migrate</artifactId>
+      <version>${revision}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vavr</groupId>
       <artifactId>vavr</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.liquibase</groupId>
-      <artifactId>liquibase-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -67,18 +69,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.liquibase</groupId>
-        <artifactId>liquibase-maven-plugin</artifactId>
-        <configuration>
-          <changeLogFile>db/changelog-root.yaml</changeLogFile>
-          <url>${env.DATABASE_URL}</url>
-          <username>${env.DATABASE_USERNAME}</username>
-          <password>${env.DATABASE_PASSWORD}</password>
-          <verbose>true</verbose>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.jooq</groupId>
         <artifactId>jooq-codegen-maven</artifactId>

@@ -56,17 +56,17 @@ public class GardensParticipants extends TableImpl<GardensParticipantsRecord> {
     /**
      * The column <code>public.gardens_participants.id</code>.
      */
-    public final TableField<GardensParticipantsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<GardensParticipantsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.gardens_participants.garden</code>.
      */
-    public final TableField<GardensParticipantsRecord, Integer> GARDEN = createField(DSL.name("garden"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<GardensParticipantsRecord, Long> GARDEN = createField(DSL.name("garden"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.gardens_participants.participant</code>.
      */
-    public final TableField<GardensParticipantsRecord, Integer> PARTICIPANT = createField(DSL.name("participant"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<GardensParticipantsRecord, Long> PARTICIPANT = createField(DSL.name("participant"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.gardens_participants.role</code>.
@@ -119,8 +119,8 @@ public class GardensParticipants extends TableImpl<GardensParticipantsRecord> {
     }
 
     @Override
-    public Identity<GardensParticipantsRecord, Integer> getIdentity() {
-        return (Identity<GardensParticipantsRecord, Integer>) super.getIdentity();
+    public Identity<GardensParticipantsRecord, Long> getIdentity() {
+        return (Identity<GardensParticipantsRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -177,14 +177,14 @@ public class GardensParticipants extends TableImpl<GardensParticipantsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, Integer, Integer, Integer, OffsetDateTime> fieldsRow() {
+    public Row5<Long, Long, Long, Integer, OffsetDateTime> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function5<? super Integer, ? super Integer, ? super Integer, ? super Integer, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function5<? super Long, ? super Long, ? super Long, ? super Integer, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -192,7 +192,7 @@ public class GardensParticipants extends TableImpl<GardensParticipantsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Integer, ? super Integer, ? super Integer, ? super Integer, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Long, ? super Long, ? super Long, ? super Integer, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

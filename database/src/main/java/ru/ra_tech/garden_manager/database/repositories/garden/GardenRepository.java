@@ -23,7 +23,7 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Gardens.GARDENS;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 import static ru.ra_tech.garden_manager.failure.DatabaseFailure.DatabaseFailureCode.GARDEN_REPOSITORY_FAILURE;
 
-public class GardenRepository extends AbstractRWRepository<Integer, CreateGardenDto, GardenDto> {
+public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto, GardenDto> {
     private static final int GARDENS_LIMIT = 1000;
     private static final int GARDENS_PARTICIPANTS_LIMIT = 100;
 
@@ -37,7 +37,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
     }
 
     private SelectOnConditionStep<
-            Record8<Integer, String, String, Integer, String, String, String, java.util.List<GardenParticipantDto>>
+            Record8<Long, String, String, Long, String, String, String, java.util.List<GardenParticipantDto>>
             > makeSelectStep() {
         return getContext().select(
                         GARDENS.ID,
@@ -69,7 +69,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                 .on(GARDENS.OWNER.eq(USERS.ID));
     }
 
-    private Either<AppFailure, Option<GardenDto>> selectGarden(int id) {
+    private Either<AppFailure, Option<GardenDto>> selectGarden(long id) {
         return Try.of(
                 () -> makeSelectStep()
                         .where(GARDENS.ID.eq(id))
@@ -91,7 +91,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                         .fetchOne()
         )
                 .andThen(Objects::requireNonNull)
-                .map(record -> record.getValue(GARDENS.ID, Integer.class))
+                .map(record -> record.getValue(GARDENS.ID, Long.class))
                 .andThen(Objects::requireNonNull)
                 .toEither()
                 .mapLeft(this::toFailure)
@@ -100,11 +100,11 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
     }
 
     @Override
-    public Either<AppFailure, Option<GardenDto>> findById(Integer id) {
+    public Either<AppFailure, Option<GardenDto>> findById(Long id) {
         return selectGarden(id);
     }
 
-    public Either<AppFailure, List<GardenDto>> listByUserId(int id) {
+    public Either<AppFailure, List<GardenDto>> listByUserId(long id) {
         return Try.of(
                 () -> makeSelectStep()
                         .where(GARDENS.OWNER.eq(id))
@@ -116,7 +116,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                 .map(List::ofAll);
     }
 
-    public Either<AppFailure, Option<GardenUsersDto>> getGardenUsers(int gardenId) {
+    public Either<AppFailure, Option<GardenUsersDto>> getGardenUsers(long gardenId) {
         return Try.of(
                 () -> getContext().select(
                         GARDENS.ID,
@@ -126,7 +126,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                                         .from(GARDENS_PARTICIPANTS)
                                         .where(GARDENS_PARTICIPANTS.GARDEN.eq(gardenId))
                         )
-                                .convertFrom(r -> r.into(Integer.class))
+                                .convertFrom(r -> r.into(Long.class))
                 )
                         .from(GARDENS)
                         .where(GARDENS.ID.eq(gardenId))
@@ -137,7 +137,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                 .map(Option::of);
     }
 
-    public Either<AppFailure, Boolean> addParticipant(int gardenId, int userId, UserRole role) {
+    public Either<AppFailure, Boolean> addParticipant(long gardenId, long userId, UserRole role) {
         return Try.of(
                 () -> getContext().insertInto(GARDENS_PARTICIPANTS)
                         .set(GARDENS_PARTICIPANTS.GARDEN, gardenId)
@@ -155,7 +155,7 @@ public class GardenRepository extends AbstractRWRepository<Integer, CreateGarden
                 .map(count -> count > 0);
     }
 
-    public Either<AppFailure, List<GardenParticipantDto>> listParticipants(int gardenId) {
+    public Either<AppFailure, List<GardenParticipantDto>> listParticipants(long gardenId) {
         return Try.of(
                 () -> getContext().select(
                         GARDENS_PARTICIPANTS.PARTICIPANT,

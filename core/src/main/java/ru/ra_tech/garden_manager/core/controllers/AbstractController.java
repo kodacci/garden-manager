@@ -41,13 +41,13 @@ public abstract class AbstractController {
         );
     }
 
-    private Either<ErrorResponse, Integer> getPrincipalId(Object principal) {
+    private Either<ErrorResponse, Long> getPrincipalId(Object principal) {
         return principal instanceof JwtPrincipal
                 ? Either.right(((JwtPrincipal) principal).id())
                 : Either.left(new UnauthorizedResponse());
     }
 
-    protected Either<ErrorResponse, Integer> getUserId() {
+    protected Either<ErrorResponse, Long> getUserId() {
         return Option.of(SecurityContextHolder.getContext().getAuthentication())
                 .toEither((ErrorResponse) new UnauthorizedResponse())
                 .map(Authentication::getPrincipal)
