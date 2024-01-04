@@ -43,6 +43,7 @@
         <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
+        <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
         <!--  Third party dependencies  -->
         <junit.version>5.9.1</junit.version>
         <assertj.version>3.24.2</assertj.version>
@@ -297,7 +298,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <release>17</release>
                     </configuration>
@@ -305,14 +306,6 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
-<!--                    <dependencies>-->
-<!--                        <dependency>-->
-<!--                            <groupId>org.junit.jupiter</groupId>-->
-<!--                            <artifactId>junit-jupiter-engine</artifactId>-->
-<!--                            <scope>test</scope>-->
-<!--                            <version>${junit.version}</version>-->
-<!--                        </dependency>-->
-<!--                    </dependencies>-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
