@@ -20,7 +20,7 @@ ENV TEST_DATABASE_URL="$TEST_DATABASE_URL"
 ENV TEST_DATABASE_USERNAME="$TEST_DATABASE_USERNAME"
 ENV TEST_DATABASE_PASSWORD="$TEST_DATABASE_PASSWORD"
 
-RUN mvn -f pom.xml -Dskip.jooq.generation=true -DskipTest clean package
+RUN mvn -f pom.xml -Dskip.jooq.generation=true -Dskip.unit.tests -DskipTests clean package
 COPY ./core/target/garden-manager-core-1.0.0-SNAPSHOT.jar /opt/app/app.jar
 
 FROM eclipse-temurin:17

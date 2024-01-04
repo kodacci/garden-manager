@@ -58,14 +58,17 @@
         <jooq.version>3.18.3</jooq.version>
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
-        <skip.jooq.generation>false</skip.jooq.generation>
         <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
-        <coverage.agent> </coverage.agent>
         <testcontainers.version>1.19.3</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
         <junit4.version>4.13.2</junit4.version>
+
+        <!--    Vars    -->
+        <coverage.agent> </coverage.agent>
+        <skip.jooq.generation>false</skip.jooq.generation>
+        <skip.unit.tests>false</skip.unit.tests>
     </properties>
 
     <distributionManagement>
@@ -306,6 +309,9 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <skip>${skip.unit.tests}</skip>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

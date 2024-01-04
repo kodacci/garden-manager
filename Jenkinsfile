@@ -30,7 +30,7 @@ pipeline {
                     println("Building project version: " + PROJECT_VERSION)
 
                     withMaven {
-                        sh 'mvn -DskipTests -Dskip.jooq.generation=true clean package'
+                        sh 'mvn -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
                     }
 
                     println("Build finished")
