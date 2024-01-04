@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn -DskipTests -Dskip.unit.tests deploy"
+                        sh "mvn -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
                     }
 
                     println("Deploying to nexus finished")
