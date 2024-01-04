@@ -310,7 +310,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
                     <configuration>
-                        <skip>${skip.unit.tests}</skip>
+                        <skipTests>${skip.unit.tests}</skipTests>
                     </configuration>
                 </plugin>
                 <plugin>
