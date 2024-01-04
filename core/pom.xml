@@ -123,9 +123,13 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>repackage</id>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                        <configuration>
+                            <finalName>garden-manager-core-app</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

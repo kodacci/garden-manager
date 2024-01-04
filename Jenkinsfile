@@ -76,16 +76,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def image = docker.build(
-                                "ru.ra-tech.garden-manager:$PROJECT_VERSION",
-                                "--build-arg DATABASE_URL=${DATABASE_URL} " +
-                                        "--build-arg DATABASE_USERNAME=${DATABASE_USERNAME} " +
-                                        "--build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} " +
-                                        "--build-arg TEST_DATABASE_URL=${TEST_DATABASE_URL} " +
-                                        "--build-arg TEST_DATABASE_USERNAME=${TEST_DATABASE_USERNAME} " +
-                                        "--build-arg TEST_DATABASE_PASSWORD=${TEST_DATABASE_PASSWORD} " +
-                                        "."
-                        )
+                        def image = docker.build("ru.ra-tech.garden-manager:$PROJECT_VERSION")
 
                         docker.withRegistry('https://nexus.ra-tech.pro:8887', 'nexus_deployer') {
                             image.push()
