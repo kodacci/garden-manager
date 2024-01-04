@@ -27,14 +27,14 @@ import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.Tables.*;
 
 @DisplayName("Gardens API test")
-public class GardensApiTest extends AbstractApiTest {
+class GardensApiTest extends AbstractApiTest {
     private static final String GARDENS_API_URL = "/api/v1/gardens";
 
     private UserDto owner = null;
     private UserDto participant = null;
 
     @BeforeAll
-    public void beforeAll() {
+    void beforeAll() {
         val user = new CreateUserDto(
                 "gardensTestUser", "Gardens Test User", null, "abc12345"
         );
@@ -47,7 +47,7 @@ public class GardensApiTest extends AbstractApiTest {
     }
 
     @AfterAll
-    public void afterAll() {
+    void afterAll() {
         getDsl().deleteFrom(USERS).execute();
         getDsl().deleteFrom(GARDENS).execute();
         getDsl().deleteFrom(GARDENS_PARTICIPANTS).execute();
@@ -55,7 +55,7 @@ public class GardensApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should add new garden on POST on /api/v1/gardens")
-    public void shouldAddNewGarden() {
+    void shouldAddNewGarden() {
         val garden = new CreateGardenRequest("Test garden", "Test garden address");
 
         val entity = new HttpEntity<>(garden, generateAuthHeaders(owner.login()));
@@ -72,7 +72,7 @@ public class GardensApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should add new participant to garden on POST on /api/v1/gardens/${id}/add_participant/${userId}")
-    public void shouldAddNewParticipantToGarden() {
+    void shouldAddNewParticipantToGarden() {
         val gardenData = new CreateGardenDto(
                 "Test garden with participant", "Test garden address", owner.id()
         );
@@ -100,7 +100,7 @@ public class GardensApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should get garden by id on GET on /api/v1/gardens/${id}")
-    public void shouldGetGardenById() {
+    void shouldGetGardenById() {
         val gardenData = new CreateGardenDto(
                 "Test garden by id", "Test garden address", owner.id()
         );
@@ -120,7 +120,7 @@ public class GardensApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should list user gardens on GET on /api/v1/gardens")
-    public void shouldListUserGardens() {
+    void shouldListUserGardens() {
         val userDto = new CreateUserDto(
                 "listGardensUser", "List Gardens User", null, "abc12345"
         );

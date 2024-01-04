@@ -1,13 +1,16 @@
 package ru.ra_tech.garden_manager.failure;
 
+import org.springframework.lang.Nullable;
+
 public class JwtFailure extends AbstractFailure {
-    public JwtFailure(String source, Throwable cause) {
+    private static final String CODE = "GM:JWT_FAILURE";
+    public JwtFailure(String source, @Nullable Throwable cause) {
         super(source, cause);
     }
 
     @Override
     public String getCode() {
-        return "GM:JWT_FAILURE";
+        return CODE;
     }
 
     @Override

@@ -42,8 +42,10 @@
         <maven.project.info.reports.plugin.version>3.4.3</maven.project.info.reports.plugin.version>
         <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
+        <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
         <!--  Third party dependencies  -->
-        <junit.version>5.9.2</junit.version>
+        <junit.version>5.9.1</junit.version>
+        <assertj.version>3.24.2</assertj.version>
         <spring.boot.version>3.2.1</spring.boot.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.25.1</liquibase.version>
@@ -55,9 +57,14 @@
         <jooq.version>3.18.3</jooq.version>
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
-        <skip.jook.generation>false</skip.jook.generation>
+        <skip.jooq.generation>false</skip.jooq.generation>
         <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
         <coverage.agent> </coverage.agent>
+        <testcontainers.version>1.19.3</testcontainers.version>
+        <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
+        <mockito.version>5.8.0</mockito.version>
+        <http.client5.version>5.2.1</http.client5.version>
+        <junit4.version>4.13.2</junit4.version>
     </properties>
 
     <distributionManagement>
@@ -78,10 +85,18 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
+
+            <!--     Test       -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -96,6 +111,46 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${http.client5.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--      Third party      -->
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -190,17 +245,18 @@
                 <version>${spring.boot.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents.client5</groupId>
-                <artifactId>httpclient5</artifactId>
-                <version>5.2.1</version>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${findbugs.jsr305.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -210,6 +266,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${findbugs.jsr305.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -233,7 +304,15 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.1</version>
+                    <version>${maven.surefire.plugin.version}</version>
+<!--                    <dependencies>-->
+<!--                        <dependency>-->
+<!--                            <groupId>org.junit.jupiter</groupId>-->
+<!--                            <artifactId>junit-jupiter-engine</artifactId>-->
+<!--                            <scope>test</scope>-->
+<!--                            <version>${junit.version}</version>-->
+<!--                        </dependency>-->
+<!--                    </dependencies>-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

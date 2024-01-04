@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import ru.ra_tech.garden_manager.database.ExceptionTranslator;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
 
 import javax.sql.DataSource;
 
@@ -58,5 +59,10 @@ public class DatabaseConfiguration {
     @Bean
     public UserRepository userRepository(DSLContext dsl) {
         return new UserRepository(dsl);
+    }
+
+    @Bean
+    public UserRoleRepository userRoleRepository(DSLContext dsl) {
+        return new UserRoleRepository(dsl);
     }
 }

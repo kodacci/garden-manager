@@ -16,9 +16,9 @@ public class UserRoleRepository implements ReadableRepository<Integer, UserRoleD
 
     private AppFailure toFailure(Throwable error) {
         return new DatabaseFailure(
-                DatabaseFailure.DatabaseFailureCode.USER_ROLES_REPOSITORY_FAILURE,
+                DatabaseFailure.DatabaseFailureCode.USER_ROLE_REPOSITORY_FAILURE,
                 error,
-                getClass().getSimpleName()
+                getClass().getName()
         );
     }
 

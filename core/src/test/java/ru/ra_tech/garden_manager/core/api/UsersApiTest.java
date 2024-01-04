@@ -18,18 +18,18 @@ import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
 @DisplayName("Users API test")
-public class UsersApiTest extends AbstractApiTest {
+class UsersApiTest extends AbstractApiTest {
 
     private static final String USERS_API_URL = "/api/v1/users";
 
     @AfterAll
-    public void afterAll() {
+    void afterAll() {
         getDsl().deleteFrom(USERS).execute();
     }
 
     @Test
     @DisplayName("Should add new user on POST on /api/v1/users")
-    public void shouldAddNewUser() {
+    void shouldAddNewUser() {
         val request = new CreateUserRequest(
                 "tester", "Testov Tester", "test@example.com", "abc12345"
         );
@@ -56,7 +56,7 @@ public class UsersApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should get existing user by GET on /api/v1/user/{id}")
-    public void shouldGetExistingUser() {
+    void shouldGetExistingUser() {
         val user = new CreateUserDto(
                 "newUser", "New User", "new-user-test@example.com", "abc12345"
         );
@@ -76,7 +76,7 @@ public class UsersApiTest extends AbstractApiTest {
     }
 
     @Test
-    public void shouldReturnErrorOnCreatingUserWithSameLogin() {
+    void shouldReturnErrorOnCreatingUserWithSameLogin() {
         val user = new CreateUserDto(
                 "duplicateUser", "Duplicate user", null, "abc12345"
         );
@@ -93,7 +93,7 @@ public class UsersApiTest extends AbstractApiTest {
     }
 
     @Test
-    public void shouldDeleteUser() {
+    void shouldDeleteUser() {
         val user = new CreateUserDto(
                 "deleteUser", "Delete User", null, "abc12345"
         );
@@ -110,7 +110,7 @@ public class UsersApiTest extends AbstractApiTest {
     }
 
     @Test
-    public void shouldReturnErrorOnDeletingNonExistentUser() {
+    void shouldReturnErrorOnDeletingNonExistentUser() {
         val user = new CreateUserDto(
                 "nonExistentAuth", "Some user", null, "abc12345"
         );
@@ -131,7 +131,7 @@ public class UsersApiTest extends AbstractApiTest {
 
     @Test
     @DisplayName("Should return error on sending invalid user data on POST /api/v1/users")
-    public void shouldReturnErrorOnAddingInvalidUser() {
+    void shouldReturnErrorOnAddingInvalidUser() {
         val user = new CreateUserRequest("a", null, "not-email", "123");
 
         val response = getRestTemplate().postForEntity(USERS_API_URL, user, ProblemResponse.class);

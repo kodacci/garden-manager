@@ -1,7 +1,10 @@
 spring:
   liquibase:
     enabled: true
+    change-log: db/changelog-root.yaml
   datasource:
     url: jdbc:tc:postgresql:15.5:///garden_manager
     username: test
     password: test
+  jooq:
+    sql-dialect: Postgres

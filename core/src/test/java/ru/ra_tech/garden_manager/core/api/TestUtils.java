@@ -13,7 +13,7 @@ public class TestUtils {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public static UserDto writeUser(DSLContext dsl, CreateUserDto user) {
+    static UserDto writeUser(DSLContext dsl, CreateUserDto user) {
         val repo = new UserRepository(dsl);
         val dto = new CreateUserDto(user.login(), user.name(), user.email(), passwordEncoder.encode(user.password()));
 

@@ -33,7 +33,7 @@ public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto
 
     @Override
     protected AppFailure toFailure(@Nullable Throwable error) {
-        return new DatabaseFailure(GARDEN_REPOSITORY_FAILURE, error, getClass().getSimpleName());
+        return new DatabaseFailure(GARDEN_REPOSITORY_FAILURE, error, getClass().getName());
     }
 
     private SelectOnConditionStep<

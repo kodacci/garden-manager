@@ -39,7 +39,7 @@ public class JwtProvider {
 
         })
                 .toEither()
-                .mapLeft(error -> new JwtFailure(this.getClass().getSimpleName(), error));
+                .mapLeft(error -> new JwtFailure(this.getClass().getName(), error));
     }
 
     public Either<AppFailure, TokenPair> createTokenPair(String username, String tokenId) {
@@ -52,7 +52,7 @@ public class JwtProvider {
     }
 
     private AppFailure toFailure(Throwable error) {
-        return new JwtFailure(this.getClass().getSimpleName(), error);
+        return new JwtFailure(this.getClass().getName(), error);
     }
 
     public Either<AppFailure, Claims> getClaims(String token) {

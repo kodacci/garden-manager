@@ -3,8 +3,8 @@ package ru.ra_tech.garden_manager.database.repositories.auth;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.lang.Nullable;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 import ru.ra_tech.garden_manager.database.repositories.ReadableRepository;
@@ -12,12 +12,9 @@ import ru.ra_tech.garden_manager.failure.AppFailure;
 
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
+@RequiredArgsConstructor
 public class AuthUserRepository implements ReadableRepository<String, Option<AuthUserDto>> {
     private final DSLContext dsl;
-
-    public AuthUserRepository(DSLContext dsl) {
-        this.dsl = dsl;
-    }
 
     private AppFailure toFailure(Throwable exception) {
         return new DatabaseFailure(
@@ -47,14 +44,13 @@ public class AuthUserRepository implements ReadableRepository<String, Option<Aut
     @Override
     public Either<AppFailure, Boolean> exists(String login) {
         return Try.of(
-                () -> dsl.fetchCount(
-                        DSL.selectFrom(USERS)
+                () -> dsl.fetchExists(
+                        dsl.selectFrom(USERS)
                                 .where(USERS.LOGIN.eq(login))
-                                .limit(1))
+                )
         )
                 .toEither()
-                .mapLeft(this::toFailure)
-                .map(count -> count > 0);
+                .mapLeft(this::toFailure);
     }
 
     public Either<AppFailure, Boolean> updateTokenId(String login, @Nullable String tokenId) {

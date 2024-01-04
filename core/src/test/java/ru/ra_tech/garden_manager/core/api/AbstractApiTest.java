@@ -3,13 +3,14 @@ package ru.ra_tech.garden_manager.core.api;
 import lombok.Getter;
 import lombok.val;
 import org.jooq.DSLContext;
-import org.jooq.impl.QOM;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,8 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.ra_tech.garden_manager.core.MainApplication;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
@@ -32,12 +35,16 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
 @Getter
 @SpringBootTest(
-        classes = { MainApplication.class, DatabaseConfiguration.class },
+        classes = {
+                MainApplication.class,
+                DatabaseConfiguration.class
+        },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
-public class AbstractApiTest {
+@Testcontainers
+class AbstractApiTest {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
