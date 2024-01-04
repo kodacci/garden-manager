@@ -48,12 +48,12 @@ pipeline {
                             sh 'mvn verify'
                         }
                     }
-                    jacoco(
-                            execPattern: '**/target/*.exec',
-                            classPattern: '**/target/classes',
-                            sourcePattern: '**/src/main/java',
-                            exclusionPattern: '**/database/schema/**/*,**/src/test'
-                    )
+//                    jacoco(
+//                            execPattern: '**/target/*.exec',
+//                            classPattern: '**/target/classes',
+//                            sourcePattern: '**/src/main/java',
+//                            exclusionPattern: '**/database/schema/**/*,**/src/test'
+//                    )
 
                     println("Verification finished")
                 }
