@@ -45,7 +45,7 @@ pipeline {
 
                     withMaven {
                         docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                            sh 'mvn verify'
+                            sh 'mvn verify -Dskip.jooq.generation'
                         }
                     }
 //                    jacoco(
