@@ -30,7 +30,7 @@ pipeline {
                     println("Building project version: " + PROJECT_VERSION)
 
                     withMaven {
-                        sh 'mvn -DskipTests clean package'
+                        sh 'mvn -DskipTests -Dskip.jooq.generation=true clean package'
                     }
 
                     println("Build finished")
@@ -44,7 +44,9 @@ pipeline {
                     println("Starting build verification")
 
                     withMaven {
-                        sh 'mvn verify'
+                        docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
+                            sh 'mvn verify'
+                        }
                     }
                     jacoco(
                             execPattern: '**/target/*.exec',
@@ -73,7 +75,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    docker.withServer('tcp://docker.ra-tech.pro:2375', 'jenkins-client-cert') {
+                    docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
                         def image = docker.build(
                                 "ru.ra-tech.garden-manager:$PROJECT_VERSION",
                                 "--build-arg DATABASE_URL=${DATABASE_URL} " +
