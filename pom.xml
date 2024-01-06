@@ -75,7 +75,7 @@
         <skip.unit.tests>false</skip.unit.tests>
 
         <!--    Sonar    -->
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/code-coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../code-coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.exclusions>**/database/schema/**/*</sonar.exclusions>
     </properties>
