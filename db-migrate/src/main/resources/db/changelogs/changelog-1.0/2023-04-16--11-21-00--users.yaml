@@ -1,0 +1,139 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Andrey Ryabtsev
+      comment: Create user roles table
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: description
+                  type: text
+
+  - changeSet:
+      id: 3
+      author: Andrey Ryabtsev
+      comment: Add basic user roles
+      changes:
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: ADMIN
+              - column:
+                  name: description
+                  value: Администратор
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: CHIEF
+              - column:
+                  name: description
+                  value: Заведующий
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: EXECUTOR
+              - column:
+                  name: description
+                  value: Исполнитель
+      rollback: delete from user_roles where name = 'ADMIN' or name = 'CHIEF' or name = 'EXECUTOR';
+
+  - changeSet:
+      id: 4
+      author: Andrey Ryabtsev
+      comment: Create users table with indexes
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tokenId
+                  type: varchar(36)
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdAt
+                  type: timestamp with time zone
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updatedAt
+                  type: timestamp with time zone
+              - column:
+                  name: deletedAt
+                  type: timestamp with time zone
+        - createIndex:
+            indexName: users_login_index
+            tableName: users
+            unique: true
+            columns:
+              - column:
+                  name: login
+        - createIndex:
+            indexName: users_email_index
+            tableName: users
+            unique: true
+            columns:
+              - column:
+                  name: email

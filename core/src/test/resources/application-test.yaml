@@ -1,0 +1,7 @@
+spring:
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:tc:postgresql:15.5:///garden_manager
+    username: test
+    password: test

@@ -1,0 +1,97 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: Andrey Ryabtsev
+      comment: Create gardens table
+      changes:
+        - createTable:
+            tableName: gardens
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: text
+              - column:
+                  name: owner
+                  type: bigint
+                  constraints:
+                    referencedTableName: users
+                    nullable: false
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: createdAt
+                  type: timestamp with time zone
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updatedAt
+                  type: timestamp with time zone
+              - column:
+                  name: deletedAt
+                  type: timestamp with time zone
+        - createIndex:
+            indexName: gardens_owner_index
+            tableName: gardens
+            columns:
+              - column:
+                  name: owner
+
+  - changeSet:
+      id: 6
+      author: Andrey Ryabtsev
+      comment: Garden participants
+      changes:
+        - createTable:
+            tableName: gardens_participants
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: garden
+                  type: bigint
+                  constraints:
+                    referencedTableName: gardens
+                    nullable: false
+              - column:
+                  name: participant
+                  type: bigint
+                  constraints:
+                    referencedTableName: users
+                    nullable: false
+              - column:
+                  name: role
+                  type: int
+                  constraints:
+                    referencedTableName: user_role
+              - column:
+                  name: assignedAt
+                  type: timestamp with timezone
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: gardens_participants
+            columnNames: garden, participant
+            constraintName: unique_participant
