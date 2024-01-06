@@ -48,14 +48,27 @@ pipeline {
                             sh 'mvn verify -Dskip.jooq.generation'
                         }
                     }
-//                    jacoco(
-//                            execPattern: '**/target/*.exec',
-//                            classPattern: '**/target/classes',
-//                            sourcePattern: '**/src/main/java',
-//                            exclusionPattern: '**/database/schema/**/*,**/src/test'
-//                    )
 
                     println("Verification finished")
+                }
+            }
+        }
+
+        stage('Analise with sonarqube') {
+//            when {
+//                branch pattern: 'master'
+//            }
+            steps {
+                withSonarQubeEnv('Sonar RA-Tech') {
+                    sh 'mvn sonar:sonar -Dskip.jooq.generation'
+                }
+            }
+        }
+
+        stage('Quality gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
