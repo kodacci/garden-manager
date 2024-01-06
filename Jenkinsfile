@@ -55,9 +55,10 @@ pipeline {
         }
 
         stage('Analise with sonarqube') {
-//            when {
-//                branch pattern: 'master'
-//            }
+            when {
+                branch 'main'
+            }
+
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
                     sh 'mvn sonar:sonar -Dskip.jooq.generation'
@@ -66,6 +67,10 @@ pipeline {
         }
 
         stage('Quality gate') {
+            when {
+                branch 'main'
+            }
+
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
