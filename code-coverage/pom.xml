@@ -39,10 +39,10 @@
                 <executions>
                     <execution>
                         <id>report-aggregate</id>
-                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
+                        <phase>verify</phase>
                         <configuration>
                             <title>Garden Manager</title>
                             <footer>Code coverage report of Garden Manager ${project.version}</footer>

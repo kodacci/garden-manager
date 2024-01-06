@@ -10,6 +10,7 @@ import org.jooq.SelectOnConditionStep;
 import org.springframework.lang.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.AbstractRWRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
+import ru.ra_tech.garden_manager.database.schema.tables.records.GardensRecord;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
@@ -23,7 +24,7 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Gardens.GARDENS;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 import static ru.ra_tech.garden_manager.failure.DatabaseFailure.DatabaseFailureCode.GARDEN_REPOSITORY_FAILURE;
 
-public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto, GardenDto> {
+public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto, GardenDto, GardensRecord> {
     private static final int GARDENS_LIMIT = 1000;
     private static final int GARDENS_PARTICIPANTS_LIMIT = 100;
 
@@ -91,7 +92,7 @@ public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto
                         .fetchOne()
         )
                 .andThen(Objects::requireNonNull)
-                .map(record -> record.getValue(GARDENS.ID, Long.class))
+                .map(row -> row.getValue(GARDENS.ID, Long.class))
                 .andThen(Objects::requireNonNull)
                 .toEither()
                 .mapLeft(this::toFailure)

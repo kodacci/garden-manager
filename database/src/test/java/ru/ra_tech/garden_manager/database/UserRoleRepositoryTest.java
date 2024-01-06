@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Slf4j
-public class UserRoleRepositoryTest implements DatabaseTest {
+class UserRoleRepositoryTest implements DatabaseTest {
     private static final int ADMIN_ID = 1;
     private static final int CHIEF_ID = 2;
     private static final int EXECUTOR_ID = 3;

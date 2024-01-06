@@ -7,6 +7,7 @@ import lombok.val;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import ru.ra_tech.garden_manager.database.repositories.AbstractRWRepository;
+import ru.ra_tech.garden_manager.database.schema.tables.records.UsersRecord;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
-public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, UserDto> {
+public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, UserDto, UsersRecord> {
 
     public UserRepository(DSLContext dsl) {
         super(dsl, USERS);

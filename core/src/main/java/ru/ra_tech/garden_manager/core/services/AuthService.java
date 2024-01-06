@@ -102,7 +102,7 @@ public class AuthService {
         return repo.clearSession(userId)
                 .mapLeft(this::toServerError)
                 .flatMap(
-                        success -> success
+                        success -> Boolean.TRUE.equals(success)
                             ? Either.right(new LogoutResponse())
                             : Either.left(new EntityNotFoundResponse(USER_ENTITY, userId))
                 );

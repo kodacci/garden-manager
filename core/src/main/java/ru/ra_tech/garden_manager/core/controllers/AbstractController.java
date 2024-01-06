@@ -42,8 +42,8 @@ public abstract class AbstractController {
     }
 
     private Either<ErrorResponse, Long> getPrincipalId(Object principal) {
-        return principal instanceof JwtPrincipal
-                ? Either.right(((JwtPrincipal) principal).id())
+        return principal instanceof JwtPrincipal realPrincipal
+                ? Either.right(realPrincipal.id())
                 : Either.left(new UnauthorizedResponse());
     }
 

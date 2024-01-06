@@ -17,7 +17,7 @@ import ru.ra_tech.garden_manager.failure.AppFailure;
 
 @RequiredArgsConstructor
 public class UserService {
-    private final static String USER_ENTITY = "User";
+    private static final String USER_ENTITY = "User";
 
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
@@ -49,7 +49,7 @@ public class UserService {
     public Either<ErrorResponse, UserData> createUser(CreateUserRequest user) {
         return repo.checkDataConflict(user.login(), Option.of(user.email()))
                 .mapLeft(this::toServerErrorResponse)
-                .flatMap(conflict -> conflict
+                .flatMap(conflict -> Boolean.TRUE.equals(conflict)
                         ? Either.left(toConflict(List.of("login", "email")))
                         : Either.right(false)
                 ).flatMap(ok ->
@@ -63,7 +63,7 @@ public class UserService {
         return repo.deleteById(id)
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(
-                        deleted -> deleted
+                        deleted -> Boolean.TRUE.equals(deleted)
                                 ? Either.right(true)
                                 : Either.left(new EntityNotFoundResponse(USER_ENTITY, id))
                 );

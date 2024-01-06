@@ -5,14 +5,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationToken implements Authentication {
     private final String token;
+    private boolean authenticated = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of();
     }
 
     @Override
@@ -32,11 +34,12 @@ public class JwtAuthenticationToken implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return authenticated;
     }
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+        authenticated = isAuthenticated;
     }
 
     @Override
