@@ -30,11 +30,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
-        <!--    MAVEN -->
+
+        <!--  MAVEN  -->
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
-        <maven.resource.plugin.version>3.0.2</maven.resource.plugin.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
         <maven.release.plugin.version>3.0.0</maven.release.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0</maven.failsafe.plugin.version>
+        <maven.failsafe.plugin.version>3.2.3</maven.failsafe.plugin.version>
         <maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
         <maven.install.plugin.version>3.1.1</maven.install.plugin.version>
         <maven.deploy.plugin.version>3.1.1</maven.deploy.plugin.version>
@@ -44,6 +45,8 @@
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
+        <sonar.maven.plugin.version>3.10.0.2594</sonar.maven.plugin.version>
+
         <!--  Third party dependencies  -->
         <junit.version>5.9.1</junit.version>
         <assertj.version>3.24.2</assertj.version>
@@ -296,7 +299,11 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven.resource.plugin.version}</version>
+                    <version>${maven.resources.plugin.version}</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <propertiesEncoding>UTF-8</propertiesEncoding>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -366,8 +373,13 @@
                 </plugin>
                 <plugin>
                     <groupId>org.liquibase</groupId>
-                    <artifactId>liquibase-mave-plugin</artifactId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
                     <version>${liquibase.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar.maven.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
