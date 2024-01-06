@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(cause.getMessage());
         }
 
-        throw new UsernameNotFoundException("User not found");
+        throw new UsernameNotFoundException("Unknown error");
     }
 
     private @Nullable UserDetails toUserDetails(Option<AuthUserDto> dto) {

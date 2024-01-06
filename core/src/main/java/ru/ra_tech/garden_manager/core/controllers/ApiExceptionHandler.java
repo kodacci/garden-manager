@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String TIMESTAMP_PROP_NAME = "timestamp";
+
     private String timestamp() {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
@@ -34,8 +36,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(violation ->
                         String.format("%s: '%s'", violation.getPropertyPath(), violation.getMessage())
                 )
-                .collect(Collectors.toList());
-        problem.setProperty("timestamp", timestamp());
+                .toList();
+        problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
         problem.setProperty("validationErrors", violations);
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
@@ -50,7 +52,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request
     ) {
         val problem = ex.getBody();
-        problem.setProperty("timestamp", timestamp());
+        problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
 
         val validations = MethodArgumentNotValidException.errorsToStringList(ex.getAllErrors());
         problem.setProperty("validationErrors", validations);
@@ -69,7 +71,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Nullable
     public ResponseEntity<Object> handleUnknownException(Exception ex, WebRequest request) {
         val problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        problem.setProperty("timestamp", timestamp());
+        problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

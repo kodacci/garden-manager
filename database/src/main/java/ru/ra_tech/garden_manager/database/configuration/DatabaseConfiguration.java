@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.database.configuration;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -20,11 +21,9 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseConfiguration {
-    @Autowired
-    private DataSource dataSource;
 
     @Bean
-    public DataSourceConnectionProvider connectionProvider() {
+    public DataSourceConnectionProvider connectionProvider(DataSource dataSource) {
         return new DataSourceConnectionProvider(new TransactionAwareDataSourceProxy(dataSource));
     }
 

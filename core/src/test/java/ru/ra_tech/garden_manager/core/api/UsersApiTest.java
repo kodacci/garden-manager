@@ -71,8 +71,9 @@ class UsersApiTest extends AbstractApiTest {
         assertHttpResponse(response);
 
         val body = response.getBody();
-        assertThat(body).isNotNull().isInstanceOf(UserData.class);
-        assertThat(body).isEqualTo(UserData.of(created));
+        assertThat(body).isNotNull()
+                .isInstanceOf(UserData.class)
+                .isEqualTo(UserData.of(created));
     }
 
     @Test

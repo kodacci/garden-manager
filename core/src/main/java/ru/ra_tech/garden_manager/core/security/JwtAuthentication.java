@@ -5,10 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Date;
 
 public class JwtAuthentication implements Authentication {
+    @Serial
+    private static final long serialVersionUID = 2024_01_06_22_00_00L;
+
     private final JwtPrincipal principal;
     private final Date expiration;
     private boolean isAuthenticated;

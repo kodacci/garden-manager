@@ -28,19 +28,19 @@ public class GardenMappers {
                     > {
         @Override
         public GardenDto map(
-                Record8<Long, String, String, Long, String, String, String, List<GardenParticipantDto>> record
+                Record8<Long, String, String, Long, String, String, String, List<GardenParticipantDto>> row
         ) {
             return new GardenDto(
-                    record.value1(),
-                    record.value2(),
-                    record.value3(),
+                    row.value1(),
+                    row.value2(),
+                    row.value3(),
                     new UserDto(
-                            record.value4(),
-                            record.value5(),
-                            record.value6(),
-                            record.value7()
+                            row.value4(),
+                            row.value5(),
+                            row.value6(),
+                            row.value7()
                     ),
-                    io.vavr.collection.List.ofAll(record.value8())
+                    io.vavr.collection.List.ofAll(row.value8())
             );
         }
     }
@@ -50,8 +50,8 @@ public class GardenMappers {
             GardenUsersDto
             > {
         @Override
-        public GardenUsersDto map(Record3<Long, Long, List<Long>> record) {
-            return new GardenUsersDto(record.value1(), record.value2(), io.vavr.collection.List.ofAll(record.value3()));
+        public GardenUsersDto map(Record3<Long, Long, List<Long>> row) {
+            return new GardenUsersDto(row.value1(), row.value2(), io.vavr.collection.List.ofAll(row.value3()));
         }
     }
 
@@ -61,13 +61,13 @@ public class GardenMappers {
             > {
 
         @Override
-        public GardenParticipantDto map(Record5<Long, String, String, String, String> record) {
+        public GardenParticipantDto map(Record5<Long, String, String, String, String> row) {
             return new GardenParticipantDto(
-                    record.value1(),
-                    record.value2(),
-                    record.value3(),
-                    record.value4(),
-                    UserRole.valueOf(record.value5().toUpperCase())
+                    row.value1(),
+                    row.value2(),
+                    row.value3(),
+                    row.value4(),
+                    UserRole.valueOf(row.value5().toUpperCase())
             );
         }
     }

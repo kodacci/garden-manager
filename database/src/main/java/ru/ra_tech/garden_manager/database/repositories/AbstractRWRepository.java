@@ -12,24 +12,24 @@ import ru.ra_tech.garden_manager.failure.AppFailure;
 import static org.jooq.impl.DSL.field;
 
 @RequiredArgsConstructor
-public abstract class AbstractRWRepository<ID, T, R> implements ReadableRepository<ID, Option<R>>,
-        WritableRepository<ID, T, R> {
+public abstract class AbstractRWRepository<I, T, R, S extends Record> implements ReadableRepository<I, Option<R>>,
+        WritableRepository<I, T, R> {
 
     private final DSLContext dsl;
-    private final Table<? extends Record> table;
+    private final Table<S> table;
 
-    abstract protected AppFailure toFailure(Throwable ex);
+    protected abstract AppFailure toFailure(Throwable ex);
 
     protected DSLContext getContext() {
         return dsl;
     }
 
-    protected Table<? extends Record> getTable() {
+    protected Table<S> getTable() {
         return table;
     }
 
     @Override
-    public Either<AppFailure, Boolean> deleteById(ID id) {
+    public Either<AppFailure, Boolean> deleteById(I id) {
         return Try.of(
                         () -> getContext().update(getTable())
                                 .set(field("deleted"), true)
@@ -42,7 +42,7 @@ public abstract class AbstractRWRepository<ID, T, R> implements ReadableReposito
     }
 
     @Override
-    public Either<AppFailure, Boolean> exists(ID id) {
+    public Either<AppFailure, Boolean> exists(I id) {
         return Try.of(
                         () -> getContext()
                                 .selectCount()

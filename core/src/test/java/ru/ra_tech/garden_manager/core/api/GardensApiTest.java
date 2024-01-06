@@ -67,7 +67,7 @@ class GardensApiTest extends AbstractApiTest {
         assertThat(body.name()).isEqualTo(garden.name());
         assertThat(body.address()).isEqualTo(garden.address());
         assertThat(body.owner()).isEqualTo(UserData.of(owner));
-        assertThat(body.participants()).hasSize(0);
+        assertThat(body.participants()).isEmpty();
     }
 
     @Test
@@ -114,8 +114,9 @@ class GardensApiTest extends AbstractApiTest {
         assertHttpResponse(response);
 
         val body = response.getBody();
-        assertThat(body).isNotNull().isInstanceOf(GardenData.class);
-        assertThat(body).isEqualTo(GardenData.of(garden));
+        assertThat(body).isNotNull()
+                .isInstanceOf(GardenData.class)
+                .isEqualTo(GardenData.of(garden));
     }
 
     @Test

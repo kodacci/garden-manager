@@ -6,12 +6,18 @@ import org.springframework.lang.Nullable;
 
 @Getter
 public class DatabaseFailure extends AbstractFailure {
+    private static final String DETAIL = "Database access error";
+
     private final String code;
-    private final String detail = "Database access error";
 
     public DatabaseFailure(DatabaseFailureCode code, @Nullable Throwable cause, String source) {
         super(source, cause);
         this.code = code.toString();
+    }
+
+    @Override
+    public String getDetail() {
+        return DETAIL;
     }
 
     @RequiredArgsConstructor

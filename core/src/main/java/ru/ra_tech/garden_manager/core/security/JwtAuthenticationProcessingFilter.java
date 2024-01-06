@@ -51,7 +51,9 @@ public class JwtAuthenticationProcessingFilter extends AbstractAuthenticationPro
         public void onAuthenticationSuccess(HttpServletRequest request,
                                             HttpServletResponse response,
                                             Authentication authentication
-        ) {}
+        ) {
+            // Needs to be overriden but does nothing
+        }
 
         @Override
         public void onAuthenticationSuccess(
@@ -59,7 +61,9 @@ public class JwtAuthenticationProcessingFilter extends AbstractAuthenticationPro
                 HttpServletResponse response,
                 FilterChain chain,
                 Authentication authentication
-        ) {}
+        ) {
+            // Needs to be overriden but does nothing
+        }
     }
 
     private void onAuthenticationFailure(
