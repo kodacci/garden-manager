@@ -72,6 +72,12 @@
         <coverage.agent> </coverage.agent>
         <skip.jooq.generation>false</skip.jooq.generation>
         <skip.unit.tests>false</skip.unit.tests>
+
+        <!--    Sonar    -->
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.jacoco.reportPath>${project.basedir}/*/target/</sonar.jacoco.reportPath>
+        <sonar.language>java</sonar.language>
+        <sonar.exclusions>**/database/schema/**/*</sonar.exclusions>
     </properties>
 
     <distributionManagement>
