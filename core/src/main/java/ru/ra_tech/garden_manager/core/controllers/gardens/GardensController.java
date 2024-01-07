@@ -23,25 +23,25 @@ public class GardensController extends AbstractController implements GardensApi 
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> createGarden(CreateGardenRequest request) {
+    public ResponseEntity<Object> createGarden(CreateGardenRequest request) {
         return toResponse(getUserId().flatMap(userId -> service.createGarden(request, userId)), HttpStatus.CREATED);
     }
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findGarden(Long id) {
+    public ResponseEntity<Object> findGarden(Long id) {
         return toResponse(getUserId().flatMap(userId -> service.findGarden(id, userId)));
     }
 
     @Override
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> listGardens() {
+    public ResponseEntity<Object> listGardens() {
         return toResponse(getUserId().flatMap(service::listGardens));
     }
 
     @Override
-    @PostMapping(value = "/{id}/add_participant/{participantId}")
-    public ResponseEntity<?> addParticipant(Long id, Long participantId) {
+    @PostMapping(value = "/{id}/add_participant/{participantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> addParticipant(Long id, Long participantId) {
         return toResponse(getUserId().flatMap(userId -> service.addParticipant(id, participantId, userId)));
     }
 }

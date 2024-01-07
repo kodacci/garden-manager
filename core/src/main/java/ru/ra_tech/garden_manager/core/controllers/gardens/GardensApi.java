@@ -34,7 +34,7 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> createGarden(@RequestBody CreateGardenRequest request);
+    ResponseEntity<Object> createGarden(@RequestBody CreateGardenRequest request);
 
     @Operation(summary = "Find garden by id")
     @ApiResponses(value = {
@@ -49,7 +49,7 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> findGarden(@Positive @PathVariable Long id);
+    ResponseEntity<Object> findGarden(@Positive @PathVariable Long id);
 
     @Operation(summary = "List user related gardens")
     @ApiResponses(value = {
@@ -64,7 +64,7 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> listGardens();
+    ResponseEntity<Object> listGardens();
 
     @Operation(summary = "Add participant to garden")
     @ApiResponses(value = {
@@ -79,7 +79,7 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> addParticipant(
+    ResponseEntity<Object> addParticipant(
             @Positive @PathVariable
             Long id,
             @Positive @PathVariable

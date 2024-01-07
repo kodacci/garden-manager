@@ -16,25 +16,25 @@ import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 public abstract class AbstractController {
     private record EmptyResponse() {}
 
-    private ResponseEntity<?> toError(ErrorResponse error) {
+    private ResponseEntity<Object> toError(ErrorResponse error) {
         val headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
         return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
     }
 
-    protected <T> ResponseEntity<?> toResponse(Either<? extends ErrorResponse, T> result, HttpStatus status) {
+    protected <T> ResponseEntity<Object> toResponse(Either<? extends ErrorResponse, T> result, HttpStatus status) {
         return result.fold(
                     this::toError,
                     data -> new ResponseEntity<>(data, status)
                 );
     }
 
-    protected <T> ResponseEntity<?> toResponse(Either<? extends ErrorResponse, T> result) {
+    protected <T> ResponseEntity<Object> toResponse(Either<? extends ErrorResponse, T> result) {
         return toResponse(result, HttpStatus.OK);
     }
 
-    protected <T> ResponseEntity<?> toEmptyResponse(Either<? extends  ErrorResponse, T> result) {
+    protected <T> ResponseEntity<Object> toEmptyResponse(Either<? extends  ErrorResponse, T> result) {
         return result.fold(
                 this::toError,
                 data -> new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK)

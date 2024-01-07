@@ -27,7 +27,7 @@ public class UsersController extends AbstractController implements UsersApi {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Override
-    public ResponseEntity<?> getUserById(@Positive @PathVariable Integer id) {
+    public ResponseEntity<Object> getUserById(@Positive @PathVariable Integer id) {
         return toResponse(service.findUser(id));
     }
 
@@ -37,13 +37,13 @@ public class UsersController extends AbstractController implements UsersApi {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Override
-    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest data) {
+    public ResponseEntity<Object> createUser(@RequestBody CreateUserRequest data) {
         return toResponse(service.createUser(data), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Override
-    public ResponseEntity<?> deleteUser(@Positive @PathVariable Integer id) {
+    public ResponseEntity<Object> deleteUser(@Positive @PathVariable Integer id) {
         return toEmptyResponse(service.deleteUser(id));
     }
 }

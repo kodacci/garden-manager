@@ -4,14 +4,19 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.Records;
 import ru.ra_tech.garden_manager.database.repositories.ReadableRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
+
+import java.util.List;
 
 import static ru.ra_tech.garden_manager.database.schema.tables.UserRoles.USER_ROLES;
 
 @RequiredArgsConstructor
 public class UserRoleRepository implements ReadableRepository<Integer, UserRoleDto> {
+    private static final int SELECT_LIMIT = 100;
+
     private final DSLContext dsl;
 
     private AppFailure toFailure(Throwable error) {
@@ -20,6 +25,17 @@ public class UserRoleRepository implements ReadableRepository<Integer, UserRoleD
                 error,
                 getClass().getName()
         );
+    }
+
+    public Either<AppFailure, List<UserRoleDto>> findAll() {
+        return Try.of(
+                () -> dsl.select(USER_ROLES.ID, USER_ROLES.NAME, USER_ROLES.DESCRIPTION)
+                        .from(USER_ROLES)
+                        .limit(SELECT_LIMIT)
+                        .fetch(Records.mapping(UserRoleDto::new))
+        )
+                .toEither()
+                .mapLeft(this::toFailure);
     }
 
     @Override
