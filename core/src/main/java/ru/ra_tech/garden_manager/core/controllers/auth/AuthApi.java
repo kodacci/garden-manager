@@ -33,7 +33,7 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> login(@Valid @RequestBody LoginRequest request);
+    ResponseEntity<Object> login(@Valid @RequestBody LoginRequest request);
 
     @Operation(summary = "Refresh token")
     @ApiResponses(value = {
@@ -48,7 +48,7 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> refresh(@Valid @RequestBody RefreshRequest request);
+    ResponseEntity<Object> refresh(@Valid @RequestBody RefreshRequest request);
 
     @Operation(summary = "Logout")
     @ApiResponses(value = {
@@ -63,5 +63,5 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> logout();
+    ResponseEntity<Object> logout();
 }

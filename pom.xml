@@ -71,7 +71,7 @@
 
         <!--    Vars    -->
         <coverage.agent> </coverage.agent>
-        <skip.jooq.generation>false</skip.jooq.generation>
+        <skip.jooq.generation>true</skip.jooq.generation>
         <skip.unit.tests>false</skip.unit.tests>
 
         <!--    Sonar    -->

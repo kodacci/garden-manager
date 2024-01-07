@@ -34,7 +34,7 @@ public interface UsersApi extends ApiErrorResponses {
                     }
             ),
     })
-    ResponseEntity<?> getUserById(@Positive @PathVariable Integer id);
+    ResponseEntity<Object> getUserById(@Positive @PathVariable Integer id);
 
     @Operation(summary = "Create new user")
     @ApiResponses(value = {
@@ -49,7 +49,7 @@ public interface UsersApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest data);
+    ResponseEntity<Object> createUser(@Valid @RequestBody CreateUserRequest data);
 
     @Operation(summary = "Delete user")
     @ApiResponses(value = {
@@ -58,5 +58,5 @@ public interface UsersApi extends ApiErrorResponses {
                     description = "Successfully deleted user"
             )
     })
-    ResponseEntity<?> deleteUser(@Positive @PathVariable Integer id);
+    ResponseEntity<Object> deleteUser(@Positive @PathVariable Integer id);
 }

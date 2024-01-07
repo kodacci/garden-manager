@@ -24,7 +24,7 @@ public class AuthController extends AbstractController implements AuthApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<Object> login(@RequestBody LoginRequest request) {
         return toResponse(service.login(request.login(), request.password()));
     }
 
@@ -34,7 +34,7 @@ public class AuthController extends AbstractController implements AuthApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> refresh(@RequestBody RefreshRequest request) {
+    public ResponseEntity<Object> refresh(@RequestBody RefreshRequest request) {
         return toResponse(service.refresh(request.refreshToken()));
     }
 
@@ -43,7 +43,7 @@ public class AuthController extends AbstractController implements AuthApi {
             value = "/logout",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<Object> logout() {
         return toResponse(getUserId().flatMap(service::logout));
     }
 }
