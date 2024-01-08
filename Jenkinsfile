@@ -19,7 +19,7 @@ pipeline {
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
-                        GIT_BRANCH_NAME = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD').trim()
+                        GIT_BRANCH_NAME = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD').trim().tokenize('/').last()
                         echo "Project version: '${PROJECT_VERSION}'"
                         echo "Branch name: '${GIT_BRANCH_NAME}'"
                     }
