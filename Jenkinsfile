@@ -97,7 +97,9 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def image = docker.build("ru.ra-tech:$GIT_BRANCH_NAME:garden-manager-core:$PROJECT_VERSION")
+                        def imageTag = 'ru.ra-tech:' + GIT_BRANCH_NAME + ':garden-manager-core:' + PROJECT_VERSION
+                        echo "Building image with tag '$imageTag'"
+                        def image = docker.build(imageTag)
 
                         docker.withRegistry('https://nexus.ra-tech.pro:8887', 'nexus_deployer') {
                             image.push()
