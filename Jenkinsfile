@@ -1,4 +1,5 @@
 def PROJECT_VERSION
+def GIT_BRANCH_NAME
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -18,7 +19,9 @@ pipeline {
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
+                        GIT_BRANCH_NAME = sh(encoding: 'UTF-8', returnStdout: true, scrpt: 'git name-rev --name-only HEAD').trim()
                         echo "Project version: '${PROJECT_VERSION}'"
+                        echo "Branch name: '${GIT_BRANCH_NAME}'"
                     }
                 }
             }
@@ -94,7 +97,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def image = docker.build("ru.ra-tech.garden-manager:$PROJECT_VERSION")
+                        def image = docker.build("ru.ra-tech:$GIT_BRANCH_NAME:garden-manager-core:$PROJECT_VERSION")
 
                         docker.withRegistry('https://nexus.ra-tech.pro:8887', 'nexus_deployer') {
                             image.push()
