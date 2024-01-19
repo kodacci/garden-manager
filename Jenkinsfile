@@ -111,7 +111,7 @@ pipeline {
                         }
                     }
 
-                    publishChecks name: 'build-succeeded' title 'Successfully built' 
+                    publishChecks name: 'build-succeeded', title 'Successfully built' 
                 }
             }
         }
