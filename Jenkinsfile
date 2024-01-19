@@ -1,5 +1,5 @@
 def PROJECT_VERSION
-def GIT_BRANCH_NAME
+def DOCKER_DEPLOY_GIT_SCOPE
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -19,9 +19,14 @@ pipeline {
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
-                        GIT_BRANCH_NAME = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD').trim().tokenize('/').last()
+                        DOCKER_DEPLOY_GIT_SCOPE =
+                                sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
+                                        .trim()
+                                        .tokenize('/')
+                                        .last()
+                                        .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
-                        echo "Branch name: '${GIT_BRANCH_NAME}'"
+                        echo "Git branch scope: '${DOCKER_DEPLOY_GIT_SCOPE}'"
                     }
                 }
             }
@@ -97,7 +102,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/' + GIT_BRANCH_NAME + '/garden-manager-core:' + PROJECT_VERSION
+                        def imageTag = 'pro.ra-tech/' + DOCKER_DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
                         echo "Building image with tag '$imageTag'"
                         def image = docker.build(imageTag)
 
