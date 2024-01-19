@@ -102,7 +102,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/' + DOCKER_DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        def imageTag = 'pro.ra-tech/garden-manager/' + DOCKER_DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
                         echo "Building image with tag '$imageTag'"
                         def image = docker.build(imageTag)
 
