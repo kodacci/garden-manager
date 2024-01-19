@@ -110,6 +110,8 @@ pipeline {
                             image.push()
                         }
                     }
+
+                    publishChecks name: 'build-succeeded' title 'Successfully built' 
                 }
             }
         }
