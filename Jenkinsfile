@@ -106,7 +106,7 @@ pipeline {
                         echo "Building image with tag '$imageTag'"
                         def image = docker.build(imageTag)
 
-                        docker.withRegistry('https://nexus.ra-tech.pro:8887', 'nexus_deployer') {
+                        docker.withRegistry(DOCKER_REGISTRY_HOST, 'nexus_deployer') {
                             image.push()
                         }
                     }
