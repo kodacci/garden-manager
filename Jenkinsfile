@@ -1,5 +1,5 @@
 def PROJECT_VERSION
-def DOCKER_DEPLOY_GIT_SCOPE
+def DEPLOY_GIT_SCOPE
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -19,14 +19,14 @@ pipeline {
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
-                        DOCKER_DEPLOY_GIT_SCOPE =
+                        DEPLOY_GIT_SCOPE =
                                 sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
                                         .trim()
                                         .tokenize('/')
                                         .last()
                                         .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
-                        echo "Git branch scope: '${DOCKER_DEPLOY_GIT_SCOPE}'"
+                        echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
                     }
                 }
             }
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn deploy:deploy-file -pl core -Dci.build.number=$BUILD_NUMBER -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
+                        sh "mvn deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
                     }
 
                     println("Deploying to nexus finished")
@@ -108,7 +108,7 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/garden-manager/' + DOCKER_DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
                         echo "Building image with tag '$imageTag'"
                         def image = docker.build(imageTag)
 

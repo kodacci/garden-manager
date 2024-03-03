@@ -156,24 +156,25 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
-                    <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>
-                    <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>
-                    <packaging>${project.packaging}</packaging>
-                    <repositoryId>nexus-snapshots</repositoryId>
-                    <version>${project.version}-${ci.build.number}-SNAPSHOT</version>
+<!--                    <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>-->
+<!--                    <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>-->
+<!--                    <packaging>${project.packaging}</packaging>-->
+<!--                    <repositoryId>nexus-snapshots</repositoryId>-->
+<!--                    <version>${project.version}-SNAPSHOT</version>-->
                 </configuration>
                 <executions>
                     <execution>
-                        <id>deploy-core-file</id>
+                        <id>deploy-core</id>
                         <goals>
-                            <goal>deploy-file</goal>
+                            <goal>deploy</goal>
                         </goals>
                         <phase>deploy</phase>
                         <configuration>
-                            <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>
-                            <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>
-                            <packaging>${project.packaging}</packaging>
-                            <repositoryId>nexus-snapshots</repositoryId>
+                            <skip>false</skip>
+<!--                            <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>-->
+<!--                            <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>-->
+<!--                            <packaging>${project.packaging}</packaging>-->
+<!--                            <repositoryId>nexus-snapshots</repositoryId>-->
                         </configuration>
                     </execution>
                 </executions>

@@ -74,7 +74,6 @@
         <coverage.agent> </coverage.agent>
         <skip.jooq.generation>true</skip.jooq.generation>
         <skip.unit.tests>false</skip.unit.tests>
-        <ci.build.number>0000</ci.build.number>
 
         <!--    Sonar    -->
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../code-coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -351,16 +350,6 @@
                     <configuration>
                         <skip>true</skip>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>deploy</id>
-                            <goals><goal>deploy-file</goal></goals>
-                            <phase>deploy</phase>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
