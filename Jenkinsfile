@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn deploy:deploy-file -pl garden-manager-core -Dci.build.number=$BUILD_NUMBER -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
+                        sh "mvn deploy:deploy-file -pl core -Dci.build.number=$BUILD_NUMBER -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
                     }
 
                     println("Deploying to nexus finished")
