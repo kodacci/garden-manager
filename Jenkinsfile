@@ -86,11 +86,17 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus') {
+        stage('Deploy to Nexus Snapshots') {
+            when {
+                not {
+                    branch 'release/*'
+                }
+            }
+
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
+                        sh "mvn deploy:deploy-file -pl garden-manager-core -Dci.build.number=$BUILD_NUMBER -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
                     }
 
                     println("Deploying to nexus finished")

@@ -1,6 +1,5 @@
 package ru.ra_tech.garden_manager.database.configuration;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -8,7 +7,6 @@ import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultDSLContext;
 import org.jooq.impl.DefaultExecuteListenerProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;

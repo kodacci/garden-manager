@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>garden-manager</artifactId>
-    <groupId>ru.ra-tech</groupId>
+    <groupId>ru.ra-tech.garden-manager</groupId>
     <version>${revision}</version>
   </parent>
 
@@ -24,12 +24,12 @@
     <!--  Internal  -->
 
     <dependency>
-      <groupId>ru.ra-tech</groupId>
+      <groupId>ru.ra-tech.garden-manager</groupId>
       <artifactId>garden-manager-failure</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>ru.ra-tech</groupId>
+      <groupId>ru.ra-tech.garden-manager</groupId>
       <artifactId>garden-manager-db-migrate</artifactId>
       <version>${revision}</version>
     </dependency>

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>garden-manager</artifactId>
-        <groupId>ru.ra-tech</groupId>
+        <groupId>ru.ra-tech.garden-manager</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -69,12 +69,12 @@
 
         <!--    INTERNAL    -->
         <dependency>
-            <groupId>ru.ra-tech</groupId>
+            <groupId>ru.ra-tech.garden-manager</groupId>
             <artifactId>garden-manager-failure</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>ru.ra-tech</groupId>
+            <groupId>ru.ra-tech.garden-manager</groupId>
             <artifactId>garden-manager-database</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
@@ -120,6 +120,7 @@
                     <mainClass>ru.ra_tech.garden_manager.core.MainApplication</mainClass>
                     <skip>false</skip>
                     <jvmArguments>${coverage.agent}</jvmArguments>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>
@@ -127,9 +128,6 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
-                        <configuration>
-                            <finalName>garden-manager-core-app</finalName>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -158,7 +156,27 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
+                    <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>
+                    <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>
+                    <packaging>${project.packaging}</packaging>
+                    <repositoryId>nexus-snapshots</repositoryId>
+                    <version>${project.version}-${ci.build.number}-SNAPSHOT</version>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>deploy-core-file</id>
+                        <goals>
+                            <goal>deploy-file</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>
+                            <url>https://nexus.ra-tech.pro/repository/maven-snapshots</url>
+                            <packaging>${project.packaging}</packaging>
+                            <repositoryId>nexus-snapshots</repositoryId>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
