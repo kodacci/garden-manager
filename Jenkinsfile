@@ -99,7 +99,7 @@ pipeline {
                         sh "mvn deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
                     }
 
-                    println("Deploying to nexus finished")
+                    println('Deploying to nexus finished')
                 }
             }
         }
@@ -110,10 +110,12 @@ pipeline {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
                         def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
                         echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag)
+                        def artifactPath = 'ru/ra-tech/garden-manager/garden-manager-core/' + $PROJECT_VERSION + '-' + $DEPLOY_GIT_SCOPE + '.jar'
+                        def image = docker.build(imageTag, "--build-arg REPO=nexus-snapshots --build-arg ARTIFACT_PATH=$artifactPath ./Dockerfile")
 
                         docker.withRegistry(DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
+                            image.push('latest')
                         }
                     }
                 }
