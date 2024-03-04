@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>ru.ra-tech</groupId>
+        <groupId>ru.ra-tech.garden-manager</groupId>
         <artifactId>garden-manager</artifactId>
         <version>${revision}</version>
     </parent>
@@ -14,20 +14,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>ru.ra-tech</groupId>
+            <groupId>ru.ra-tech.garden-manager</groupId>
             <artifactId>garden-manager-failure</artifactId>
             <version>${revision}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>ru.ra-tech</groupId>
+            <groupId>ru.ra-tech.garden-manager</groupId>
             <artifactId>garden-manager-database</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>ru.ra-tech</groupId>
+            <groupId>ru.ra-tech.garden-manager</groupId>
             <artifactId>garden-manager-core</artifactId>
             <version>${revision}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -52,6 +54,13 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>

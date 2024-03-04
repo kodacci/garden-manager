@@ -9,7 +9,7 @@
         <version>3.1.2</version>
     </parent>
 
-    <groupId>ru.ra-tech</groupId>
+    <groupId>ru.ra-tech.garden-manager</groupId>
     <artifactId>garden-manager</artifactId>
     <version>${revision}</version>
 
@@ -26,7 +26,7 @@
     </modules>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.0.0</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
         <java.version>17</java.version>
@@ -50,7 +50,8 @@
         <!--  Third party dependencies  -->
         <junit.version>5.9.1</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <spring.boot.version>3.2.1</spring.boot.version>
+        <spring.boot.version>3.2.3</spring.boot.version>
+        <spring.version>6.1.4</spring.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.25.1</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
@@ -62,7 +63,7 @@
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
         <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
-        <testcontainers.version>1.19.3</testcontainers.version>
+        <testcontainers.version>1.19.6</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
@@ -87,7 +88,7 @@
         </snapshotRepository>
         <repository>
             <id>nexus</id>
-            <url>https://nexus.ra-tech.pro/repository/maven-releases/</url>
+            <url>https://nexus.ra-tech.pro/repository/maven-releases</url>
         </repository>
     </distributionManagement>
 
@@ -164,6 +165,11 @@
 
             <!--      Third party      -->
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -315,7 +321,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven.compiler.plugin.version}</version>
                     <configuration>
-                        <release>17</release>
+                        <release>${java.version}</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -341,6 +347,9 @@
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
@@ -442,14 +451,6 @@
                     <nexusUrl>https://nexus.ra-tech.pro</nexusUrl>
                     <repository>maven-releases</repository>
                     <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

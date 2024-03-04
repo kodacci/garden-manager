@@ -1,5 +1,5 @@
 def PROJECT_VERSION
-def DOCKER_DEPLOY_GIT_SCOPE
+def DEPLOY_GIT_SCOPE
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -19,14 +19,14 @@ pipeline {
                                 script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
-                        DOCKER_DEPLOY_GIT_SCOPE =
+                        DEPLOY_GIT_SCOPE =
                                 sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
                                         .trim()
                                         .tokenize('/')
                                         .last()
                                         .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
-                        echo "Git branch scope: '${DOCKER_DEPLOY_GIT_SCOPE}'"
+                        echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
                     }
                 }
             }
@@ -86,14 +86,20 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus') {
+        stage('Deploy to Nexus Snapshots') {
+            when {
+                not {
+                    branch 'release/*'
+                }
+            }
+
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn -DskipTests -Dskip.unit.tests -Dskip.jooq.generation deploy"
+                        sh "mvn deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
                     }
 
-                    println("Deploying to nexus finished")
+                    println('Deploying to nexus finished')
                 }
             }
         }
@@ -102,12 +108,17 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/garden-manager/' + DOCKER_DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        def groupId = 'ru.ra-tech.garden-manager'
+                        def artifactId = 'garden-manager-core'
+                        def version = PROJECT_VERSION + '-' + DEPLOY_GIT_SCOPE + '-SNAPSHOT'
+
                         echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag)
+                        def image = docker.build(imageTag, "--build-arg REPO=maven-snapshots --build-arg GROUP_ID=$groupId --build-arg ARTIFACT_ID=$artifactId --build-arg VERSION=$version .")
 
                         docker.withRegistry(DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
+                            image.push('latest')
                         }
                     }
                 }
