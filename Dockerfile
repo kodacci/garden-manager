@@ -13,8 +13,7 @@ RUN ./download.sh $PATH app.jar
 
 FROM eclipse-temurin:17
 
-RUN mkdir app
-RUN useradd -D garden-manager
+RUN useradd -U garden-manager
 WORKDIR /home/garden-manager
 USER garden-manager
 COPY --from=build --chown=garden-manager /home/downloader/app.jar ./
