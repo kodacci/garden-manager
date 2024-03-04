@@ -3,13 +3,13 @@ FROM maven-artifact-downloader as build
 LABEL authors="Andrey Ryabtsev"
 
 ARG REPO
-ARG ARTIFACT_PATH
-
-ENV PATH "${NEXUS_BASE_PATH}/${REPO}/${ARTIFACT_PATH}"
+ARG GROUP_ID
+ARG ARTIFACT_ID
+ARG VERSION
 
 WORKDIR /home/downloader
 USER downloader
-RUN ./download.sh $PATH app.jar
+RUN ./download.sh $REPO $GROUP_ID $ARTIFACT_ID $VERSION_BASE app.jar
 
 FROM eclipse-temurin:17
 
