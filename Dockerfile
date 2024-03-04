@@ -19,5 +19,5 @@ USER garden-manager
 COPY --from=build --chown=garden-manager /home/downloader/app.jar ./
 
 EXPOSE 8080
-CMD ["-jar", "/home/garden-manager/app.jar"]
+CMD ["-jar", "app.jar"]
 ENTRYPOINT ["java"]
