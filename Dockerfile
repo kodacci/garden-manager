@@ -14,7 +14,8 @@ RUN ./download.sh $PATH app.jar
 FROM eclipse-temurin:17
 
 RUN mkdir app
-RUN adduser -ms /bin/bash garden-manager
+RUN groupadd garden-manager
+RUN useradd -D garden-manager -G garden-manager
 WORKDIR /home/garden-manager
 USER garden-manager
 COPY --from=build --chown=garden-manager /home/downloader/app.jar ./
