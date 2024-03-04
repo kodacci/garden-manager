@@ -1,18 +1,24 @@
 # syntax=docker/dockerfile:1
-FROM maven:3.9.4-eclipse-temurin-17-alpine as build
-
+FROM maven-artifact-downloader as build
 LABEL authors="Andrey Ryabtsev"
 
-COPY ./ /opt/src
-WORKDIR /opt/src
+ARG REPO
+ARG ARTIFACT_PATH
 
-RUN mvn -f pom.xml -Dskip.jooq.generation=true -Dskip.unit.tests -DskipTests clean package
-COPY ./core/target/garden-manager-core-app.jar /opt/app/app.jar
+ENV PATH "${NEXUS_BASE_PATH}/${REPO}/${ARTIFACT_PATH}"
+
+WORKDIR /home/downloader
+USER downloader
+RUN ./download.sh $PATH app.jar
 
 FROM eclipse-temurin:17
+
 RUN mkdir app
-WORKDIR /app
-COPY --from=build /opt/app/app.jar ./
+RUN adduser -ms /bin/bash garden-manager
+WORKDIR /home/garden-manager
+USER garden-manager
+COPY --from=build --chown=garden-manager /home/downloader/app.jar ./
 
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar"]
+CMD ["-jar", "/home/garden-manager/app.jar"]
+ENTRYPOINT ["java"]
