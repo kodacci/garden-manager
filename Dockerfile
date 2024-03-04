@@ -9,7 +9,7 @@ ARG VERSION
 
 WORKDIR /home/downloader
 USER downloader
-RUN ./download.sh $REPO $GROUP_ID $ARTIFACT_ID $VERSION_BASE app.jar
+RUN ./download.sh $REPO $GROUP_ID $ARTIFACT_ID $VERSION app.jar
 
 FROM eclipse-temurin:17
 
