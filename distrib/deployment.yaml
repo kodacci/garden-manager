@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garden-manager-core-deployment
+  labels:
+    app: garden-manager-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garden-manager-core
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: garden-manager-core
+    spec:
+      containers:
+        - name: garden-manager-core
+          image: snapshots.docker-registry.ra-tech.pro/pro.ra-tech/garden-manager/main/garden-manager-core:latest
+          ports:
+            containerPort: 8080
+      imagePullSecrets:
+        - name: docker-registry-creds
