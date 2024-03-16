@@ -116,7 +116,7 @@ pipeline {
                         echo "Building image with tag '$imageTag'"
                         def image = docker.build(imageTag, "--build-arg REPO=maven-snapshots --build-arg GROUP_ID=$groupId --build-arg ARTIFACT_ID=$artifactId --build-arg VERSION=$version .")
 
-                        docker.withRegistry(DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
+                        docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
                             image.push('latest')
                         }
