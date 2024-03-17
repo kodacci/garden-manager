@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: garden-manager-ingress
+spec:
+  ingressClass: istio
+  rules:
+    - host: garden-manager.cloud.ra-tech.pro
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: garden-manager-core-service
+                port:
+                  name: http-rest-api

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.2.3</version>
     </parent>
 
     <groupId>ru.ra-tech.garden-manager</groupId>
@@ -48,22 +48,22 @@
         <sonar.maven.plugin.version>3.10.0.2594</sonar.maven.plugin.version>
 
         <!--  Third party dependencies  -->
-        <junit.version>5.9.1</junit.version>
+        <junit.version>5.10.2</junit.version>
         <assertj.version>3.24.2</assertj.version>
         <spring.boot.version>3.2.3</spring.boot.version>
         <spring.version>6.1.4</spring.version>
         <lombok.version>1.18.26</lombok.version>
-        <liquibase.version>4.25.1</liquibase.version>
+        <liquibase.version>4.26.0</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
         <springdoc.openapi.version>2.3.0</springdoc.openapi.version>
-        <postgresql.version>42.6.0</postgresql.version>
+        <postgresql.version>42.7.3</postgresql.version>
         <problem.version>0.27.0</problem.version>
         <vavr.version>0.10.4</vavr.version>
         <jooq.version>3.18.3</jooq.version>
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
         <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
-        <testcontainers.version>1.19.6</testcontainers.version>
+        <testcontainers.version>1.19.7</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
