@@ -12,7 +12,7 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-                    withMaven(maven: 'maven-3') {
+                    withMaven(maven: 'maven-config-ra-tech') {
                         PROJECT_VERSION = sh(
                                 encoding: 'UTF-8',
                                 returnStdout: true,
