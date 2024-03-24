@@ -66,7 +66,9 @@ pipeline {
 
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
-                    sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests -Dskip.unit.tests'
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests -Dskip.unit.tests'
+                    }
                 }
             }
         }
