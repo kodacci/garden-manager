@@ -12,7 +12,7 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-//                    withMaven {
+                    withMaven {
                         PROJECT_VERSION = sh(
                                 encoding: 'UTF-8',
                                 returnStdout: true,
@@ -27,7 +27,7 @@ pipeline {
                                         .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
                         echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
-//                    }
+                    }
                 }
             }
         }
