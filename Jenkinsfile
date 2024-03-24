@@ -12,20 +12,22 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-                    PROJECT_VERSION = sh(
-                            encoding: 'UTF-8',
-                            returnStdout: true,
-                            script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
-                    ).trim()
-                    PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
-                    DEPLOY_GIT_SCOPE =
-                            sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
-                                    .trim()
-                                    .tokenize('/')
-                                    .last()
-                                    .toLowerCase()
-                    echo "Project version: '${PROJECT_VERSION}'"
-                    echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
+                    withMaven {
+                        PROJECT_VERSION = sh(
+                                encoding: 'UTF-8',
+                                returnStdout: true,
+                                script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
+                        ).trim()
+                        PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
+                        DEPLOY_GIT_SCOPE =
+                                sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
+                                        .trim()
+                                        .tokenize('/')
+                                        .last()
+                                        .toLowerCase()
+                        echo "Project version: '${PROJECT_VERSION}'"
+                        echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
+                    }
                 }
             }
         }
