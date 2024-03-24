@@ -12,19 +12,21 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-                    PROJECT_VERSION = sh(
-                            encoding: 'UTF-8',
-                            returnStdout: true,
-                            script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
-                    ).trim()
-                    DEPLOY_GIT_SCOPE =
-                            sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
-                                    .trim()
-                                    .tokenize('/')
-                                    .last()
-                                    .toLowerCase()
-                    echo "Project version: '${PROJECT_VERSION}'"
-                    echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        PROJECT_VERSION = sh(
+                                encoding: 'UTF-8',
+                                returnStdout: true,
+                                script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
+                        ).trim()
+                        DEPLOY_GIT_SCOPE =
+                                sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
+                                        .trim()
+                                        .tokenize('/')
+                                        .last()
+                                        .toLowerCase()
+                        echo "Project version: '${PROJECT_VERSION}'"
+                        echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
+                    }
                 }
             }
         }
@@ -33,7 +35,9 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
-                    sh './mvnw -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        sh './mvnw -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
+                    }
                     println("Build finished")
                 }
             }
@@ -44,8 +48,10 @@ pipeline {
                 script {
                     println("Starting build verification")
 
-                    docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        sh './mvnw verify -Dskip.jooq.generation'
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
+                            sh './mvnw verify -Dskip.jooq.generation'
+                        }
                     }
 
                     println("Verification finished")
