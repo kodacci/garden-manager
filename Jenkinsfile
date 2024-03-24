@@ -12,11 +12,11 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-                    withMaven {
+//                    withMaven {
                         PROJECT_VERSION = sh(
                                 encoding: 'UTF-8',
                                 returnStdout: true,
-                                script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
+                                script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
                         DEPLOY_GIT_SCOPE =
@@ -27,7 +27,7 @@ pipeline {
                                         .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
                         echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
-                    }
+//                    }
                 }
             }
         }
@@ -37,9 +37,9 @@ pipeline {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
 
-                    withMaven {
-                        sh 'mvn -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
-                    }
+//                    withMaven {
+                        sh './mvnw -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
+//                    }
 
                     println("Build finished")
                 }
@@ -51,11 +51,11 @@ pipeline {
                 script {
                     println("Starting build verification")
 
-                    withMaven {
+//                    withMaven {
                         docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                            sh 'mvn verify -Dskip.jooq.generation'
+                            sh './mvnw verify -Dskip.jooq.generation'
                         }
-                    }
+//                    }
 
                     println("Verification finished")
                 }
@@ -69,7 +69,7 @@ pipeline {
 
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
-                    sh 'mvn sonar:sonar -Dskip.jooq.generation'
+                    sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests -Dskip.unit.tests'
                 }
             }
         }
