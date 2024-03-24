@@ -86,7 +86,9 @@ pipeline {
 
             steps {
                 script {
-                    sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
+                    }
 
                     println('Deploying to nexus finished')
                 }
