@@ -143,8 +143,15 @@ pipeline {
                 timeout time: 1, unit: 'HOURS'
             }
 
+            input {
+                message: 'Deploy to k8s?'
+                ok: 'Yes'
+            }
+
             steps {
-                env.DO_DEPLOY = input "Deploy?"
+                script {
+                    env.DO_DEPLOY = 'yes'
+                }
             }
         }
 
@@ -153,7 +160,7 @@ pipeline {
 
             when {
                 beforeAgent: true
-                environment name: 'DO_DEPLOY'
+                environment name: 'DO_DEPLOY', value: 'yes'
             }
 
             steps {
