@@ -6,7 +6,7 @@ LABEL authors="Andrey Ryabtsev"
 RUN useradd -U garden-manager
 WORKDIR /home/garden-manager
 USER garden-manager
-COPY --chwon=garden-manager:garden-manager  core/target/garden-manager-core.jar ./
+COPY --chown=garden-manager:garden-manager  core/target/garden-manager-core.jar ./
 
 EXPOSE 8080
 CMD ["-jar", "garden-manager-core.jar"]
