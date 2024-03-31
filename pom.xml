@@ -73,7 +73,7 @@
         <!--    Vars    -->
         <coverage.agent> </coverage.agent>
         <skip.jooq.generation>true</skip.jooq.generation>
-        <skip.unit.tests>false</skip.unit.tests>
+        <skipTests>false</skipTests>
 
         <!--    Sonar    -->
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../code-coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -328,13 +328,16 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
                     <configuration>
-                        <skipTests>${skip.unit.tests}</skipTests>
+                        <skipTests>${skipTests}</skipTests>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven.failsafe.plugin.version}</version>
+                    <configuration>
+                        <skipTests>${skipTests}</skipTests>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>

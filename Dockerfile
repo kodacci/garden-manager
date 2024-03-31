@@ -1,23 +1,13 @@
 # syntax=docker/dockerfile:1
-FROM maven-artifact-downloader as build
-LABEL authors="Andrey Ryabtsev"
-
-ARG REPO
-ARG GROUP_ID
-ARG ARTIFACT_ID
-ARG VERSION
-
-WORKDIR /home/downloader
-USER downloader
-RUN ./download.sh $REPO $GROUP_ID $ARTIFACT_ID $VERSION app.jar
-
 FROM eclipse-temurin:17
+
+LABEL authors="Andrey Ryabtsev"
 
 RUN useradd -U garden-manager
 WORKDIR /home/garden-manager
 USER garden-manager
-COPY --from=build --chown=garden-manager /home/downloader/app.jar ./
+COPY --chwon=garden-manager:garden-manager  core/target/garden-manager-core.jar ./
 
 EXPOSE 8080
-CMD ["-jar", "app.jar"]
+CMD ["-jar", "garden-manager-core.jar"]
 ENTRYPOINT ["java"]

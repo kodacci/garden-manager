@@ -2,14 +2,14 @@ def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
 
 pipeline {
-    agent { label 'jenkins-agent1' }
-
     options {
         ansiColor('xterm')
     }
 
     stages {
         stage('Determine Version') {
+            agent { label 'jenkins-agent1' }
+
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
@@ -32,6 +32,8 @@ pipeline {
         }
 
         stage('Build') {
+            agent { label 'jenkins-agent1' }
+
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
@@ -44,6 +46,8 @@ pipeline {
         }
 
         stage('Test') {
+            agent { label 'jenkins-agent1' }
+
             steps {
                 script {
                     println("Starting build verification")
@@ -60,6 +64,8 @@ pipeline {
         }
 
         stage('Analise with sonarqube') {
+            agent { label 'jenkins-agent1' }
+
             when {
                 branch 'main'
             }
@@ -74,6 +80,8 @@ pipeline {
         }
 
         stage('Quality gate') {
+            agent { label 'jenkins-agent1' }
+
             when {
                 branch 'main'
             }
@@ -86,6 +94,8 @@ pipeline {
         }
 
         stage('Deploy to Nexus Snapshots') {
+            agent { label 'jenkins-agent1' }
+
             when {
                 not {
                     branch 'release/*'
@@ -104,6 +114,8 @@ pipeline {
         }
 
         stage('Build docker image') {
+            agent { label 'jenkins-agent1' }
+
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
@@ -119,6 +131,36 @@ pipeline {
                             image.push()
                             image.push('latest')
                         }
+                    }
+                }
+            }
+        }
+
+        stage('Request to deploy') {
+            agent none
+
+            options {
+                timeout time: 1, unit: 'HOURS'
+            }
+
+            steps {
+                env.DO_DEPLOY = input "Deploy?"
+            }
+        }
+
+        stage('Deploy to test environment') {
+            agent { label 'jenkins-agent1' }
+
+            when {
+                beforeAgent: true
+                environment name: 'DO_DEPLOY'
+            }
+
+            steps {
+                script {
+                    withPythonEnv('python') {
+                        sh 'pip install -U jinja2-cli'
+                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
                     }
                 }
             }
