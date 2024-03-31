@@ -1,0 +1,38 @@
+def DEPLOY_GIT_SCOPE
+
+pipeline {
+    agent { label 'jenkins-agent1' }
+
+    stages {
+        stage('Determine git scope') {
+            steps {
+                script {
+                    DEPLOY_GIT_SCOPE = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
+                        .trim()
+                        .tokenize('/')
+                        .last()
+                        .toLowerCase()
+
+                    echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
+                }
+            }
+        }
+
+        stage('Deploy to test environment') {
+            when {
+                not {
+                    branch 'release/*'
+                }
+            }
+
+            steps {
+                script {
+                    withPythonEnv('python') {
+                        sh 'pip install -U jinja2-cli'
+                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -124,39 +124,9 @@ pipeline {
             }
         }
 
-        stage('Request to deploy') {
-            agent none
-
-            options {
-                timeout time: 5, unit: 'MINUTES'
-            }
-
-            input {
-                message 'Deploy to k8s?'
-                ok 'Yes'
-                parameters { choice(name: 'Deploy', choices: ['no', 'yes']) }
-            }
-
+        stage('Trigger deploy pipeline') {
             steps {
-                script {
-                    env.DO_DEPLOY = "${Deploy}"
-                }
-            }
-        }
-
-        stage('Deploy to test environment') {
-            when {
-                beforeAgent true
-                environment name: 'DO_DEPLOY', value: 'yes'
-            }
-
-            steps {
-                script {
-                    withPythonEnv('python') {
-                        sh 'pip install -U jinja2-cli'
-                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
-                    }
-                }
+                build(job: "Garden Manager Deploy Backend", wait: false)
             }
         }
     }
