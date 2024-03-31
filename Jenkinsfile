@@ -159,7 +159,7 @@ pipeline {
             agent { label 'jenkins-agent1' }
 
             when {
-                beforeAgent: true
+                beforeAgent true
                 environment name: 'DO_DEPLOY', value: 'yes'
             }
 
