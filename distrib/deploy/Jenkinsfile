@@ -27,7 +27,7 @@ pipeline {
 
             steps {
                 script {
-                    withPythonEnv('python') {
+                    withPythonEnv('python3') {
                         sh 'pip install -U jinja2-cli'
                         sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
                     }
