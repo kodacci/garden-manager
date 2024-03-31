@@ -10,8 +10,6 @@ pipeline {
 
     stages {
         stage('Determine Version') {
-            agent { label 'jenkins-agent1' }
-
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
@@ -34,13 +32,11 @@ pipeline {
         }
 
         stage('Build') {
-            agent { label 'jenkins-agent1' }
-
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh './mvnw -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
+                        sh './mvnw -DskipTests -Dskip.jooq.generation=true clean package'
                     }
                     println("Build finished")
                 }
@@ -48,8 +44,6 @@ pipeline {
         }
 
         stage('Test') {
-            agent { label 'jenkins-agent1' }
-
             steps {
                 script {
                     println("Starting build verification")
@@ -66,8 +60,6 @@ pipeline {
         }
 
         stage('Analise with sonarqube') {
-            agent { label 'jenkins-agent1' }
-
             when {
                 branch 'main'
             }
@@ -75,15 +67,13 @@ pipeline {
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests -Dskip.unit.tests'
+                        sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests'
                     }
                 }
             }
         }
 
         stage('Quality gate') {
-            agent { label 'jenkins-agent1' }
-
             when {
                 branch 'main'
             }
@@ -96,8 +86,6 @@ pipeline {
         }
 
         stage('Deploy to Nexus Snapshots') {
-            agent { label 'jenkins-agent1' }
-
             when {
                 not {
                     branch 'release/*'
@@ -107,7 +95,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
+                        sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                     }
 
                     println('Deploying to nexus finished')
@@ -116,8 +104,6 @@ pipeline {
         }
 
         stage('Build docker image') {
-            agent { label 'jenkins-agent1' }
-
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
@@ -142,24 +128,23 @@ pipeline {
             agent none
 
             options {
-                timeout time: 1, unit: 'HOURS'
+                timeout time: 5, unit: 'MINUTES'
             }
 
             input {
-                message "Deploy to k8s?"
-                ok "Yes"
+                message 'Deploy to k8s?'
+                ok 'Yes'
+                parameters { choice(name: 'Deploy', choices: ['yes', 'now']) }
             }
 
             steps {
                 script {
-                    env.DO_DEPLOY = 'yes'
+                    env.DO_DEPLOY = "${Deploy}"
                 }
             }
         }
 
         stage('Deploy to test environment') {
-            agent { label 'jenkins-agent1' }
-
             when {
                 beforeAgent true
                 environment name: 'DO_DEPLOY', value: 'yes'
