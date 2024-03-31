@@ -2,6 +2,8 @@ def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
 
 pipeline {
+    agent { label 'jenkins-agent1' }
+
     options {
         ansiColor('xterm')
     }
