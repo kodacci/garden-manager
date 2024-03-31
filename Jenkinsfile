@@ -144,8 +144,8 @@ pipeline {
             }
 
             input {
-                message: 'Deploy to k8s?'
-                ok: 'Yes'
+                message: "Deploy to k8s?"
+                ok: "Yes"
             }
 
             steps {
