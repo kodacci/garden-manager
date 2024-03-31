@@ -134,7 +134,7 @@ pipeline {
             input {
                 message 'Deploy to k8s?'
                 ok 'Yes'
-                parameters { choice(name: 'Deploy', choices: ['yes', 'now']) }
+                parameters { choice(name: 'Deploy', choices: ['yes', 'no'], defaultValue: 'no') }
             }
 
             steps {
