@@ -137,17 +137,18 @@ pipeline {
         }
 
         stage('Request to deploy') {
-            agent none
+//            agent none
+//
+//            options {
+//                timeout time: 1, unit: 'HOURS'
+//            }
 
-            options {
-                timeout time: 1, unit: 'HOURS'
+            input {
+                message: "Deploy to k8s?"
+                ok: "Yes"
             }
 
             steps {
-                input {
-                    message: "Deploy to k8s?"
-                    ok: "Yes"
-                }
                 script {
                     env.DO_DEPLOY = 'yes'
                 }
