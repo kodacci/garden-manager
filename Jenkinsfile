@@ -19,7 +19,7 @@ pipeline {
                                 returnStdout: true,
                                 script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
-                        GIT_BRANCH = sh(encoding: 'UTF-8', returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                        GIT_BRANCH = sh(encoding: 'UTF-8', returnStdout: true, script: 'git branch --show-current').trim()
                         DEPLOY_GIT_SCOPE = GIT_BRANCH.tokenize('/').last().toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
                         echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
