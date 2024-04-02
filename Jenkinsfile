@@ -1,5 +1,3 @@
-import org.assertj.core.api.UrlAssert
-
 def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
 
