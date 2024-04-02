@@ -1,5 +1,4 @@
 def PROJECT_VERSION
-def GIT_BRANCH
 def DEPLOY_GIT_SCOPE
 
 pipeline {
@@ -19,8 +18,12 @@ pipeline {
                                 returnStdout: true,
                                 script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
-                        GIT_BRANCH = sh(encoding: 'UTF-8', returnStdout: true, script: 'git branch --show-current').trim()
-                        DEPLOY_GIT_SCOPE = GIT_BRANCH.tokenize('/').last().toLowerCase()
+                        DEPLOY_GIT_SCOPE =
+                                sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
+                                        .trim()
+                                        .tokenize('/')
+                                        .last()
+                                        .toLowerCase()
                         echo "Project version: '${PROJECT_VERSION}'"
                         echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
                     }
@@ -120,7 +123,7 @@ pipeline {
 
         stage('Trigger deploy pipeline') {
             steps {
-                build(job: "Garden Manager Deploy Backend/$GIT_BRANCH", wait: false)
+                build(job: "Garden Manager Deploy Backend/$BRANCH_NAME", wait: false)
             }
         }
     }
