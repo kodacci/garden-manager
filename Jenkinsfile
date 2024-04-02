@@ -1,3 +1,5 @@
+import org.assertj.core.api.UrlAssert
+
 def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
 
@@ -123,7 +125,10 @@ pipeline {
 
         stage('Trigger deploy pipeline') {
             steps {
-                build(job: "Garden Manager Deploy Backend/$BRANCH_NAME", wait: false)
+                script {
+                    def path = UrlEncoder.encode(BRANCH_NAME)
+                    build(job: "Garden Manager Deploy Backend/$path", wait: false)
+                }
             }
         }
     }
