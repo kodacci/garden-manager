@@ -108,12 +108,9 @@ pipeline {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
                         def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
-                        def groupId = 'ru.ra-tech.garden-manager'
-                        def artifactId = 'garden-manager-core'
-                        def version = PROJECT_VERSION + '-' + DEPLOY_GIT_SCOPE + '-SNAPSHOT'
 
                         echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag, "--build-arg REPO=maven-snapshots --build-arg GROUP_ID=$groupId --build-arg ARTIFACT_ID=$artifactId --build-arg VERSION=$version .")
+                        def image = docker.build(imageTag)
 
                         docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
