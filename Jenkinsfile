@@ -124,7 +124,7 @@ pipeline {
         stage('Trigger deploy pipeline') {
             steps {
                 script {
-                    def path = UrlEncoder.encode(BRANCH_NAME)
+                    def path = BRANCH_NAME.replaceAll("/", "%2F")
                     build(job: "Garden Manager Deploy Backend/$path", wait: false)
                 }
             }
