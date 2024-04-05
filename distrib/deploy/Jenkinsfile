@@ -7,12 +7,7 @@ pipeline {
         stage('Determine git scope') {
             steps {
                 script {
-                    DEPLOY_GIT_SCOPE = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
-                        .trim()
-                        .tokenize('/')
-                        .last()
-                        .toLowerCase()
-
+                    DEPLOY_GIT_SCOPE = BRANCH_NAME.tokenize('/').last().toLowerCase()
                     echo "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
                 }
             }
@@ -28,7 +23,7 @@ pipeline {
             steps {
                 script {
                     withPythonEnv('python3') {
-                        sh 'pip install -U jinja2-cli'
+                        sh 'python3 -m pip install -U jinja2-cli'
                         sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
                     }
                 }
