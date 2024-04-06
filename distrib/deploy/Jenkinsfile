@@ -24,7 +24,15 @@ pipeline {
                 script {
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
-                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE distrib/templates/deployment.yaml"
+
+                        def namespace = 'garden-manager-test'
+                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace distrib/templates/deployment.yaml > distrib/deployment.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/service.yaml > distrib/service.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/ingress.yaml > distrib/ingress.yaml"
+                    }
+
+                    withKubeConfig([credentialsId: 'jenkins-client-cert', serverUrl: KUBERNETES_API_URL]) {
+                        sh 'kubectl apply -f distrib/deployment.yaml -f distrib/service.yaml -f distrib/ingress.yaml'
                     }
                 }
             }
