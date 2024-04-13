@@ -31,7 +31,7 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace distrib/templates/ingress.yaml > distrib/ingress.yaml"
                     }
 
-                    withKubeConfig([credentialsId: 'jenkins-client-cert', serverUrl: KUBERNETES_API_URL]) {
+                    withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL]) {
                         sh 'kubectl apply -f distrib/deployment.yaml -f distrib/service.yaml -f distrib/ingress.yaml'
                     }
                 }
