@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: garden-manager-network-policy
+  namespace: {{ namespace }}
+spec:
+  podSelector:
+    {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: garden-manager-test
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: garden-manager
+    - to:
+      - ipBlock:
+          cidr: 10.8.0.10/32
+      ports:
+        - protocol: TCP
+          port: {{ db_port }}

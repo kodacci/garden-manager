@@ -25,5 +25,18 @@ spec:
           ports:
             - containerPort: 8080
               name: http-rest-api
+          env:
+            - name: DATABASE_URL
+              value: jdbc:postgresql://db.ra-tech.pro:{{ db_port }}/garden-manager
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ namespace }}-secret
+                  key: db-username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ namespace }}-secret
+                  key: db-password
       imagePullSecrets:
         - name: docker-registry-creds
