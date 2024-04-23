@@ -22,8 +22,8 @@ pipeline {
 
             steps {
                 script {
-                        def namespace = 'garden-manager-test'
-                        def dbPort = '4444'
+                    def namespace = 'garden-manager-test'
+                    def dbPort = '4444'
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'

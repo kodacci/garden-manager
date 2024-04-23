@@ -4,7 +4,7 @@ metadata:
   name: garden-manager-ingress
   namespace: {{ namespace }}
 spec:
-  ingressClass: istio
+  ingressClassName: istio
   rules:
     - host: garden-manager.cloud.ra-tech.pro
       http:
