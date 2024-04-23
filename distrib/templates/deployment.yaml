@@ -26,6 +26,8 @@ spec:
             - containerPort: 8080
               name: http-rest-api
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
             - name: DATABASE_URL
               value: jdbc:postgresql://db.ra-tech.pro:{{ db_port }}/garden-manager
             - name: DATABASE_USERNAME
