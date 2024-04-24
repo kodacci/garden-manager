@@ -25,3 +25,9 @@ spec:
       ports:
         - protocol: TCP
           port: {{ db_port }}
+    - to:
+      - ipBlock:
+          cidr: 10.8.0.1/32
+      ports:
+        - protocol: UDP
+          port: 53
