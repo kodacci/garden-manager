@@ -24,7 +24,7 @@ spec:
           image: snapshots.docker-registry.ra-tech.pro/pro.ra-tech/garden-manager/{{ branch }}/garden-manager-core:latest
           ports:
             - containerPort: 8080
-              name: http-rest-api
+              name: core-http-rest-api
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
