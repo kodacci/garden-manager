@@ -23,3 +23,5 @@ buildNumber.properties
 application-local.yaml
 
 .testcontainers.properties
+
+.DS_Store

@@ -12,5 +12,5 @@ spec:
   ports:
     - name: http-rest-api
       protocol: TCP
-      port: 9999
-      targetPort: core-http-rest-api
+      port: 80
+      targetPort: core-rest-api

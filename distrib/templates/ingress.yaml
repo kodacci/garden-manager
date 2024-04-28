@@ -15,4 +15,4 @@ spec:
               service:
                 name: garden-manager-core-service
                 port:
-                  name: http-rest-api
+                  name: core-rest-api

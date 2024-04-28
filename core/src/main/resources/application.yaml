@@ -12,3 +12,5 @@ spring:
     enabled: false
   jooq:
     sql-dialect: Postgres
+  datasource:
+    driverClassName: org.postgresql.Driver
