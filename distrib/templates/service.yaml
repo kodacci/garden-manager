@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/part-of: garden-manager
 spec:
   selector:
-    app.kubernetes.io/name: garden-manager-core
+    app: garden-manager-core
   ports:
     - name: http-rest-api
       protocol: TCP
