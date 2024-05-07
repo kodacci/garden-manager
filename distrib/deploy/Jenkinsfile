@@ -43,7 +43,7 @@ pipeline {
                                 '-f distrib/service.yaml ' +
                                 '-f distrib/gateway.yaml ' +
                                 '-f distrib/virtual-service.yaml ' +
-                                '-f distrib/destination-rule.yaml' +
+                                '-f distrib/destination-rule.yaml ' +
                                 '-f distrib/deployment.yaml'
                     }
                 }
