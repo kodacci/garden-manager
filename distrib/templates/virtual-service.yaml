@@ -5,7 +5,7 @@ metadata:
   namespace: {{ namespace }}
 spec:
   hosts:
-    - garden-manager.cloud.ra-tech.pro
+    - garden-manager.test.cloud.ra-tech.pro
     - odroid.ra-tech.pro
   gateways:
     - {{ namespace }}/garden-manager-ingress-gateway
@@ -18,5 +18,3 @@ spec:
       route:
         - destination:
             host: core.{{ namespace }}.svc.cluster.local
-            port:
-              number: 8080
