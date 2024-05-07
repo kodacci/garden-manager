@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v2beta1
+kind: VirtualService
+metadata:
+  name: garden-manager-core-rule
+  namespace: {{ namespace }}
+spec:
+  hosts:
+    - garden-manager.cloud.ra-tech.pro
+    - odroid.ra-tech.pro
+  gateways:
+    - {{ namespace }}/garden-manager-ingress-gateway
+    - mesh
+  http:
+    - name: core-route
+      match:
+        - uri:
+            prefix: "/"
+      route:
+        - destination:
+            host: core.{{ namespace }}.svc.cluster.local
+            port:
+              number: 8080

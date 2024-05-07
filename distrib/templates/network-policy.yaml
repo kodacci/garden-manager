@@ -13,12 +13,12 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: garden-manager-test
+              name: {{ namespace }}
   egress:
     - to:
       - namespaceSelector:
           matchLabels:
-            name: garden-manager
+            name: {{ namespace }}
     - to:
       - ipBlock:
           cidr: 10.8.0.10/32
