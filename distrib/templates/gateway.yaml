@@ -12,4 +12,4 @@ spec:
         number: 18080
         protocol: HTTP
       hosts:
-        - "*"
+        - "garden-manager.test.cloud.ra-tech.pro"
