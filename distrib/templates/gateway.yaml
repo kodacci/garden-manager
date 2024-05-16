@@ -5,11 +5,11 @@ metadata:
   namespace: {{ namespace }}
 spec:
   selector:
-    app: garden-manager-core
+    istio: ingressgateway
   servers:
     - port:
         name: http
-        number: 18080
+        number: 80
         protocol: HTTP
       hosts:
         - "garden-manager.test.cloud.ra-tech.pro"
