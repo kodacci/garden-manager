@@ -75,6 +75,10 @@ public class WebSecurityConfiguration {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                     auth -> auth
+                            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+                            .permitAll()
+                            .requestMatchers("/api/*/auth/**", "/api/v1/users")
+                            .permitAll()
                             .requestMatchers("/api/**")
                             .hasAuthority("GARDEN_USER")
                 )
@@ -87,11 +91,11 @@ public class WebSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-                .requestMatchers(HttpMethod.POST)
-                .requestMatchers("/api/*/auth/**", "/api/v1/users");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring()
+//                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+//                .requestMatchers(HttpMethod.POST)
+//                .requestMatchers("/api/*/auth/**", "/api/v1/users");
+//    }
 }
