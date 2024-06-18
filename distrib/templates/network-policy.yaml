@@ -38,11 +38,11 @@ spec:
       - namespaceSelector:
           matchLabels:
             kubernetes.io/metadata.name: istio-system
-        ports:
-          - protocol: UDP
-            port: 15012
-          - protocol: TCP
-            port: 15012
+      ports:
+        - protocol: UDP
+          port: 15012
+        - protocol: TCP
+          port: 15012
     - to:
       - namespaceSelector:
           matchLabels:
