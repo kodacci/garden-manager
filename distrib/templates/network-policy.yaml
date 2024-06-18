@@ -38,6 +38,9 @@ spec:
       - namespaceSelector:
           matchLabels:
             name: istio-system
+      - podSelector:
+          matchLabels:
+            app: istiod
     - to:
       - namespaceSelector:
           matchLabels:
