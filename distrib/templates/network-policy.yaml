@@ -34,3 +34,7 @@ spec:
       ports:
         - protocol: UDP
           port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: istio-system
