@@ -18,3 +18,4 @@ spec:
       route:
         - destination:
             host: core.{{ namespace }}.svc.cluster.local
+            portNumber: 8080

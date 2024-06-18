@@ -9,4 +9,4 @@ spec:
     - "."
   workloadSelector:
     matchLabels:
-      app.kubernetes.io/part-of: garden-manager
+      app: garden-manager-core
