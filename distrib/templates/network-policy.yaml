@@ -39,8 +39,9 @@ spec:
           matchLabels:
             name: istio-system
     - to:
-      - ipBlock:
-          cidr: 10.152.183.10/32
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
       ports:
         - protocol: UDP
         - port: 53
