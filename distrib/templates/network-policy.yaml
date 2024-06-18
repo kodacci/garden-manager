@@ -35,6 +35,12 @@ spec:
         - protocol: UDP
           port: 53
     - to:
-        - namespaceSelector:
-            matchLabels:
-              name: istio-system
+      - namespaceSelector:
+          matchLabels:
+            name: istio-system
+    - to:
+      - ipBlock:
+          cidr: 10.152.183.10/32
+      ports:
+        - protocol: UDP
+        - port: 53
