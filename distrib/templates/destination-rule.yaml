@@ -4,7 +4,7 @@ metadata:
   name: garden-manager-core-destination
   namespace: {{ namespace }}
 spec:
-  host: core.{{ namespace }}.svc.cluster.local
+  host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
   exportTo:
     - "."
   workloadSelector:
