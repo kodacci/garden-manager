@@ -10,11 +10,10 @@ spec:
     - Ingress
     - Egress
   ingress:
-#    - {}
     - from:
-#        - namespaceSelector:
-#            matchLabels:
-#              name: {{ namespace }}
+        - namespaceSelector:
+            matchLabels:
+              name: {{ namespace }}
         - podSelector:
             matchLabels:
               istio: ingressgateway
@@ -22,7 +21,7 @@ spec:
     - to:
       - namespaceSelector:
           matchLabels:
-            name: {{ namespace }}
+            kubernetes.io/metadata.name: {{ namespace }}
     - to:
       - ipBlock:
           cidr: 10.8.0.10/32
@@ -36,14 +35,9 @@ spec:
         - protocol: UDP
           port: 53
     - to:
-      - namespaceSelector:
+      - podSelector:
           matchLabels:
-            kubernetes.io/metadata.name: istio-system
-      ports:
-        - protocol: UDP
-          port: 15012
-        - protocol: TCP
-          port: 15012
+            istio: egressgateway
     - to:
       - namespaceSelector:
           matchLabels:
