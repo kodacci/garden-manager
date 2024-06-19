@@ -47,7 +47,7 @@ spec:
           endPort: 1600
         - protocol: TCP
           port: 15000
-          endPort: 1600
+          endPort: 16000
     - to:
       - namespaceSelector:
           matchLabels:
