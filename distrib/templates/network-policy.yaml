@@ -14,9 +14,9 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: {{ namespace }}
-        - podSelector:
+        - namespaceSelector:
             matchLabels:
-              istio: ingressgateway
+              kubernetes.io/metadata.name: istio-system
   egress:
     - to:
       - namespaceSelector:
@@ -43,9 +43,11 @@ spec:
             kubernetes.io/metadata.name: istio-system
       ports:
         - protocol: UDP
-          port: 15012
+          port: 1500
+          endPort: 1600
         - protocol: TCP
-          port: 15012
+          port: 15000
+          endPort: 1600
     - to:
       - namespaceSelector:
           matchLabels:
