@@ -22,9 +22,9 @@ spec:
       - namespaceSelector:
           matchLabels:
             kubernetes.io/metadata.name: {{ namespace }}
-      ports:
-        - protocol: TCP
-          port: 8080
+        ports:
+          - protocol: TCP
+            port: 8080
     - to:
       - ipBlock:
           cidr: 10.8.0.10/32
@@ -38,9 +38,9 @@ spec:
         - protocol: UDP
           port: 53
     - to:
-      - podSelector:
+      - namespaceSelector:
           matchLabels:
-            istio: egressgateway
+            kubernetes.io/metadata.name: istio-system
       ports:
         - protocol: UDP
           port: 15012
