@@ -17,3 +17,5 @@ spec:
       route:
         - destination:
             host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
+            port:
+              number: 8080
