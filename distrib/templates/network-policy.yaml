@@ -10,13 +10,14 @@ spec:
     - Ingress
     - Egress
   ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              name: {{ namespace }}
-        - podSelector:
-            matchLabels:
-              istio: ingress
+    - {}
+#    - from:
+#        - namespaceSelector:
+#            matchLabels:
+#              name: {{ namespace }}
+#        - podSelector:
+#            matchLabels:
+#              istio: ingress
   egress:
     - to:
       - namespaceSelector:
