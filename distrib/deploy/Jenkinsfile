@@ -24,6 +24,7 @@ pipeline {
                 script {
                     def namespace = 'garden-manager-test'
                     def dbPort = '4444'
+                    def host = 'garden-manager.test.cloud.ra-tech.pro'
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
@@ -31,8 +32,8 @@ pipeline {
                         sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_port=$dbPort distrib/templates/deployment.yaml > distrib/deployment.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/service.yaml > distrib/service.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_port=$dbPort distrib/templates/network-policy.yaml > distrib/network-policy.yaml"
-                        sh "jinja2 -D namespace=$namespace distrib/templates/gateway.yaml > distrib/gateway.yaml"
-                        sh "jinja2 -D namespace=$namespace distrib/templates/virtual-service.yaml > distrib/virtual-service.yaml"
+                        sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/gateway.yaml > distrib/gateway.yaml"
+                        sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/virtual-service.yaml > distrib/virtual-service.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
                     }
 
