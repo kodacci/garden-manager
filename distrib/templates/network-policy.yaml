@@ -43,8 +43,8 @@ spec:
             kubernetes.io/metadata.name: istio-system
       ports:
         - protocol: UDP
-          port: 1500
-          endPort: 1600
+          port: 15000
+          endPort: 16000
         - protocol: TCP
           port: 15000
           endPort: 16000
