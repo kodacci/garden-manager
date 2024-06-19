@@ -5,7 +5,7 @@ metadata:
   namespace: {{ namespace }}
 spec:
   hosts:
-    - {{ host }}
+    - garden-manager.test.cloud.ra-tech.pro
   gateways:
     - {{ namespace }}/garden-manager-ingress-gateway
     - mesh
