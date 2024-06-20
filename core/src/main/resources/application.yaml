@@ -1,8 +1,4 @@
 spring:
-  datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
   liquibase:
     change-log: db/changelog-root.yaml
   mvc:

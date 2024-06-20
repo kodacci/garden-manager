@@ -1,0 +1,12 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: garden-manager-core-destination
+  namespace: {{ namespace }}
+spec:
+  host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
+  exportTo:
+    - "."
+  workloadSelector:
+    matchLabels:
+      app: garden-manager-core

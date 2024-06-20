@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: garden-manager-core-service
+  namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/name: garden-manager-core-service
+    app.kubernetes.io/part-of: garden-manager
+spec:
+  selector:
+    app: garden-manager-core
+  ports:
+    - name: http-rest-api
+      protocol: TCP
+      port: 8080
+      targetPort: core-rest-api

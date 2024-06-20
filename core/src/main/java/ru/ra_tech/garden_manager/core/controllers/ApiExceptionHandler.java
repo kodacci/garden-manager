@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.BindErrorUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -54,7 +54,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         val problem = ex.getBody();
         problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
 
-        val validations = MethodArgumentNotValidException.errorsToStringList(ex.getAllErrors());
+        val validations = BindErrorUtils.resolve(ex.getAllErrors()).values().stream().toList();
         problem.setProperty("validationErrors", validations);
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);

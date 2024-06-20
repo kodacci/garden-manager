@@ -12,13 +12,12 @@ pipeline {
         stage('Determine Version') {
             steps {
                 script {
-                    withMaven {
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         PROJECT_VERSION = sh(
                                 encoding: 'UTF-8',
                                 returnStdout: true,
-                                script: 'mvn help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
+                                script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
-                        PROJECT_VERSION = PROJECT_VERSION.substring(3, PROJECT_VERSION.length() - 4)
                         DEPLOY_GIT_SCOPE =
                                 sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
                                         .trim()
@@ -36,11 +35,9 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
-
-                    withMaven {
-                        sh 'mvn -DskipTests -Dskip.jooq.generation=true -Dskip.unit.tests clean package'
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        sh './mvnw -DskipTests -Dskip.jooq.generation=true clean package'
                     }
-
                     println("Build finished")
                 }
             }
@@ -51,9 +48,9 @@ pipeline {
                 script {
                     println("Starting build verification")
 
-                    withMaven {
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                            sh 'mvn verify -Dskip.jooq.generation'
+                            sh './mvnw verify -Dskip.jooq.generation'
                         }
                     }
 
@@ -69,7 +66,9 @@ pipeline {
 
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
-                    sh 'mvn sonar:sonar -Dskip.jooq.generation'
+                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                        sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests'
+                    }
                 }
             }
         }
@@ -96,7 +95,7 @@ pipeline {
             steps {
                 script {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "mvn deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.unit.tests -Dskip.jooq.generation"
+                        sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                     }
 
                     println('Deploying to nexus finished')
@@ -109,18 +108,24 @@ pipeline {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
                         def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
-                        def groupId = 'ru.ra-tech.garden-manager'
-                        def artifactId = 'garden-manager-core'
-                        def version = PROJECT_VERSION + '-' + DEPLOY_GIT_SCOPE + '-SNAPSHOT'
 
                         echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag, "--build-arg REPO=maven-snapshots --build-arg GROUP_ID=$groupId --build-arg ARTIFACT_ID=$artifactId --build-arg VERSION=$version .")
+                        def image = docker.build(imageTag)
 
                         docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
                             image.push('latest')
                         }
                     }
+                }
+            }
+        }
+
+        stage('Trigger deploy pipeline') {
+            steps {
+                script {
+                    def path = BRANCH_NAME.replaceAll("/", "%2F")
+                    build(job: "Garden Manager Deploy Backend/$path", wait: false)
                 }
             }
         }

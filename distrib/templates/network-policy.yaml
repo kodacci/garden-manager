@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: garden-manager-network-policy
+  namespace: {{ namespace }}
+spec:
+  podSelector:
+    {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ namespace }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-system
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ namespace }}
+      ports:
+        - protocol: TCP
+          port: 8080
+    - to:
+      - ipBlock:
+          cidr: 10.8.0.10/32
+      ports:
+        - protocol: TCP
+          port: {{ db_port }}
+    - to:
+      - ipBlock:
+          cidr: 10.8.0.1/32
+      ports:
+        - protocol: UDP
+          port: 53
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: istio-system
+      ports:
+        - protocol: UDP
+          port: 15000
+          endPort: 16000
+        - protocol: TCP
+          port: 15000
+          endPort: 16000
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
