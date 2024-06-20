@@ -4,7 +4,7 @@ logging:
 
 spring:
   liquibase:
-    enabled: false
+    enabled: true
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
