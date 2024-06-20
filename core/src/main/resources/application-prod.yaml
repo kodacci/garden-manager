@@ -1,3 +1,7 @@
+logging:
+  level:
+    root: ${ROOT_LOGGING_LEVEL:DEBUG}
+
 spring:
   liquibase:
     enabled: false
