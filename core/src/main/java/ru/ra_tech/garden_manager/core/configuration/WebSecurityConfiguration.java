@@ -90,12 +90,4 @@ public class WebSecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring()
-//                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-//                .requestMatchers(HttpMethod.POST)
-//                .requestMatchers("/api/*/auth/**", "/api/v1/users");
-//    }
 }
