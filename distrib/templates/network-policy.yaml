@@ -25,6 +25,8 @@ spec:
       ports:
         - protocol: TCP
           port: 8080
+        - protocol: TCP
+          port: 4444
     - to:
       - ipBlock:
           cidr: 10.8.0.1/32
