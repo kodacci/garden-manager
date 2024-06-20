@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: garden-manager-database-entry
+  namespace: {{ namespace }}
+spec:
+  hosts:
+    - {{ db_host }}
+  ports:
+    - number: {{ dbPort }}
+      name: tcp
+      protocol: TCP
+  resolution: DNS
+  location: MESH_EXTERNAL

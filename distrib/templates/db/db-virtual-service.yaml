@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: garden-manager-database-rule
+  namespace: {{ namespace }}
+spec:
+  hosts:
+    - {{ db_host }}
+  http:
+    - timeout: 3s
+      route:
+        - destination:
+            host: {{ db_host }}
+          weight: 100

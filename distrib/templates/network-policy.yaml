@@ -27,12 +27,6 @@ spec:
           port: 8080
     - to:
       - ipBlock:
-          cidr: 10.8.0.10/32
-      ports:
-        - protocol: TCP
-          port: {{ db_port }}
-    - to:
-      - ipBlock:
           cidr: 10.8.0.1/32
       ports:
         - protocol: UDP

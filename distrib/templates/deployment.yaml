@@ -29,7 +29,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: DATABASE_URL
-              value: jdbc:postgresql://garden-manager.db.ra-tech.pro:{{ db_port }}/garden-manager
+              value: jdbc:postgresql://{{ db_host }}:{{ db_port }}/garden-manager
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
