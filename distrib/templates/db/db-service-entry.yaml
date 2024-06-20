@@ -7,7 +7,7 @@ spec:
   hosts:
     - {{ db_host }}
   ports:
-    - number: {{ dbPort }}
+    - number: {{ db_port }}
       name: tcp
       protocol: TCP
   resolution: DNS
