@@ -6,6 +6,8 @@ metadata:
 spec:
   hosts:
     - {{ db_host }}
+  addresses:
+    - {{ db_address }}
   ports:
     - number: {{ db_port }}
       name: tcp

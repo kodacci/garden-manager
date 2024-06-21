@@ -25,6 +25,7 @@ pipeline {
                     def namespace = 'garden-manager-test'
                     def host = 'garden-manager.test.cloud.ra-tech.pro'
                     def dbHost = 'garden-manager.db.ra-tech.pro'
+                    def dbAddress = '10.8.0.10'
                     def dbPort = '4444'
 
                     withPythonEnv('Python-3') {
@@ -40,7 +41,7 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
 
                         // database
-                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
+                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-virtual-service.yaml > distrib/db-virtual-service.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-destination-rule.yaml > distrib/db-destination-rule.yaml"
                     }
