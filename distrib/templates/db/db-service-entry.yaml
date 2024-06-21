@@ -12,5 +12,5 @@ spec:
     - number: {{ db_port }}
       name: tcp
       protocol: TCP
-  resolution: DNS
+  resolution: STATIC
   location: MESH_EXTERNAL
