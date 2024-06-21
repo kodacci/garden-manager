@@ -8,6 +8,8 @@ spec:
     - {{ db_host }}
   addresses:
     - {{ db_address }}/32
+  endpoints:
+    - address: {{ db_address }}
   ports:
     - number: {{ db_port }}
       name: tcp
