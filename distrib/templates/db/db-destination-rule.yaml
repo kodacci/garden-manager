@@ -6,6 +6,6 @@ metadata:
 spec:
   host: istio-egressgateway.istio-system.svc.cluster.local
   subsets:
-    - name: garden-manager-database
+    - name: {{ namespace }}/garden-manager-database
   exportTo:
     - "."

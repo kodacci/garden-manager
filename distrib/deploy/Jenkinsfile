@@ -55,10 +55,10 @@ pipeline {
                                 '-f distrib/egress-gateway.yaml ' +
                                 '-f distrib/virtual-service.yaml ' +
                                 '-f distrib/destination-rule.yaml ' +
-                                '-f distrib/deployment.yaml ' +
                                 '-f distrib/db-service-entry.yaml ' +
                                 '-f distrib/db-virtual-service.yaml ' +
-                                '-f distrib/db-destination-rule.yaml'
+                                '-f distrib/db-destination-rule.yaml ' +
+                                '-f distrib/deployment.yaml'
                     }
                 }
             }
