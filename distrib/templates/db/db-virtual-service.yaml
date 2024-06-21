@@ -7,7 +7,7 @@ spec:
   hosts:
     - {{ db_host }}
   tcp:
-    - match
+    - match:
         - port: {{ db_port }}
       timeout: 3s
       route:
