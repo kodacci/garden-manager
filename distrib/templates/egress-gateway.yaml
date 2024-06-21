@@ -12,4 +12,5 @@ spec:
         name: tcp
         protocol: TCP
       hosts:
-        - {{ db_host }}
+        - "*"
+#        - {{ db_host }}
