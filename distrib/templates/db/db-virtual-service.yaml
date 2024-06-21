@@ -6,6 +6,7 @@ metadata:
 spec:
   hosts:
     - {{ db_host }}
+    - garden-manager-egress-gateway
   gateways:
     - mesh
     - {{ namespace }}/garden-manager-egress-gateway
@@ -14,10 +15,13 @@ spec:
       - gateways:
           - mesh
         port: {{ db_port }}
+      - destinationSubnets:
+          - {{ db_address }}/32
       route:
         - destination:
-            host: istio-egressgateway.istio-system.svc.cluster.local
-            subset: garden-manager-database
+#            host: istio-egressgateway.istio-system.svc.cluster.local
+#            subset: garden-manager-database
+            host: garden-manager-egress-gateway
             port:
               number: {{ db_port }}
           weight: 100

@@ -43,7 +43,7 @@ pipeline {
                         // database
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-virtual-service.yaml > distrib/db-virtual-service.yaml"
-                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-destination-rule.yaml > distrib/db-destination-rule.yaml"
+//                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-destination-rule.yaml > distrib/db-destination-rule.yaml"
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
