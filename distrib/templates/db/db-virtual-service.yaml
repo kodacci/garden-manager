@@ -7,13 +7,13 @@ spec:
   hosts:
     - {{ db_host }}
   gateways:
-    - {{ namespace }}/garden-manager-egress-gateway
     - mesh
+    - {{ namespace }}/garden-manager-egress-gateway
   tcp:
     - match:
       - gateways:
           - mesh
-        port: {{ db_port }}
+      port: {{ db_port }}
       route:
         - destination:
             host: istio-egressgateway.istio-system.svc.cluster.local
@@ -24,7 +24,7 @@ spec:
     - match:
       - gateways:
           - {{ namespace }}/garden-manager-egress-gateway
-        port: {{ db_port }}
+      port: {{ db_port }}
       route:
         - destination:
             host: {{ db_host }}
