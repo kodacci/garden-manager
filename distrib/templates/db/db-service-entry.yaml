@@ -7,7 +7,7 @@ spec:
   hosts:
     - {{ db_host }}
   addresses:
-    - {{ db_address }}
+    - {{ db_address }}/32
   ports:
     - number: {{ db_port }}
       name: tcp
