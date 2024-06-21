@@ -6,9 +6,13 @@ metadata:
 spec:
   hosts:
     - {{ db_host }}
-  http:
-    - timeout: 3s
+  tcp:
+    - match
+        - port: {{ db_port }}
+      timeout: 3s
       route:
         - destination:
             host: {{ db_host }}
+            port:
+              number: {{ db_port }}
           weight: 100

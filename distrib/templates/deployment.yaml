@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: garden-manager-core-deployment
+  name: garden-manager-core
   namespace: {{ namespace }}
   labels:
     app.kubernetes.io/name: garden-manager-core
