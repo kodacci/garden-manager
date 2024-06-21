@@ -21,9 +21,9 @@ spec:
           - {{ db_address }}/32
       route:
         - destination:
-            host: {{ db_host }}
-#            host: istio-egressgateway.istio-system.svc.cluster.local
-#            subset: garden-manager-database
+#            host: {{ db_host }}
+            host: istio-egressgateway.istio-system.svc.cluster.local
+            subset: garden-manager-database
 #          host: garden-manager-egress-gateway
             port:
               number: {{ db_port }}
