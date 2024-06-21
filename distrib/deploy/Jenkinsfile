@@ -34,7 +34,7 @@ pipeline {
                         sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/deployment.yaml > distrib/deployment.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/service.yaml > distrib/service.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/network-policy.yaml > distrib/network-policy.yaml"
-                        sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/gateway.yaml > distrib/gateway.yaml"
+                        sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/ingress-gateway.yaml > distrib/ingress-gateway.yaml"
                         sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/virtual-service.yaml > distrib/virtual-service.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
 
@@ -49,7 +49,7 @@ pipeline {
                         sh 'kubectl apply ' +
                                 '-f distrib/network-policy.yaml ' +
                                 '-f distrib/service.yaml ' +
-                                '-f distrib/gateway.yaml ' +
+                                '-f distrib/ingress-gateway.yaml ' +
                                 '-f distrib/virtual-service.yaml ' +
                                 '-f distrib/destination-rule.yaml ' +
                                 '-f distrib/deployment.yaml ' +

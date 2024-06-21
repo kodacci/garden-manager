@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: garden-manager-egress-gateway
+  namespace: {{ namespace }}
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+    - port:
+        number: 4444
+        name: tcp
+        protocol: TCP
+      hosts:
+        - {{ db_host }}

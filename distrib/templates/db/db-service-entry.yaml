@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: garden-manager-database-entry
+  name: garden-manager-database
   namespace: {{ namespace }}
 spec:
   hosts:
