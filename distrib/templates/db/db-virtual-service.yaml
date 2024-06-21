@@ -27,7 +27,7 @@ spec:
 #          host: garden-manager-egress-gateway
             port:
               number: {{ db_port }}
-            weight: 100
+          weight: 100
     - match:
       - gateways:
           - {{ namespace }}/garden-manager-egress-gateway
