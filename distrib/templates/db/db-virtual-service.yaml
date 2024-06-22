@@ -4,9 +4,6 @@ metadata:
   name: garden-manager-database-rule
   namespace: {{ namespace }}
 spec:
-  exportTo:
-    - "."
-    - istio-system
   hosts:
     - {{ db_host }}
   gateways:
@@ -21,17 +18,15 @@ spec:
           - {{ db_address }}/32
       route:
         - destination:
-#            host: {{ db_host }}
             host: istio-egressgateway.istio-system.svc.cluster.local
             subset: garden-manager-database
-#          host: garden-manager-egress-gateway
             port:
-              number: {{ db_port }}
+              number: 80
           weight: 100
     - match:
       - gateways:
           - {{ namespace }}/garden-manager-egress-gateway
-        port: {{ db_port }}
+        port: 80
       route:
         - destination:
             host: {{ db_host }}

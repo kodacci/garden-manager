@@ -4,9 +4,6 @@ metadata:
   name: garden-manager-database
   namespace: {{ namespace }}
 spec:
-  exportTo:
-    - "."
-    - istio-system
   hosts:
     - {{ db_host }}
   addresses:
