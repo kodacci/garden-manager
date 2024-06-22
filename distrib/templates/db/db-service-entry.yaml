@@ -11,7 +11,7 @@ spec:
   endpoints:
     - address: {{ db_address }}
       ports:
-        pg-tcp: {{ db_port }}
+        tcp: {{ db_port }}
   ports:
     - number: {{ db_port }}
       name: tcp
