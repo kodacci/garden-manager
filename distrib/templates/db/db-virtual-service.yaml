@@ -21,12 +21,12 @@ spec:
             host: istio-egressgateway.istio-system.svc.cluster.local
             subset: garden-manager-database
             port:
-              number: 80
+              number: {{ db_port }}
           weight: 100
     - match:
       - gateways:
           - {{ namespace }}/garden-manager-egress-gateway
-        port: 80
+        port: {{ db_port }}
       route:
         - destination:
             host: {{ db_host }}
