@@ -26,7 +26,7 @@ spec:
     - match:
       - gateways:
           - {{ namespace }}/garden-manager-egress-gateway
-        port: {{ db_port }}
+        port: 80
       route:
         - destination:
             host: {{ db_host }}
