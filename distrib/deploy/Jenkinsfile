@@ -26,7 +26,7 @@ pipeline {
                     def host = 'garden-manager.test.cloud.ra-tech.pro'
                     def dbHost = 'garden-manager.db.ra-tech.pro'
                     def dbAddress = '10.8.0.10'
-                    def dbPort = '4444'
+                    def dbPort = '9999'
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
