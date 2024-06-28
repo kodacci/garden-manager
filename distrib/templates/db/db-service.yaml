@@ -5,7 +5,7 @@ metadata:
   namespace: {{ namespace }}
 spec:
   ports:
-    - name: tcp
+    - name: test-pg
       protocol: TCP
       port: {{ db_port }}
       targetPort: {{ db_port }}

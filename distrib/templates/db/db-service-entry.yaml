@@ -14,7 +14,7 @@ spec:
         tcp: {{ db_port }}
   ports:
     - number: {{ db_port }}
-      name: tcp
+      name: test-pg
       protocol: TCP
   resolution: STATIC
   location: MESH_EXTERNAL
