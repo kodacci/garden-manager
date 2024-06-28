@@ -11,7 +11,7 @@ spec:
   endpoints:
     - address: {{ db_address }}
       ports:
-        tcp: {{ db_port }}
+        test-pg: {{ db_port }}
   ports:
     - number: {{ db_port }}
       name: test-pg
