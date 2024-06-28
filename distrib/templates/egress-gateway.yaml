@@ -13,4 +13,3 @@ spec:
         protocol: TCP
       hosts:
         - {{ db_host }}
-        - garden-manager-database.garden-manager-test.svc.cluster.local
