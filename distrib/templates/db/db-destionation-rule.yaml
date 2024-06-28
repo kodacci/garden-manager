@@ -1,0 +1,7 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: garden-manager-database
+  namespace: {{ namespace }}
+spec:
+  host: {{ db_host }}
