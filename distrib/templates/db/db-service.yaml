@@ -9,5 +9,3 @@ spec:
       protocol: TCP
       port: {{ db_port }}
       targetPort: {{ db_port }}
-#  endpoints:
-#    - address: {{ db_address }}
