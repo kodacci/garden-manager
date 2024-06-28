@@ -8,8 +8,8 @@ spec:
     istio: egressgateway
   servers:
     - port:
-        number: {{ db_port }}
-        name: test-pg
+        number: {{ egress_tcp_port }}
+        name: tcp
         protocol: TCP
       hosts:
         - {{ db_host }}

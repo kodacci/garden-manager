@@ -11,10 +11,10 @@ spec:
   endpoints:
     - address: {{ db_address }}
       ports:
-        test-pg: {{ db_port }}
+        tcp: {{ db_port }}
   ports:
     - number: {{ db_port }}
-      name: test-pg
+      name: tcp
       protocol: TCP
   resolution: STATIC
   location: MESH_EXTERNAL
