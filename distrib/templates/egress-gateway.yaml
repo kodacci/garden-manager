@@ -13,3 +13,4 @@ spec:
         protocol: TCP
       hosts:
         - {{ db_host }}
+        - istio-egressgateway.istio-system.svc.cluster.local
