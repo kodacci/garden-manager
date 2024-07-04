@@ -28,8 +28,9 @@ pipeline {
                     def dbAddress = sh(
                             encoding: 'UTF-8',
                             returnStdout: true,
-                            script: 'getent hosts garden-manager.db.ra-tech.pro | awk \'NR==1{ print \$1 }\''
-                    )
+                            script: """getent hosts garden-manager.db.ra-tech.pro | awk 'NR==1{ print \$1 }'"""
+                    ).trim()
+                    echo "DB address: $dbAddress"
                     def dbPort = '4444'
                     def egressTcpPort = '9999'
 
