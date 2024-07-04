@@ -1,6 +1,10 @@
+logging:
+  level:
+    root: ${ROOT_LOGGING_LEVEL:DEBUG}
+
 spring:
   liquibase:
-    enabled: false
+    enabled: ${LIQUIBASE_ENABLED:false}
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}

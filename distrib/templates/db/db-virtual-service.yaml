@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: garden-manager-database-rule
+  namespace: {{ namespace }}
+spec:
+  hosts:
+    - {{ db_host }}
+  gateways:
+    - mesh
+    - {{ namespace }}/garden-manager-egress-gateway
+  tcp:
+    - match:
+      - gateways:
+          - mesh
+        port: {{ db_port }}
+        destinationSubnets:
+          - {{ db_address }}/32
+      route:
+        - destination:
+            host: istio-egressgateway.istio-system.svc.cluster.local
+            subset: garden-manager-database
+            port:
+              number: {{ egress_tcp_port }}
+          weight: 100
+    - match:
+      - gateways:
+          - {{ namespace }}/garden-manager-egress-gateway
+        port: {{ egress_tcp_port }}
+      route:
+        - destination:
+            host: {{ db_host }}
+            port:
+              number: {{ db_port }}
+          weight: 100
