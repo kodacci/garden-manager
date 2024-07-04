@@ -25,7 +25,11 @@ pipeline {
                     def namespace = 'garden-manager-test'
                     def host = 'garden-manager.test.cloud.ra-tech.pro'
                     def dbHost = 'garden-manager.db.ra-tech.pro'
-                    def dbAddress = '10.8.0.10'
+                    def dbAddress = sh(
+                            encoding: 'UTF-8',
+                            returnStdout: true,
+                            script: "getent hosts garden-manager.db.ra-tech.pro | awk 'NR==1{ print \$1 }'"
+                    )
                     def dbPort = '4444'
                     def egressTcpPort = '9999'
 
