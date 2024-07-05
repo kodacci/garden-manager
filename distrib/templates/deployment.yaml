@@ -34,6 +34,8 @@ spec:
               value: jdbc:postgresql://{{ db_host }}:{{ db_port }}/garden-manager
             - name: ROOT_LOGGING_LEVEL
               value: DEBUG
+            - name: METRICS_APPLICATION_TAG
+              value: {{ metrics_application_tag }}
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
