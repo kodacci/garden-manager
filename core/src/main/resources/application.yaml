@@ -1,3 +1,33 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
+          - health
+          - info
+          - metrics
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include:
+            - livenessState
+        readiness:
+          include:
+            - readinessState
+    prometheus:
+      enabled: true
+      metrics:
+        export:
+          enabled: true
+  server:
+    port: 8081
+
 spring:
   liquibase:
     change-log: db/changelog-root.yaml

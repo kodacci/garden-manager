@@ -79,6 +79,8 @@ public class WebSecurityConfiguration {
                             .permitAll()
                             .requestMatchers("/api/*/auth/**", "/api/v1/users")
                             .permitAll()
+                            .requestMatchers("/actuator/**")
+                            .permitAll()
                             .requestMatchers("/api/**")
                             .hasAuthority("GARDEN_USER")
                 )

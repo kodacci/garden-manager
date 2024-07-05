@@ -7,10 +7,19 @@ spec:
   hosts:
     - {{ host }}
   gateways:
-    - {{ namespace }}/garden-manager-ingress-gateway
+    - "{{ namespace }}/garden-manager-ingress-gateway"
     - mesh
   http:
-    - name: core-route
+    - name: core-actuator-route
+      match:
+        - uri:
+            prefix: "/actuator"
+      route:
+        - destination:
+            host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
+            port:
+              number: 8081
+    - name: core-api-route
       match:
         - uri:
             prefix: "/"

@@ -25,6 +25,8 @@ spec:
           ports:
             - containerPort: 8080
               name: core-rest-api
+            - containerPort: 8081
+              name: core-actuator
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
