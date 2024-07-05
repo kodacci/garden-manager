@@ -44,5 +44,19 @@ spec:
                 secretKeyRef:
                   name: {{ namespace }}-secret
                   key: db-password
+          readinessProbe:
+            httpGet:
+                path: /actuator/health/readiness
+                port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
       imagePullSecrets:
         - name: docker-registry-creds
