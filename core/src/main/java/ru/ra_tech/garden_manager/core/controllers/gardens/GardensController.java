@@ -1,4 +1,5 @@
 package ru.ra_tech.garden_manager.core.controllers.gardens;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,24 +24,28 @@ public class GardensController extends AbstractController implements GardensApi 
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("gardens.create")
     public ResponseEntity<Object> createGarden(CreateGardenRequest request) {
         return toResponse(getUserId().flatMap(userId -> service.createGarden(request, userId)), HttpStatus.CREATED);
     }
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed("gardens.find")
     public ResponseEntity<Object> findGarden(Long id) {
         return toResponse(getUserId().flatMap(userId -> service.findGarden(id, userId)));
     }
 
     @Override
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed("gardens.list")
     public ResponseEntity<Object> listGardens() {
         return toResponse(getUserId().flatMap(service::listGardens));
     }
 
     @Override
     @PostMapping(value = "/{id}/add_participant/{participantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed("gardens.add-user")
     public ResponseEntity<Object> addParticipant(Long id, Long participantId) {
         return toResponse(getUserId().flatMap(userId -> service.addParticipant(id, participantId, userId)));
     }

@@ -4,6 +4,8 @@ metadata:
   name: garden-manager-core-rule
   namespace: {{ namespace }}
 spec:
+  exportTo:
+    - "."
   hosts:
     - {{ host }}
   gateways:

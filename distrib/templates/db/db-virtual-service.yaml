@@ -4,6 +4,8 @@ metadata:
   name: garden-manager-database-rule
   namespace: {{ namespace }}
 spec:
+  exportTo:
+    - "."
   hosts:
     - {{ db_host }}
   gateways:

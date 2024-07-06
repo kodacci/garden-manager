@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.core.controllers.users;
 
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class UsersController extends AbstractController implements UsersApi {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("users.get")
     @Override
     public ResponseEntity<Object> getUserById(@Positive @PathVariable Integer id) {
         return toResponse(service.findUser(id));
@@ -36,6 +38,7 @@ public class UsersController extends AbstractController implements UsersApi {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("users.create")
     @Override
     public ResponseEntity<Object> createUser(@RequestBody CreateUserRequest data) {
         return toResponse(service.createUser(data), HttpStatus.CREATED);
