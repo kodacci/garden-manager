@@ -1,7 +1,10 @@
 package ru.ra_tech.garden_manager.core.configuration;
 
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleReposit
 
 @Configuration
 @Import(DatabaseConfiguration.class)
+@EnableAspectJAutoProxy
 public class MainConfiguration {
     @Bean
     public UserService userService(UserRepository repo, PasswordEncoder passwordEncoder) {
@@ -42,5 +46,10 @@ public class MainConfiguration {
     @Bean
     public UserRoleService userRoleService(UserRoleRepository repo) {
         return new UserRoleService(repo);
+    }
+
+    @Bean
+    public TimedAspect timedAspect(MeterRegistry registry) {
+        return new TimedAspect(registry);
     }
 }
