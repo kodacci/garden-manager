@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.core.controllers.auth;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class AuthController extends AbstractController implements AuthApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("auth.login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest request) {
         return toResponse(service.login(request.login(), request.password()));
     }
@@ -34,6 +36,7 @@ public class AuthController extends AbstractController implements AuthApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("auth.refresh")
     public ResponseEntity<Object> refresh(@RequestBody RefreshRequest request) {
         return toResponse(service.refresh(request.refreshToken()));
     }
@@ -43,6 +46,7 @@ public class AuthController extends AbstractController implements AuthApi {
             value = "/logout",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Timed("auth.logout")
     public ResponseEntity<Object> logout() {
         return toResponse(getUserId().flatMap(service::logout));
     }

@@ -4,6 +4,9 @@ metadata:
   name: garden-manager-database-rule
   namespace: {{ namespace }}
 spec:
+  exportTo:
+    - "."
+    - istio-system
   hosts:
     - {{ db_host }}
   gateways:

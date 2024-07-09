@@ -37,7 +37,7 @@ pipeline {
                         sh 'pip install -U jinja2-cli'
 
                         // main app
-                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/deployment.yaml > distrib/deployment.yaml"
+                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -Dmetrics_application_tag=garden-manager-core-test distrib/templates/deployment.yaml > distrib/deployment.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/service.yaml > distrib/service.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/network-policy.yaml > distrib/network-policy.yaml"
                         sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/ingress-gateway.yaml > distrib/ingress-gateway.yaml"

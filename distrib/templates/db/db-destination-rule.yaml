@@ -5,3 +5,5 @@ metadata:
   namespace: {{ namespace }}
 spec:
   host: {{ db_host }}
+  exportTo:
+    - "."

@@ -25,6 +25,8 @@ spec:
           ports:
             - containerPort: 8080
               name: core-rest-api
+            - containerPort: 8081
+              name: core-actuator
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
@@ -32,6 +34,8 @@ spec:
               value: jdbc:postgresql://{{ db_host }}:{{ db_port }}/garden-manager
             - name: ROOT_LOGGING_LEVEL
               value: DEBUG
+            - name: METRICS_APPLICATION_TAG
+              value: {{ metrics_application_tag }}
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -42,5 +46,26 @@ spec:
                 secretKeyRef:
                   name: {{ namespace }}-secret
                   key: db-password
+          readinessProbe:
+            httpGet:
+                path: /actuator/health/readiness
+                port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+          resources:
+            requests:
+              cpu: 1
+              memory: 2Gi
+            limits:
+              cpu: 1.5
+              memory: 3Gi
       imagePullSecrets:
         - name: docker-registry-creds
