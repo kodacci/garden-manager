@@ -60,5 +60,12 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 10
+          resources:
+            requests:
+              cpu: 1
+              memory: 2Gi
+            limits:
+              cpu: 1.5
+              memory: 3Gi
       imagePullSecrets:
         - name: docker-registry-creds
