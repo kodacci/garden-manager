@@ -25,7 +25,7 @@ spec:
             sizeLimit: 500Mi
         - name: fluentbit-config
           configMap:
-            name: core-fluentbit-config
+            name: core-fluent-bit-config
             items:
               - key: fluent-bit.conf
                 path: fluent-bit.conf
