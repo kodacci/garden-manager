@@ -31,6 +31,9 @@ spec:
                 path: fluent-bit.conf
               - key: parsers.conf
                 path: parsers.conf
+        - name: fluentbit-db
+          emptyDir:
+            sizeLimit: 50Mi
 
       containers:
         - name: garden-manager-core
@@ -99,6 +102,8 @@ spec:
               name: logs-volume
             - mountPath: /fluent-bit/etc
               name: fluentbit-config
+            - mountPath: /fluent-bit/db
+              name: fluentbit-db
           restartPolicy: Always
       imagePullSecrets:
         - name: docker-registry-creds

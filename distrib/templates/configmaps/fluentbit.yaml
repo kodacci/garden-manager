@@ -9,14 +9,14 @@ metadata:
 data:
   fluent-bit.conf: |
     [SERVICE]
-      Parsers_File        /fluentbit/parsers.conf
+      Parsers_File        /fluent-bit/etc/parsers.conf
     
     [INPUT]
       Name              tail
       Tag               garden-manager-core.*
       Path              /logs/*.log
       Parser            log4j
-      DB                /fluentbit/tail.db
+      DB                /fluent-bit/db/tail.db
       Mem_Buf_Limit     10MB
       Refresh_Interval  10
       
