@@ -44,6 +44,7 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D egress_tcp_port=$egressTcpPort distrib/templates/egress-gateway.yaml > distrib/egress-gateway.yaml"
                         sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/virtual-service.yaml > distrib/virtual-service.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/configmaps/fluentbit.yaml > distrib/fluentbit.yaml"
 
                         // database
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
@@ -57,6 +58,7 @@ pipeline {
                         sh 'kubectl version'
                         sh "kubectl delete deployment garden-manager-core -n $namespace --ignore-not-found=true"
                         sh 'kubectl apply ' +
+                                '-f distrib/fluentbit.yaml ' +
                                 '-f distrib/network-policy.yaml ' +
                                 '-f distrib/service.yaml ' +
                                 '-f distrib/ingress-gateway.yaml ' +
