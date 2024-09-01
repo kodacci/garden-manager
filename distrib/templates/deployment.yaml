@@ -87,7 +87,6 @@ spec:
               cpu: 1.5
               memory: 3Gi
 
-#      initContainers:
         - name: fluentbit
           image: fluent/fluent-bit:3.1.4
           resources:
@@ -104,6 +103,5 @@ spec:
               name: fluentbit-config
             - mountPath: /fluent-bit/db
               name: fluentbit-db
-#          restartPolicy: Always
       imagePullSecrets:
         - name: docker-registry-creds
