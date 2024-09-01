@@ -13,7 +13,7 @@ Configuration:
       fileName: logs/garden-manager-core.log
       filePattern: logs/garden-manager-core-%d{yyyy-MM-dd}-%i.log.zip
       PatternLayout:
-        pattern: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%t] %c{5} - %msg |||%n'
+        pattern: '%d{ISO8601} [%-5level] [%t] %c{5} - %msg |||%n'
       Policies:
         OnStartupTriggeringPolicy:
         SizeBasedTriggeringPolicy:
