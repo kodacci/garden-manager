@@ -25,7 +25,7 @@ data:
       Match *
     
     [OUTPUT]
-      Name              solr
+      Name              http
       Match             *
       host              odroid.ra-tech.pro
       port              8983
