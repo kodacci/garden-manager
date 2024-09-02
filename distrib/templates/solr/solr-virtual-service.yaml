@@ -14,9 +14,9 @@ spec:
     - {{ namespace }}/garden-manger-egress-gateway
   http:
     - match:
-        gateways:
+        - gateways:
           - mesh
-        port: {{ solr_port }}
+          port: {{ solr_port }}
       route:
         - destination:
             host: istio-egressgateway.istio-system.svc.cluster.local
