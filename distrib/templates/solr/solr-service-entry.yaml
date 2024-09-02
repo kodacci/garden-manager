@@ -8,7 +8,7 @@ spec:
     - {{ solr_host }}
   ports:
     - number: {{ solr_port }}
-      name: solr_http_port
-      protocol: TCP
+      name: http
+      protocol: HTTP
   resolution: DNS
   location: MESH_EXTERNAL
