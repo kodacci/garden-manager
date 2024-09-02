@@ -5,5 +5,11 @@ metadata:
   namespace: {{ namespace }}
 spec:
   host: {{ solr_host }}
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE
   exportTo:
     - "."

@@ -22,11 +22,11 @@ spec:
             host: istio-egressgateway.istio-system.svc.cluster.local
             subset: solr
             port:
-              number: 443
+              number: 80
     - match:
         - gateways:
             - {{ namespace }}/garden-manager-egress-gateway
-          port: 443
+          port: 80
       route:
         - destination:
             host: {{ solr_host }}
