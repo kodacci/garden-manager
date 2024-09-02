@@ -16,7 +16,7 @@ spec:
     - match:
         - gateways:
           - mesh
-          port: {{ solr_port }}
+          port: 80
       route:
         - destination:
             host: istio-egressgateway.istio-system.svc.cluster.local
@@ -26,9 +26,9 @@ spec:
     - match:
         - gateways:
             - {{ namespace }}/garden-manager-egress-gateway
-          port: {{ solr_port }}
+          port: 80
       route:
         - destination:
             host: {{ solr_host }}
             port:
-              number: {{ solr_port }}
+              number: 443

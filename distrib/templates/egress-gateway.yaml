@@ -14,8 +14,8 @@ spec:
       hosts:
         - {{ db_host }}
     - port:
-        number: {{ solr_port }}
-        name: solr-http-port
+        number: 80
+        name:  http
         protocol: HTTP
       hosts:
         - {{ solr_host }}
