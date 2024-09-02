@@ -7,5 +7,12 @@ spec:
   host: istio-egressgateway.istio-system.svc.cluster.local
   subsets:
     - name: solr
+      trafficPolicy:
+        portLevelSettings:
+          - port:
+              number: 80
+            tls:
+              mode: ISTIO_MUTUAL
+              sni: {{ solr_host }}
   exportTo:
     - "."

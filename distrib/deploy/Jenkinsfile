@@ -58,7 +58,7 @@ pipeline {
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service-entry.yaml > distrib/solr-service-entry.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
-                        sh "jinja2 -D namespace=${namespace} distrib/templates/solr/solr-egw-destination-rule.yaml > distrib/solr-egw-destination-rule.yaml"
+                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-egw-destination-rule.yaml > distrib/solr-egw-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-destination-rule.yaml > distrib/solr-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service.yaml > distrib/solr-service.yaml"
                     }
