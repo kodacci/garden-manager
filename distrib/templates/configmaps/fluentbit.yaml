@@ -27,8 +27,8 @@ data:
     [OUTPUT]
       Name              http
       Match             *
-      host              odroid.ra-tech.pro
-      port              8983
+      host              solr.ra-tech.pro
+      port              80
       uri               /solr/garden-manager-test/update/json/docs
       format            json
       json_date_key     false
