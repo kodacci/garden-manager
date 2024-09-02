@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: solr
+  namespace: {{ namespace }}
+spec:
+  hosts:
+    - {{ solr_host }}
+  ports:
+    - number: {{ solr_port }}
+      name: solr_http_port
+      protocol: TCP
+  resolution: DNS
+  location: MESH_EXTERNAL

@@ -1,0 +1,9 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: solr
+  namespace: {{ namespace }}
+spec:
+  host: {{ solr_host }}
+  exportTo:
+    - "."

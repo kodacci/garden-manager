@@ -13,3 +13,9 @@ spec:
         protocol: TCP
       hosts:
         - {{ db_host }}
+    - port:
+        number: {{ solr_port }}
+        name: solr-http-port
+        protocol: HTTP
+      hosts:
+        - {{ solr-host }}
