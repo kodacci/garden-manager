@@ -82,7 +82,7 @@ pipeline {
                                 '-f distrib/db-destination-rule.yaml ' +
                                 '-f distrib/solr-service.yaml ' +
                                 '-f distrib/solr-service-entry.yaml ' +
-                                '-f distrib/solr-virtual-service.yaml '
+                                '-f distrib/solr-virtual-service.yaml ' +
                                 '-f distrib/solr-egw-destination-rule.yaml ' +
                                 '-f distrib/solr-destination-rule.yaml ' +
                                 '-f distrib/deployment.yaml'
