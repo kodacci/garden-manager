@@ -18,4 +18,4 @@ spec:
         name: solr-http-port
         protocol: HTTP
       hosts:
-        - {{ solr-host }}
+        - {{ solr_host }}
