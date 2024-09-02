@@ -16,12 +16,16 @@ spec:
     - port:
         number: 80
         name:  http
-        protocol: HTTP
+        protocol: HTTPS
       hosts:
         - {{ solr_host }}
+      tls:
+        mode: ISTIO_MUTUAL
     - port:
         number: 443
         name: https
         protocol: HTTPS
       hosts:
         - {{ solr_host }}
+      tls:
+        mode: ISTIO_MUTUAL
