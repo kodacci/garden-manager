@@ -11,6 +11,7 @@ spec:
           number: 443
         tls:
           mode: SIMPLE
+          sni: {{ solr_host }}
   exportTo:
     - "."
     - istio-system
