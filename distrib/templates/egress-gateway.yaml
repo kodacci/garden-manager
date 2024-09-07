@@ -26,4 +26,4 @@ spec:
       hosts:
         - {{ solr_host }}
       tls:
-        mode: SIMPLE
+        mode: PASSTHROUGH
