@@ -11,7 +11,7 @@ spec:
     - {{ solr_host }}
   gateways:
     - mesh
-    - {{ namespace }}/garden-manger-egress-gateway
+    - {{ namespace }}/garden-manager-egress-gateway
   http:
     - match:
         - gateways:
