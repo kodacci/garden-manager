@@ -25,3 +25,5 @@ spec:
         protocol: HTTPS
       hosts:
         - {{ solr_host }}
+      tls:
+        mode: SIMPLE
