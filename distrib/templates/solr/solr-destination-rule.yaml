@@ -13,3 +13,4 @@ spec:
           mode: SIMPLE
   exportTo:
     - "."
+    - istio-system

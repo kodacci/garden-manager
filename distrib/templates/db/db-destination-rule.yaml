@@ -7,3 +7,4 @@ spec:
   host: {{ db_host }}
   exportTo:
     - "."
+    - istio-system

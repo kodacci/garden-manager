@@ -16,3 +16,4 @@ spec:
 #              sni: {{ solr_host }}
   exportTo:
     - "."
+    - istio-system
