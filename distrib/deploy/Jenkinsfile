@@ -46,11 +46,12 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/virtual-service.yaml > distrib/virtual-service.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/configmaps/fluentbit.yaml > distrib/fluentbit.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/egw-destination-rule.yaml > distrib/egw-destination-rule.yaml"
 
                         // database
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress -D egress_tcp_port=$egressTcpPort distrib/templates/db/db-virtual-service.yaml > distrib/db-virtual-service.yaml"
-                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-egw-destination-rule.yaml > distrib/db-egw-destination-rule.yaml"
+//                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-egw-destination-rule.yaml > distrib/db-egw-destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-destination-rule.yaml > distrib/db-destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service.yaml > distrib/db-service.yaml"
 
@@ -58,7 +59,7 @@ pipeline {
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service-entry.yaml > distrib/solr-service-entry.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-egw-destination-rule.yaml > distrib/solr-egw-destination-rule.yaml"
+//                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-egw-destination-rule.yaml > distrib/solr-egw-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-destination-rule.yaml > distrib/solr-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service.yaml > distrib/solr-service.yaml"
                     }
@@ -74,15 +75,16 @@ pipeline {
                                 '-f distrib/egress-gateway.yaml ' +
                                 '-f distrib/virtual-service.yaml ' +
                                 '-f distrib/destination-rule.yaml ' +
+                                '-f distrib/egw-destination-rule.yaml ' +
                                 '-f distrib/db-service.yaml ' +
                                 '-f distrib/db-service-entry.yaml ' +
                                 '-f distrib/db-virtual-service.yaml ' +
-                                '-f distrib/db-egw-destination-rule.yaml ' +
+//                                '-f distrib/db-egw-destination-rule.yaml ' +
                                 '-f distrib/db-destination-rule.yaml ' +
                                 '-f distrib/solr-service.yaml ' +
                                 '-f distrib/solr-service-entry.yaml ' +
                                 '-f distrib/solr-virtual-service.yaml ' +
-                                '-f distrib/solr-egw-destination-rule.yaml ' +
+//                                '-f distrib/solr-egw-destination-rule.yaml ' +
                                 '-f distrib/solr-destination-rule.yaml ' +
                                 '-f distrib/deployment.yaml'
                     }
