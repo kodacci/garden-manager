@@ -3,6 +3,8 @@ kind: DestinationRule
 metadata:
   name: solr
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/part-of: garden-manager
 spec:
   host: {{ solr_host }}
   trafficPolicy:

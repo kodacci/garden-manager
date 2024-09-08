@@ -51,7 +51,6 @@ pipeline {
                         // database
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress -D egress_tcp_port=$egressTcpPort distrib/templates/db/db-virtual-service.yaml > distrib/db-virtual-service.yaml"
-//                        sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-egw-destination-rule.yaml > distrib/db-egw-destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/db/db-destination-rule.yaml > distrib/db-destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service.yaml > distrib/db-service.yaml"
 
@@ -59,14 +58,13 @@ pipeline {
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service-entry.yaml > distrib/solr-service-entry.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
-//                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-egw-destination-rule.yaml > distrib/solr-egw-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-destination-rule.yaml > distrib/solr-destination-rule.yaml"
                         sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service.yaml > distrib/solr-service.yaml"
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         sh 'kubectl version'
-                        sh "kubectl delete deployment garden-manager-core -n $namespace --ignore-not-found=true"
+                        sh "kubectl delete all -l \"app.kubernetes.io/part-of: garden-manager\" -n $namespace"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
                                 '-f distrib/network-policy.yaml ' +
@@ -79,12 +77,10 @@ pipeline {
                                 '-f distrib/db-service.yaml ' +
                                 '-f distrib/db-service-entry.yaml ' +
                                 '-f distrib/db-virtual-service.yaml ' +
-//                                '-f distrib/db-egw-destination-rule.yaml ' +
                                 '-f distrib/db-destination-rule.yaml ' +
                                 '-f distrib/solr-service.yaml ' +
                                 '-f distrib/solr-service-entry.yaml ' +
                                 '-f distrib/solr-virtual-service.yaml ' +
-//                                '-f distrib/solr-egw-destination-rule.yaml ' +
                                 '-f distrib/solr-destination-rule.yaml ' +
                                 '-f distrib/deployment.yaml'
                     }

@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: solr-service
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/name: garden-manager-solr-service
+    app.kubernetes.io/part-of: garden-manager
 spec:
   ports:
     - name: http

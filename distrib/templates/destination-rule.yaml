@@ -3,6 +3,8 @@ kind: DestinationRule
 metadata:
   name: garden-manager-core-destination
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/part-of: garden-manager
 spec:
   host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
   exportTo:

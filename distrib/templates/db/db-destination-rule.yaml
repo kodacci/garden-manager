@@ -3,6 +3,8 @@ kind: DestinationRule
 metadata:
   name: garden-manager-database
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/part-of: garden-manager
 spec:
   host: {{ db_host }}
   exportTo:
