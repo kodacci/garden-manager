@@ -2,6 +2,7 @@ package ru.ra_tech.garden_manager.core.controllers;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,12 +14,15 @@ import org.springframework.web.ErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
 import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 
+@Slf4j
 public abstract class AbstractController {
     private record EmptyResponse() {}
 
     private ResponseEntity<Object> toError(ErrorResponse error) {
         val headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
+        log.error("Error while handling request: {}", error.getBody().getDetail());
 
         return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
     }
