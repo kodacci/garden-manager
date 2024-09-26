@@ -10,6 +10,7 @@ data:
   fluent-bit.conf: |
     [SERVICE]
       Parsers_File        /fluent-bit/etc/parsers.conf
+      log_level           info
     
     [INPUT]
       Name              tail
@@ -21,7 +22,7 @@ data:
       Refresh_Interval  10
     
     [FILTER]
-      Name              from-multiline
+      Name              parser
       match             *
       key_name          log
       parser            log4j
@@ -44,7 +45,7 @@ data:
     [PARSER]
       Name          log4j
       Format        regex
-      Regex         ^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>.*)===== (?<exception>(.|\n)*) =====?$
+      Regex         ^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>.*)\n===== (?<exception>(.|\n)*) =====\n?$
       Time_Key      time
       Time_Format   %Y-%m-%dT%H:%M:%S,%L
       Time_Keep     On
