@@ -4,8 +4,9 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.ErrorResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ConflictResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.EntityNotFoundResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
@@ -16,17 +17,18 @@ import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private static final String USER_ENTITY = "User";
 
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
 
-    protected ErrorResponse toServerErrorResponse(AppFailure failure) {
+    protected AppErrorResponse toServerErrorResponse(AppFailure failure) {
         return new ServerErrorResponse(failure);
     }
 
-    public Either<ErrorResponse, UserData> findUser(long id) {
+    public Either<AppErrorResponse, UserData> findUser(long id) {
         return repo.findById(id)
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(user -> user.toEither(new EntityNotFoundResponse(USER_ENTITY, id)))
@@ -42,11 +44,11 @@ public class UserService {
         );
     }
 
-    private ErrorResponse toConflict(List<String> props) {
+    private AppErrorResponse toConflict(List<String> props) {
         return new ConflictResponse(USER_ENTITY, props);
     }
 
-    public Either<ErrorResponse, UserData> createUser(CreateUserRequest user) {
+    public Either<AppErrorResponse, UserData> createUser(CreateUserRequest user) {
         return repo.checkDataConflict(user.login(), Option.of(user.email()))
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(conflict -> Boolean.TRUE.equals(conflict)
@@ -59,7 +61,7 @@ public class UserService {
                 .map(UserData::of);
     }
 
-    public Either<ErrorResponse, Boolean> deleteUser(long id) {
+    public Either<AppErrorResponse, Boolean> deleteUser(long id) {
         return repo.deleteById(id)
                 .mapLeft(this::toServerErrorResponse)
                 .flatMap(

@@ -10,50 +10,53 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.ErrorResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
 import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
+
+import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractController {
     private record EmptyResponse() {}
 
-    private ResponseEntity<Object> toError(ErrorResponse error) {
+    private ResponseEntity<Object> toError(AppErrorResponse error) {
         val headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-        log.error("Error while handling request: {}", error.getBody().getDetail());
+        Optional.ofNullable(error.getThrowable())
+                .ifPresent(ex -> log.error("Error while handling request:", ex));
 
         return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
     }
 
-    protected <T> ResponseEntity<Object> toResponse(Either<? extends ErrorResponse, T> result, HttpStatus status) {
+    protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result, HttpStatus status) {
         return result.fold(
                     this::toError,
                     data -> new ResponseEntity<>(data, status)
                 );
     }
 
-    protected <T> ResponseEntity<Object> toResponse(Either<? extends ErrorResponse, T> result) {
+    protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result) {
         return toResponse(result, HttpStatus.OK);
     }
 
-    protected <T> ResponseEntity<Object> toEmptyResponse(Either<? extends  ErrorResponse, T> result) {
+    protected <T> ResponseEntity<Object> toEmptyResponse(Either<? extends  AppErrorResponse, T> result) {
         return result.fold(
                 this::toError,
                 data -> new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK)
         );
     }
 
-    private Either<ErrorResponse, Long> getPrincipalId(Object principal) {
+    private Either<AppErrorResponse, Long> getPrincipalId(Object principal) {
         return principal instanceof JwtPrincipal realPrincipal
                 ? Either.right(realPrincipal.id())
                 : Either.left(new UnauthorizedResponse());
     }
 
-    protected Either<ErrorResponse, Long> getUserId() {
+    protected Either<AppErrorResponse, Long> getUserId() {
         return Option.of(SecurityContextHolder.getContext().getAuthentication())
-                .toEither((ErrorResponse) new UnauthorizedResponse())
+                .toEither((AppErrorResponse) new UnauthorizedResponse())
                 .map(Authentication::getPrincipal)
                 .flatMap(this::getPrincipalId);
     }

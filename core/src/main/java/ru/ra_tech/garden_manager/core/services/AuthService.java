@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.ErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LogoutResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.EntityNotFoundResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
@@ -31,23 +31,23 @@ public class AuthService {
     private final AuthenticationManager authManager;
     private final AuthUserRepository repo;
 
-    private ErrorResponse toUnauthorized() {
+    private AppErrorResponse toUnauthorized() {
         return new UnauthorizedResponse();
     }
 
-    private ErrorResponse toUnauthorized(Throwable error) {
+    private AppErrorResponse toUnauthorized(Throwable error) {
         return toUnauthorized();
     }
 
-    private ErrorResponse toUnauthorized(AppFailure failure) {
+    private AppErrorResponse toUnauthorized(AppFailure failure) {
         return toUnauthorized();
     }
 
-    private ErrorResponse toServerError(AppFailure failure) {
+    private AppErrorResponse toServerError(AppFailure failure) {
         return new ServerErrorResponse(failure);
     }
 
-    private Either<ErrorResponse, JwtProvider.TokenPair> createTokenPair(String login) {
+    private Either<AppErrorResponse, JwtProvider.TokenPair> createTokenPair(String login) {
         val tokenId = UUID.randomUUID().toString();
 
         return jwtProvider.createTokenPair(login, tokenId)
@@ -59,7 +59,7 @@ public class AuthService {
                 );
     }
 
-    public Either<ErrorResponse, LoginResponse> login(String login, String password) {
+    public Either<AppErrorResponse, LoginResponse> login(String login, String password) {
         return Try.of(() ->
                         authManager.authenticate(new UsernamePasswordAuthenticationToken(login, password))
                 )
@@ -70,7 +70,7 @@ public class AuthService {
                 .map(LoginResponse::new);
     }
 
-    private Either<ErrorResponse, Claims> validateToken(AuthUserDto user, Claims claims) {
+    private Either<AppErrorResponse, Claims> validateToken(AuthUserDto user, Claims claims) {
         if (
                 Objects.equals(user.tokenId(), claims.getId())
                         && Objects.equals(claims.get("type"), TokenType.REFRESH.toString())
@@ -81,7 +81,7 @@ public class AuthService {
         }
     }
 
-    private Either<ErrorResponse, Claims> validateClaims(Claims claims) {
+    private Either<AppErrorResponse, Claims> validateClaims(Claims claims) {
         return repo.findById(claims.getSubject())
                 .mapLeft(this::toServerError)
                 .flatMap(user ->
@@ -90,7 +90,7 @@ public class AuthService {
                 );
     }
 
-    public Either<ErrorResponse, LoginResponse> refresh(String token) {
+    public Either<AppErrorResponse, LoginResponse> refresh(String token) {
         return jwtProvider.getClaims(token)
                 .mapLeft(this::toUnauthorized)
                 .flatMap(this::validateClaims)
@@ -98,7 +98,7 @@ public class AuthService {
                 .map(LoginResponse::new);
     }
 
-    public Either<ErrorResponse, LogoutResponse> logout(long userId) {
+    public Either<AppErrorResponse, LogoutResponse> logout(long userId) {
         return repo.clearSession(userId)
                 .mapLeft(this::toServerError)
                 .flatMap(

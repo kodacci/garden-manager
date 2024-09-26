@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.core.services;
 
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.ErrorResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.roles.dto.UserRoleData;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleDto;
@@ -22,7 +22,7 @@ public class UserRoleService {
             );
     }
 
-    public Either<ErrorResponse, List<UserRoleData>> findAllRoles() {
+    public Either<AppErrorResponse, List<UserRoleData>> findAllRoles() {
         return repo.findAll()
                 .map(roles -> roles.stream().map(this::toData).toList())
                 .mapLeft(ServerErrorResponse::new);
