@@ -45,7 +45,7 @@ data:
     [PARSER]
       Name          log4j
       Format        regex
-      Regex         ^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>.*)\n===== (?<exception>(.|\n)*) =====\n?$
+      Regex         /^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>.*) (?<exception>.*)/m
       Time_Key      time
       Time_Format   %Y-%m-%dT%H:%M:%S,%L
       Time_Keep     On
@@ -66,4 +66,4 @@ data:
         # rules |   state name  | regex pattern                                      | next state
         # ------|---------------|----------------------------------------------------|------------
         rule      "start_state"   "/^([^ ]*) \[([^ ]*)\] \[([^ ]*)\] ([^ ]*) - (.*)/"  "exception"
-        rule      "exception"     "/===== ((.|\n)*) =====/"                            "exception"
+        rule      "exception"     "/\^s+at.*/"                            "exception"
