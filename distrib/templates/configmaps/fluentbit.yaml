@@ -38,7 +38,7 @@ data:
     [PARSER]
       Name          log4j
       Format        regex
-      Regex         ^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>[^\n]*) \|\|\|?$
+      Regex         ^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) - (?<message>.*)\n===== (?<exception>(.|\n)*) =====\n?$
       Time_Key      time
       Time_Format   %Y-%m-%dT%H:%M:%S,%L
       Time_Keep     On
