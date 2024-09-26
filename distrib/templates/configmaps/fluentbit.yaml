@@ -67,4 +67,4 @@ data:
         # ------|---------------|-------------------------------------------------------------|------------
         rule      "start_state"   "/^([^ ]*) \[([^ ]*)\] \[([^ ]*)\] ([^ ]*) ([^ ]*) - (.*)/"  "start_ex"
         rule      "start_ex"      "/=====.*/"                                                  "exception"
-        rule      "exception"     "/(\^s+at|Caused).*/"                                        "exception"
+        rule      "exception"     "/(\^s+at|Caused|\.\.\.).*/"                                        "exception"
