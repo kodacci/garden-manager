@@ -66,5 +66,5 @@ data:
         # rules |   state name  | regex pattern                                               | next state
         # ------|---------------|-------------------------------------------------------------|------------
         rule      "start_state"   "/^([^ ]*) \[([^ ]*)\] \[([^ ]*)\] ([^ ]*) ([^ ]*) - (.*)/"  "start_ex"
-        rule      "start_ex"      "/=====.*/"                                                  "exception"
-        rule      "exception"     "/(\^s+at|Caused|\.\.\.).*/"                                        "exception"
+        rule      "start_ex"      "/=====([^\n]*)/"                                            "exception"
+        rule      "exception"     "/(^\s+at|Caused|\.\.\.)(.*)/"                               "exception"

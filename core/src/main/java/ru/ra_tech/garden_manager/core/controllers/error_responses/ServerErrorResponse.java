@@ -7,10 +7,13 @@ import ru.ra_tech.garden_manager.failure.AppFailure;
 
 public class ServerErrorResponse extends AbstractErrorResponse {
     public ServerErrorResponse(AppFailure failure) {
-        super(ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                failure.getDetail()
-        ));
+        super(
+                ProblemDetail.forStatusAndDetail(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        failure.getDetail()
+                ),
+                failure.getCause()
+        );
 
         problem.setProperty("code", failure.getCode());
         problem.setProperty("source", failure.getSource());
