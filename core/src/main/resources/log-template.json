@@ -3,7 +3,7 @@
   "time": {
     "$resolver": "timestamp",
     "pattern": {
-      "format": "yyyy-MM-dd'T'HH:mm:ss.SSS+03:00'Z'",
+      "format": "yyyy-MM-dd'T'HH:mm:ss,SSS+03:00",
       "timeZone": "Europe/Moscow",
       "locale": "en_US"
     }
