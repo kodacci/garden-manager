@@ -30,13 +30,13 @@
   },
   "message": {
     "$resolver": "message",
-    "stringfield": true
+    "stringified": true
   },
   "exception": {
     "$resolver": "exception",
     "field": "stackTrace",
     "stackTrace": {
-      "stringfield": true
+      "stringified": true
     }
   }
 }
