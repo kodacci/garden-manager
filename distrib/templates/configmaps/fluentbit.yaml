@@ -16,16 +16,10 @@ data:
       Name              tail
       Tag               core.*
       Path              /logs/*.log
-      Multiline.Parser  log4j-multiline
+      Multiline.Parser  log4j-json
       DB                /fluent-bit/db/tail.db
       Mem_Buf_Limit     10MB
       Refresh_Interval  10
-    
-    [FILTER]
-      Name              parser
-      match             *
-      key_name          log
-      parser            log4j
       
     [OUTPUT]
       Name stdout
@@ -43,28 +37,8 @@ data:
 
   parsers.conf: |
     [PARSER]
-      Name          log4j
-      Format        regex
-      Regex         /^(?<time>[^ ]*) \[(?<level>[^ ]*)\] \[(?<thread>[^ ]*)\] (?<source>[^ ]*) (?<method>[^ ]*) - (?<message>.*) =====(?<exception>.*)/m
+      Name          log4j-json
+      Format        json
       Time_Key      time
-      Time_Format   %Y-%m-%dT%H:%M:%S,%L
+      Time_Format   %Y-%m-%dT%H:%M:%S.%L%z
       Time_Keep     On
-    
-    [MULTILINE_PARSER]
-        name          log4j-multiline
-        type          regex
-        flush_timeout 1000
-        #
-        # Regex rules for multiline parsing
-        # ---------------------------------
-        #
-        # configuration hints:
-        #
-        #  - first state always has the name: start_state
-        #  - every field in the rule must be inside double quotes
-        #
-        # rules |   state name  | regex pattern                                               | next state
-        # ------|---------------|-------------------------------------------------------------|------------
-        rule      "start_state"   "/^([^ ]*) \[([^ ]*)\] \[([^ ]*)\] ([^ ]*) ([^ ]*) - (.*)/"  "start_ex"
-        rule      "start_ex"      "/=====([^\n]*)/"                                            "exception"
-        rule      "exception"     "/(^\s+at|Caused|\.\.\.)(.*)/"                               "exception"

@@ -6,14 +6,14 @@ Configuration:
       name: Console
       target: SYSTEM_OUT
       PatternLayout:
-        pattern: '%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%level]} [%t] %c{5} %M - %msg%n%throwable'
+        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%level]} [%t] %c{5} %M - %msg%n%throwable"
     RollingFile:
       name: RollingFile
       append: true
       fileName: logs/garden-manager-core.log
       filePattern: logs/garden-manager-core-%d{yyyy-MM-dd}-%i.log.zip
-      PatternLayout:
-        pattern: '%d{ISO8601} [%level] [%t] %c{5} %M - %msg%n=====%throwable%n'
+      JsonTemplateLayout:
+        eventTemplateUri: classpath:log-template.json
       Policies:
         OnStartupTriggeringPolicy:
         SizeBasedTriggeringPolicy:

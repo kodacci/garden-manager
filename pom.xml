@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.3.4</version>
     </parent>
 
     <groupId>ru.ra-tech.garden-manager</groupId>
@@ -50,7 +50,7 @@
         <!--  Third party dependencies  -->
         <junit.version>5.10.2</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <spring.boot.version>3.2.3</spring.boot.version>
+        <spring.boot.version>3.3.4</spring.boot.version>
         <spring.version>6.1.4</spring.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.26.0</liquibase.version>
@@ -63,12 +63,13 @@
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
         <jacoco.maven.plugin.version>0.8.11</jacoco.maven.plugin.version>
-        <testcontainers.version>1.19.8</testcontainers.version>
+        <testcontainers.version>1.20.1</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
         <junit4.version>4.13.2</junit4.version>
         <sonar.jacoco.plugin>1.3.0.1538</sonar.jacoco.plugin>
+        <log4j.version>2.24.0</log4j.version>
 
         <!--    Vars    -->
         <coverage.agent> </coverage.agent>
@@ -94,10 +95,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--     Logging       -->
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
 
             <!--     Test       -->
