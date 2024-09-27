@@ -16,7 +16,7 @@ data:
       Name              tail
       Tag               core.*
       Path              /logs/*.log
-      Multiline.Parser  log4j-json
+      Parser            log4j-json
       DB                /fluent-bit/db/tail.db
       Mem_Buf_Limit     10MB
       Refresh_Interval  10
