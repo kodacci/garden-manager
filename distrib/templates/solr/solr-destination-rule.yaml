@@ -1,12 +1,19 @@
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: garden-manager-database
+  name: solr
   namespace: {{ namespace }}
   labels:
     app.kubernetes.io/part-of: garden-manager
 spec:
-  host: {{ db_host }}
+  host: {{ solr_host }}
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE
+          sni: {{ solr_host }}
   exportTo:
     - "."
     - istio-system

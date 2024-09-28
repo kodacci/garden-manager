@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: garden-manager-egress-gateway
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/part-of: garden-manager
 spec:
   selector:
     istio: egressgateway
@@ -13,3 +15,17 @@ spec:
         protocol: TCP
       hosts:
         - {{ db_host }}
+    - port:
+        number: 80
+        name:  http
+        protocol: HTTP
+      hosts:
+        - {{ solr_host }}
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - {{ solr_host }}
+      tls:
+        mode: PASSTHROUGH

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.ra_tech.garden_manager.core.controllers.users.UsersApi;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.services.AuthService;
 import ru.ra_tech.garden_manager.core.services.GardenService;

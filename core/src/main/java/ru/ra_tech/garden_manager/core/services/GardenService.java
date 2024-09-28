@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.core.services;
 
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.ErrorResponse;
+import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.EntityNotFoundResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ForbiddenResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
@@ -28,17 +28,17 @@ public class GardenService {
         return new CreateGardenDto(request.name(), request.address(), ownerId);
     }
 
-    private ErrorResponse toServerError(AppFailure failure) {
+    private AppErrorResponse toServerError(AppFailure failure) {
         return new ServerErrorResponse(failure);
     }
 
-    public Either<ErrorResponse, GardenData> createGarden(CreateGardenRequest request, long ownerId) {
+    public Either<AppErrorResponse, GardenData> createGarden(CreateGardenRequest request, long ownerId) {
         return repo.create(toDto(request, ownerId))
                 .mapLeft(this::toServerError)
                 .map(GardenData::of);
     }
 
-    private Either<ErrorResponse, GardenDto> checkUser(GardenDto garden, long userId) {
+    private Either<AppErrorResponse, GardenDto> checkUser(GardenDto garden, long userId) {
         if (garden.owner().id() == userId) {
             return Either.right(garden);
         } else {
@@ -46,7 +46,7 @@ public class GardenService {
         }
     }
 
-    public Either<ErrorResponse, GardenData> findGarden(long id, long userId) {
+    public Either<AppErrorResponse, GardenData> findGarden(long id, long userId) {
         return repo.findById(id)
                 .mapLeft(this::toServerError)
                 .flatMap(option -> option.toEither(new EntityNotFoundResponse(GARDEN_ENTITY, id)))
@@ -54,19 +54,19 @@ public class GardenService {
                 .map(GardenData::of);
     }
 
-    public Either<ErrorResponse, List<GardenData>> listGardens(long userId) {
+    public Either<AppErrorResponse, List<GardenData>> listGardens(long userId) {
         return repo.listByUserId(userId)
                 .mapLeft(this::toServerError)
                 .map(list -> list.map(GardenData::of).asJava());
     }
 
-    private Either<ErrorResponse, GardenUsersDto> checkOwner(long userId, GardenUsersDto garden) {
+    private Either<AppErrorResponse, GardenUsersDto> checkOwner(long userId, GardenUsersDto garden) {
         return garden.ownerId() == userId
                 ? Either.right(garden)
                 : Either.left(new ForbiddenResponse("Only owner can add participants"));
     }
 
-    private Either<ErrorResponse, Boolean> checkAndAddParticipant(
+    private Either<AppErrorResponse, Boolean> checkAndAddParticipant(
             GardenUsersDto gardenUsers, long participantId, long userId
     ) {
         return gardenUsers.participants().contains(participantId) || userId == participantId
@@ -74,7 +74,7 @@ public class GardenService {
                 : repo.addParticipant(gardenUsers.id(), participantId, UserRole.EXECUTOR).mapLeft(this::toServerError);
     }
 
-    public Either<ErrorResponse, List<GardenParticipantData>> addParticipant(long gardenId, long participantId, long userId) {
+    public Either<AppErrorResponse, List<GardenParticipantData>> addParticipant(long gardenId, long participantId, long userId) {
         return repo.getGardenUsers(gardenId)
                 .mapLeft(this::toServerError)
                 .flatMap(users -> users.toEither(new EntityNotFoundResponse(GARDEN_ENTITY, gardenId)))

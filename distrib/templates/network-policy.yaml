@@ -3,6 +3,8 @@ kind: NetworkPolicy
 metadata:
   name: garden-manager-network-policy
   namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/part-of: garden-manager
 spec:
   podSelector:
     {}

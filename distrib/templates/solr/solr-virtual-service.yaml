@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: garden-manager-database-rule
+  name: solr-rule
   namespace: {{ namespace }}
   labels:
     app.kubernetes.io/part-of: garden-manager
@@ -10,31 +10,27 @@ spec:
     - "."
     - istio-system
   hosts:
-    - {{ db_host }}
+    - {{ solr_host }}
   gateways:
     - mesh
     - {{ namespace }}/garden-manager-egress-gateway
-  tcp:
+  http:
     - match:
-      - gateways:
+        - gateways:
           - mesh
-        port: {{ db_port }}
-        destinationSubnets:
-          - {{ db_address }}/32
+          port: 80
       route:
         - destination:
             host: istio-egressgateway.istio-system.svc.cluster.local
-            subset: garden-manager-database
+            subset: solr
             port:
-              number: {{ egress_tcp_port }}
-          weight: 100
+              number: 80
     - match:
-      - gateways:
-          - {{ namespace }}/garden-manager-egress-gateway
-        port: {{ egress_tcp_port }}
+        - gateways:
+            - {{ namespace }}/garden-manager-egress-gateway
+          port: 80
       route:
         - destination:
-            host: {{ db_host }}
+            host: {{ solr_host }}
             port:
-              number: {{ db_port }}
-          weight: 100
+              number: 443
