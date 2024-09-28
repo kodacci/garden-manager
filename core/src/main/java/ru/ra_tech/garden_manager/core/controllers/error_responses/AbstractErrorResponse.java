@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.lang.Nullable;
-import org.springframework.web.ErrorResponse;
 
 public abstract class AbstractErrorResponse implements AppErrorResponse {
     protected final ProblemDetail problem;
