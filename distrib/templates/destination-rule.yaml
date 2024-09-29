@@ -5,6 +5,7 @@ metadata:
   namespace: {{ namespace }}
   labels:
     app.kubernetes.io/part-of: garden-manager
+    app.kubernetes.io/component: core
 spec:
   host: garden-manager-core-service.{{ namespace }}.svc.cluster.local
   exportTo:
