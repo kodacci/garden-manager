@@ -36,11 +36,15 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh './mvnw --log-file ./build.log -DskipTests -Dskip.jooq.generation=true clean package'
+                    def logFileName = env.BUILD_URL + '-build.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            sh "./mvnw --log-file $logFileName -DskipTests -Dskip.jooq.generation=true clean package"
+                        }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
-                    archiveArtifacts('build.log')
-                    sh 'rm ./build.log'
                     println("Build finished")
                 }
             }
@@ -50,14 +54,17 @@ pipeline {
             steps {
                 script {
                     println("Starting build verification")
-
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                            sh './mvnw --log-file ./test.log verify -Dskip.jooq.generation'
+                    def logFileName = env.BUILD_URL + '-test.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
+                                sh './mvnw --log-file ./test.log verify -Dskip.jooq.generation'
+                            }
                         }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
-                    archiveArtifacts('test.log')
-                    sh 'rm ./test.log'
                     println("Verification finished")
                 }
             }
@@ -98,11 +105,15 @@ pipeline {
 
             steps {
                 script {
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "./mvnw --log-file ./deploy.log deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                    def logFileName = env.BUILD_URL + '-deploy.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            sh "./mvnw --log-file ./deploy.log deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                        }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
-                    archiveArtifacts('deploy.log')
-                    sh 'rm ./deploy.log'
 
                     println('Deploying to nexus finished')
                 }
