@@ -58,7 +58,7 @@ pipeline {
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                                sh './mvnw --log-file ./test.log verify -Dskip.jooq.generation'
+                                sh "./mvnw --log-file $logFileName verify -Dskip.jooq.generation"
                             }
                         }
                     } finally {
@@ -108,7 +108,7 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-deploy.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw --log-file ./deploy.log deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                            sh "./mvnw --log-file $logFileName deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
