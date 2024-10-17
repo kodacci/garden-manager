@@ -129,7 +129,7 @@ pipeline {
             steps {
                 script {
                     def path = BRANCH_NAME.replaceAll("/", "%2F")
-                    build(job: "Garden Manager Deploy Backend/$path", wait: false, parameters: [imageTag(name: 'core_image', imageTag: IMAGE_TAG)])
+                    build(job: "Garden Manager Deploy Backend/$path", wait: false, parameters: [string(name: 'core_image', value: IMAGE_TAG)])
                 }
             }
         }
