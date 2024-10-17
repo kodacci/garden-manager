@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
-                    def logFileName = env.BUILD_URL + '-build.log'
+                    def logFileName = env.BUILD_TAG + '-build.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             sh "./mvnw --log-file $logFileName -DskipTests -Dskip.jooq.generation=true clean package"
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     println("Starting build verification")
-                    def logFileName = env.BUILD_URL + '-test.log'
+                    def logFileName = env.BUILD_TAG + '-test.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
@@ -105,7 +105,7 @@ pipeline {
 
             steps {
                 script {
-                    def logFileName = env.BUILD_URL + '-deploy.log'
+                    def logFileName = env.BUILD_TAG + '-deploy.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             sh "./mvnw --log-file ./deploy.log deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
