@@ -37,7 +37,7 @@ spec:
 
       containers:
         - name: garden-manager-core
-          image: snapshots.docker-registry.ra-tech.pro/pro.ra-tech/garden-manager/{{ branch }}/garden-manager-core:latest
+          image: snapshots.docker-registry.ra-tech.pro/{{ image_tag}}
           ports:
             - containerPort: 8080
               name: core-rest-api

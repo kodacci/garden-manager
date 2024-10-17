@@ -1,5 +1,6 @@
 def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
+def IMAGE_TAG
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -107,10 +108,13 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        IMAGE_TAG = 'pro.ra-tech/garden-manager/' +
+                                DEPLOY_GIT_SCOPE +
+                                '/garden-manager-core:' +
+                                PROJECT_VERSION + '-' + currentBuild.number
 
-                        echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag)
+                        echo "Building image with tag '$IMAGE_TAG'"
+                        def image = docker.build(IMAGE_TAG)
 
                         docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
@@ -125,7 +129,7 @@ pipeline {
             steps {
                 script {
                     def path = BRANCH_NAME.replaceAll("/", "%2F")
-                    build(job: "Garden Manager Deploy Backend/$path", wait: false)
+                    build(job: "Garden Manager Deploy Backend/$path", wait: false, parameters: [imageTag(name: 'core_image', imageTag: IMAGE_TAG)])
                 }
             }
         }
