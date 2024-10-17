@@ -1,5 +1,6 @@
 def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
+def IMAGE_TAG
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -35,8 +36,14 @@ pipeline {
             steps {
                 script {
                     println("Building project version: " + PROJECT_VERSION)
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh './mvnw -DskipTests -Dskip.jooq.generation=true clean package'
+                    def logFileName = env.BUILD_TAG + '-build.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            sh "./mvnw --log-file $logFileName -DskipTests -Dskip.jooq.generation=true clean package"
+                        }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
                     println("Build finished")
                 }
@@ -47,13 +54,17 @@ pipeline {
             steps {
                 script {
                     println("Starting build verification")
-
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                            sh './mvnw verify -Dskip.jooq.generation'
+                    def logFileName = env.BUILD_TAG + '-test.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
+                                sh "./mvnw --log-file $logFileName verify -Dskip.jooq.generation"
+                            }
                         }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
-
                     println("Verification finished")
                 }
             }
@@ -94,8 +105,14 @@ pipeline {
 
             steps {
                 script {
-                    withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh "./mvnw deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                    def logFileName = env.BUILD_TAG + '-deploy.log'
+                    try {
+                        withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
+                            sh "./mvnw --log-file $logFileName deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                        }
+                    } finally {
+                        archiveArtifacts(logFileName)
+                        sh "rm $logFileName"
                     }
 
                     println('Deploying to nexus finished')
@@ -107,10 +124,13 @@ pipeline {
             steps {
                 script {
                     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        def imageTag = 'pro.ra-tech/garden-manager/' + DEPLOY_GIT_SCOPE + '/garden-manager-core:' + PROJECT_VERSION
+                        IMAGE_TAG = 'pro.ra-tech/garden-manager/' +
+                                DEPLOY_GIT_SCOPE +
+                                '/garden-manager-core:' +
+                                PROJECT_VERSION + '-' + currentBuild.number
 
-                        echo "Building image with tag '$imageTag'"
-                        def image = docker.build(imageTag)
+                        echo "Building image with tag '$IMAGE_TAG'"
+                        def image = docker.build(IMAGE_TAG)
 
                         docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
                             image.push()
@@ -125,7 +145,7 @@ pipeline {
             steps {
                 script {
                     def path = BRANCH_NAME.replaceAll("/", "%2F")
-                    build(job: "Garden Manager Deploy Backend/$path", wait: false)
+                    build(job: "Garden Manager Deploy Backend/$path", wait: false, parameters: [string(name: 'core_image', value: IMAGE_TAG)])
                 }
             }
         }
