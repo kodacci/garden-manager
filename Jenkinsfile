@@ -39,7 +39,7 @@ pipeline {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         sh './mvnw --log-file ./build.log -DskipTests -Dskip.jooq.generation=true clean package'
                     }
-                    archiveArtifacts('./build.log')
+                    archiveArtifacts('build.log')
                     sh 'rm ./build.log'
                     println("Build finished")
                 }
@@ -56,7 +56,7 @@ pipeline {
                             sh './mvnw --log-file ./test.log verify -Dskip.jooq.generation'
                         }
                     }
-                    archiveArtifacts('./test.log')
+                    archiveArtifacts('test.log')
                     sh 'rm ./test.log'
                     println("Verification finished")
                 }
@@ -101,7 +101,7 @@ pipeline {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                         sh "./mvnw --log-file ./deploy.log deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                     }
-                    archiveArtifacts('./deploy.log')
+                    archiveArtifacts('deploy.log')
                     sh 'rm ./deploy.log'
 
                     println('Deploying to nexus finished')
