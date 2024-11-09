@@ -22,11 +22,13 @@ spec:
         protocol: HTTP
       hosts:
         - {{ solr_host }}
+        - {{ vault_host }}
     - port:
         number: 443
         name: https
         protocol: HTTPS
       hosts:
         - {{ solr_host }}
+        - {{ vault_host }}
       tls:
         mode: PASSTHROUGH

@@ -10,6 +10,7 @@ spec:
   host: istio-egressgateway.istio-system.svc.cluster.local
   subsets:
     - name: solr
+    - name: vault
     - name: garden-manager-database
   exportTo:
     - "."
