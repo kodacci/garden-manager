@@ -35,8 +35,6 @@ spec:
           emptyDir:
             sizeLimit: 50Mi
         - name: vault-agent-config
-          emptyDir:
-            sizeLimit: 1Mi
           configMap:
             name: core-vault-agent
             items:
