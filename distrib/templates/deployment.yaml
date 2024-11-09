@@ -25,7 +25,7 @@ spec:
             sizeLimit: 250Mi
         - name: fluentbit-config
           configMap:
-            name: core-fluent-bit-config
+            name: core-fluentbit-config
             items:
               - key: fluent-bit.conf
                 path: fluent-bit.conf
@@ -38,7 +38,7 @@ spec:
           emptyDir:
             sizeLimit: 1Mi
           configMap:
-            name: vault-agent-config
+            name: core-vault-agent
             items:
               - key: vault-agent-config.hcl
                 path: vault-agent-config.hcl
@@ -136,10 +136,13 @@ spec:
           volumeMounts:
             - mountPath: /vault/agent
               name: vault-agent-config
+              readOnly: true
             - mountPath: /vault/secrets/data/application
               name: application-yaml
+              readOnly: true
             - mountPath: /vault/token
               name: vault-token
+              readOnly: true
 
       imagePullSecrets:
         - name: docker-registry-creds

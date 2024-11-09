@@ -1,5 +1,18 @@
 def DEPLOY_GIT_SCOPE
 
+def generateExtHttp(namespace, name, host) {
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-service-entry.yaml > distrib/${name}-service-entry.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-virtual-service.yaml > distrib/${name}-virtual-service.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-virtual-service.yaml > distrib/${name}-virtual-service.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-destination-rule.yaml > distrib/${name}-destination-rule.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-service.yaml > distrib/${name}-service.yaml"
+
+    return '-f distrib/solr-service.yaml ' +
+            '-f distrib/solr-service-entry.yaml ' +
+            '-f distrib/solr-virtual-service.yaml ' +
+            '-f distrib/solr-destination-rule.yaml '
+}
+
 pipeline {
     agent { label 'jenkins-agent1' }
 
@@ -33,6 +46,7 @@ pipeline {
                     def dbPort = '4444'
                     def egressTcpPort = '9999'
                     def solrHost = 'solr.ra-tech.pro'
+                    def vaultHost = 'vault.ra-tech.pro'
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
@@ -55,11 +69,11 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service.yaml > distrib/db-service.yaml"
 
                         // Solr
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service-entry.yaml > distrib/solr-service-entry.yaml"
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-virtual-service.yaml > distrib/solr-virtual-service.yaml"
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-destination-rule.yaml > distrib/solr-destination-rule.yaml"
-                        sh "jinja2 -D namespace=${namespace} -D solr_host=$solrHost distrib/templates/solr/solr-service.yaml > distrib/solr-service.yaml"
+                        def solrApply = generateExtHttp(namespace, 'solr', solrHost)
+
+                        // Vault
+                        def vaultApply = generateExtHttp(namespace, 'vault', vaultHost)
+                        sh "jinja2 -D namespace=$namespace -Dvault_addr=https://${vaultHost} distrib/templates/configmaps/vault-agent.yaml > distrib/vault-agent.yaml"
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
@@ -73,6 +87,7 @@ pipeline {
                         sh "kubectl delete configmap -l app.kubernetes.io/component=core -n $namespace"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
+                                '-f distrib/vault-agent.yaml ' +
                                 '-f distrib/network-policy.yaml ' +
                                 '-f distrib/service.yaml ' +
                                 '-f distrib/ingress-gateway.yaml ' +
@@ -84,10 +99,8 @@ pipeline {
                                 '-f distrib/db-service-entry.yaml ' +
                                 '-f distrib/db-virtual-service.yaml ' +
                                 '-f distrib/db-destination-rule.yaml ' +
-                                '-f distrib/solr-service.yaml ' +
-                                '-f distrib/solr-service-entry.yaml ' +
-                                '-f distrib/solr-virtual-service.yaml ' +
-                                '-f distrib/solr-destination-rule.yaml ' +
+                                solrApply +
+                                vaultApply +
                                 '-f distrib/deployment.yaml'
                     }
                 }

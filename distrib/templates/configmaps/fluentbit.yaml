@@ -2,8 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ namespace }}
-  name: core-fluent-bit-config
+  name: core-fluentbit-config
   labels:
+    app.kubernetes.io/name: core-fluentbit-config
     app.kubernetes.io/component: core
     app.kubernetes.io/part-of: garden-manager
 data:
