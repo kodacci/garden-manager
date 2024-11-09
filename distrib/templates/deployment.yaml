@@ -121,7 +121,6 @@ spec:
               name: fluentbit-db
               readOnly: true
 
-      initContainers:
         - name: vault-agent
           image: hashicorp/vault:1.18
           args:

@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/component: core
 data:
   vault-agent-config.hcl: |
-    exit_after_auth = true
+    exit_after_auth = false
     vault {
       address = "{{ vault_addr }}"
     }
