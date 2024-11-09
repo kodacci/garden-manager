@@ -137,7 +137,6 @@ spec:
               readOnly: true
             - mountPath: /vault/secrets/data/application
               name: application-yaml
-              readOnly: true
             - mountPath: /vault/token
               name: vault-token
               readOnly: true
