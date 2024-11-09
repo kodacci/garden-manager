@@ -1,16 +1,16 @@
 def DEPLOY_GIT_SCOPE
 
 def generateExtHttp(namespace, name, host) {
-    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-service-entry.yaml > distrib/${name}-service-entry.yaml"
-    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-virtual-service.yaml > distrib/${name}-virtual-service.yaml"
-    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-virtual-service.yaml > distrib/${name}-virtual-service.yaml"
-    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-destination-rule.yaml > distrib/${name}-destination-rule.yaml"
-    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/${name}-service.yaml > distrib/${name}-service.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/service-entry.yaml > distrib/${name}-service-entry.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/virtual-service.yaml > distrib/${name}-virtual-service.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/virtual-service.yaml > distrib/${name}-virtual-service.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/destination-rule.yaml > distrib/${name}-destination-rule.yaml"
+    sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/service.yaml > distrib/${name}-service.yaml"
 
-    return '-f distrib/solr-service.yaml ' +
-            '-f distrib/solr-service-entry.yaml ' +
-            '-f distrib/solr-virtual-service.yaml ' +
-            '-f distrib/solr-destination-rule.yaml '
+    return "-f distrib/${name}-service.yaml " +
+            "-f distrib/${name}-service-entry.yaml " +
+            "-f distrib/${name}-virtual-service.yaml " +
+            "-f distrib/${name}-destination-rule.yaml "
 }
 
 pipeline {
