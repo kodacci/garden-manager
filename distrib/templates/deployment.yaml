@@ -119,7 +119,6 @@ spec:
               readOnly: true
             - mountPath: /fluent-bit/db
               name: fluentbit-db
-              readOnly: true
 
         - name: vault-agent
           image: hashicorp/vault:1.18

@@ -28,6 +28,6 @@ data:
     
     # Render application.yaml from vault
     template {
-      contents = {{ '"{{ with secret \"ra-tech-kv/data/garden-manager-test/application\" }}{{ .Data.data.application.yaml }}{{ end }}"' }}
+      contents = {{ '"{{ with secret \\"ra-tech-kv/data/garden-manager-test/application\\" }}{{ .Data.data.application.yaml }}{{ end }}"' }}
       destination = "/vault/secrets/application/application.yaml"
     }
