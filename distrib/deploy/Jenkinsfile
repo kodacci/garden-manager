@@ -48,6 +48,9 @@ pipeline {
                     def solrHost = 'solr.ra-tech.pro'
                     def vaultHost = 'vault.ra-tech.pro'
 
+                    def solrApply = ""
+                    def vaultApply = ""
+
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
 
@@ -69,10 +72,10 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service.yaml > distrib/db-service.yaml"
 
                         // Solr
-                        def solrApply = generateExtHttp(namespace, 'solr', solrHost)
+                        solrApply = generateExtHttp(namespace, 'solr', solrHost)
 
                         // Vault
-                        def vaultApply = generateExtHttp(namespace, 'vault', vaultHost)
+                        vaultApply = generateExtHttp(namespace, 'vault', vaultHost)
                         sh "jinja2 -D namespace=$namespace -Dvault_addr=https://${vaultHost} distrib/templates/configmaps/vault-agent.yaml > distrib/vault-agent.yaml"
                     }
 
