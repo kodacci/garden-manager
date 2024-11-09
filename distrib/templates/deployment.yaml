@@ -34,7 +34,7 @@ spec:
         - name: fluentbit-db
           emptyDir:
             sizeLimit: 50Mi
-        - name: vault-config
+        - name: vault-agent-config
           emptyDir:
             sizeLimit: 1Mi
           configMap:
