@@ -27,12 +27,12 @@ spec:
               subset: {{ name }}
               port:
                 number: 80
-        - match:
-            - gateways:
-                - {{ namespace }}/garden-manager-egress-gateway
-              port: 80
-          route:
-            - destination:
-                host: {{ host }}
-                port:
-                  number: 443
+      - match:
+          - gateways:
+              - {{ namespace }}/garden-manager-egress-gateway
+            port: 80
+        route:
+          - destination:
+              host: {{ host }}
+              port:
+                number: 443
