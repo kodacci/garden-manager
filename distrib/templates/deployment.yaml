@@ -22,7 +22,7 @@ spec:
       volumes:
         - name: logs-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 250Mi
         - name: fluentbit-config
           configMap:
             name: core-fluent-bit-config
@@ -34,6 +34,20 @@ spec:
         - name: fluentbit-db
           emptyDir:
             sizeLimit: 50Mi
+        - name: vault-config
+          emptyDir:
+            sizeLimit: 1Mi
+          configMap:
+            name: vault-agent-config
+            items:
+              - key: vault-agent-config.hcl
+                path: vault-agent-config.hcl
+        - name: application-yaml
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-token
+          secret:
+            secretName: vault-token
 
       containers:
         - name: garden-manager-core
@@ -55,16 +69,19 @@ spec:
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ namespace }}-secret
+                  name: database-creds
                   key: db-username
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ namespace }}-secret
+                  name: database-creds
                   key: db-password
           volumeMounts:
             - mountPath: /home/garden-manager/logs
               name: logs-volume
+            - mountPath: /application
+              name: application-yaml
+              readOnly: true
           readinessProbe:
             httpGet:
                 path: /actuator/health/readiness
@@ -101,7 +118,28 @@ spec:
               name: logs-volume
             - mountPath: /fluent-bit/etc
               name: fluentbit-config
+              readOnly: true
             - mountPath: /fluent-bit/db
               name: fluentbit-db
+              readOnly: true
+
+      initContainers:
+        - name: vault-agent
+          image: hashicorp/vault:1.18
+          args:
+            - agent
+            - -config=/vault/agent/vault-agent-config.hcl
+            - -log-level=debug
+          env:
+            - name: VAULT_ADDR
+              value: {{ vault_address }}
+          volumeMounts:
+            - mountPath: /vault/agent
+              name: vault-agent-config
+            - mountPath: /vault/secrets/data/application
+              name: application-yaml
+            - mountPath: /vault/token
+              name: vault-token
+
       imagePullSecrets:
         - name: docker-registry-creds

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-agent-config
+  namespace: {{ namespace }}
+data:
+  vault-agent-config.hcl: |
+    exit_after_auth = true
+    vault {
+      address = "https://vault.ra-tech.pro"
+    }
+    
+    pid_file = "/vault/pidfile"
+    
+    auto_auth {
+      method {
+        type = "token_file"
+        
+        config = {
+          token_file_path = "/vault/token/.token"
+        }
+      }
+    }
+    
+    # Render application.yaml from vault
+    template {
+      contents = {{ '"{{ with secret \"ra-tech-kv/data/garden-manager-test/application\" }}{{ .Data.data.application.yaml }}{{ end }}"' }}
+      destination = "/vault/secrets/application/application.yaml"
+    }
