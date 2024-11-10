@@ -14,7 +14,7 @@ data:
       address = "{{ vault_addr }}"
     }
     
-    pid_file = "/vault/agent/pidfile"
+    pid_file = "/vault/pidfile"
     
     auto_auth {
       method {

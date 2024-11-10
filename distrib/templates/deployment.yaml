@@ -139,11 +139,25 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 50m
+              cpu: 100m
               memory: 100Mi
             limits:
-              cpu: 50m
+              cpu: 150m
               memory: 150Mi
+          readinessProbe:
+            httpGet:
+              path: /v1/sys/health
+              port: 8200
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /v1/sys/health
+              port: 8200
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
 
       imagePullSecrets:
         - name: docker-registry-creds
