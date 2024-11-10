@@ -10,9 +10,15 @@ metadata:
 data:
   fluent-bit.conf: |
     [SERVICE]
-      Parsers_File        /fluent-bit/etc/parsers.conf
-      log_level           info
-      Health_Check        On
+      HTTP_Server             On
+      HTTP_Listen             0.0.0.0
+      HTTP_Port               8080
+      Health_Check            On
+      HC_Errors_Count         10
+      HC_Retry_Failure_Count  10
+      HC_Period               10
+      Parsers_File            /fluent-bit/etc/parsers.conf
+      log_level               info
     
     [INPUT]
       Name              tail

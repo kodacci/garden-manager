@@ -58,22 +58,6 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: DATABASE_URL
-              value: jdbc:postgresql://{{ db_host }}:{{ db_port }}/garden-manager
-            - name: ROOT_LOGGING_LEVEL
-              value: INFO
-            - name: METRICS_APPLICATION_TAG
-              value: {{ metrics_application_tag }}
-            - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: database-creds
-                  key: db-username
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: database-creds
-                  key: db-password
           volumeMounts:
             - mountPath: /home/garden-manager/logs
               name: logs-volume
@@ -122,14 +106,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/v1/health
-              port: 2020
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /api/v1/health
-              port: 8081
+              port: 8080
             initialDelaySeconds: 15
             periodSeconds: 5
             failureThreshold: 10
