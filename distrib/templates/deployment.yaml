@@ -106,14 +106,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/v1/health
-              port: 8080
+              port: 9090
             initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /api/v1/health
-              port: 8080
+              port: 9090
             initialDelaySeconds: 15
             periodSeconds: 5
             failureThreshold: 10

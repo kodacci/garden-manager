@@ -12,7 +12,7 @@ data:
     [SERVICE]
       HTTP_Server             On
       HTTP_Listen             0.0.0.0
-      HTTP_Port               8080
+      HTTP_Port               9090
       Health_Check            On
       HC_Errors_Count         10
       HC_Retry_Failure_Count  10
