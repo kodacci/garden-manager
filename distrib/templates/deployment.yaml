@@ -132,12 +132,18 @@ spec:
           volumeMounts:
             - mountPath: /vault/agent
               name: vault-agent-config
-              readOnly: true
             - mountPath: /vault/secrets/data/application
               name: application-yaml
             - mountPath: /vault/token
               name: vault-token
               readOnly: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 50m
+              memory: 150Mi
 
       imagePullSecrets:
         - name: docker-registry-creds
