@@ -12,6 +12,7 @@ data:
     [SERVICE]
       Parsers_File        /fluent-bit/etc/parsers.conf
       log_level           info
+      Health_Check        On
     
     [INPUT]
       Name              tail

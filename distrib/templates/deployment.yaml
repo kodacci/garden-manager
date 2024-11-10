@@ -84,14 +84,14 @@ spec:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: 3
+            initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
             failureThreshold: 10
           resources:
@@ -119,6 +119,20 @@ spec:
               readOnly: true
             - mountPath: /fluent-bit/db
               name: fluentbit-db
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 2020
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 10
 
         - name: vault-agent
           image: hashicorp/vault:1.18
@@ -139,25 +153,11 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 100m
+              cpu: 200m
               memory: 100Mi
             limits:
-              cpu: 150m
+              cpu: 200m
               memory: 150Mi
-          readinessProbe:
-            httpGet:
-              path: /v1/sys/health
-              port: 8200
-            initialDelaySeconds: 3
-            periodSeconds: 3
-            failureThreshold: 10
-          livenessProbe:
-            httpGet:
-              path: /v1/sys/health
-              port: 8200
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 10
 
       imagePullSecrets:
         - name: docker-registry-creds

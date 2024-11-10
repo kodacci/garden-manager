@@ -9,5 +9,5 @@ USER garden-manager
 COPY --chown=garden-manager:garden-manager  core/target/garden-manager-core.jar ./
 
 EXPOSE 8080
-CMD ["-jar", "garden-manager-core.jar"]
+CMD ["-jar", "garden-manager-core.jar", "--spring.config.location=/application/application.yaml"]
 ENTRYPOINT ["java"]
