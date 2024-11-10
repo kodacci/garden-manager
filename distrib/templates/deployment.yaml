@@ -132,7 +132,7 @@ spec:
           volumeMounts:
             - mountPath: /vault/agent
               name: vault-agent-config
-            - mountPath: /vault/secrets/data/application
+            - mountPath: /vault/secrets/application
               name: application-yaml
             - mountPath: /vault/token
               name: vault-token
