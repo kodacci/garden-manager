@@ -25,6 +25,10 @@ def generateImageTag() {
 pipeline {
     agent { label 'jenkins-agent1' }
 
+    parameters {
+        string(name: 'core_image', desciption: 'Core image tag to use in deploy')
+    }
+
     stages {
         stage('Determine git scope') {
             steps {
