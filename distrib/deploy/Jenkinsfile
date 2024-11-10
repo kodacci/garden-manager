@@ -26,7 +26,7 @@ pipeline {
     agent { label 'jenkins-agent1' }
 
     parameters {
-        string(name: 'core_image', desciption: 'Core image tag to use in deploy')
+        string(name: 'core_image', description: 'Core image tag to use in deploy')
     }
 
     stages {

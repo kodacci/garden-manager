@@ -123,7 +123,7 @@ spec:
           args:
             - agent
             - -config=/vault/agent/vault-agent-config.hcl
-            - -log-level=debug
+            - -log-level=info
           env:
             - name: VAULT_ADDR
               value: {{ vault_address }}
