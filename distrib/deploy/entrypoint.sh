@@ -10,4 +10,4 @@ done
 
 echo "Configuration file found, executing main app ..."
 
-java -jar garden-manager-core.jar --spring.config.location=$CONFIG_PATH
+java -jar /home/garden-manager/garden-manager-core.jar --spring.config.location=$CONFIG_PATH
