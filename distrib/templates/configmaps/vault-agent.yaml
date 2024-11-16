@@ -26,8 +26,15 @@ data:
       }
     }
     
+    listener "tcp" {
+      address: "127.0.0.1:8200"
+      tls_disable: true
+      role: metrics_only
+    }
+    
     # Render application.yaml from vault
     template {
       contents = {{ '"{{ with secret \\"ra-tech-kv/data/garden-manager-test/application\\" }}{{ .Data.data.config }}{{ end }}"' }}
       destination = "/vault/secrets/application/application.yaml"
+      error_on_missing_key = true
     }

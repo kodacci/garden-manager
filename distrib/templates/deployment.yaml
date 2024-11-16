@@ -142,6 +142,20 @@ spec:
             limits:
               cpu: 200m
               memory: 150Mi
+          readinessProbe:
+            httpGet:
+              path: /v1/sys/health
+              port: 8200
+            initialDelaySeconds: 10
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /v1/sys/health
+              port: 8200
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 10
 
       imagePullSecrets:
         - name: docker-registry-creds
