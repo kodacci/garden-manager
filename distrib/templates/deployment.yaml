@@ -44,8 +44,11 @@ spec:
           emptyDir:
             sizeLimit: 1Mi
         - name: vault-token
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-role
           secret:
-            secretName: vault-token
+            secretName: vault-role
 
       containers:
         - name: garden-manager-core
@@ -134,6 +137,8 @@ spec:
               name: application-yaml
             - mountPath: /vault/token
               name: vault-token
+            - mountPath: /vault/role
+              name: vault-role
               readOnly: true
           resources:
             requests:

@@ -18,10 +18,18 @@ data:
     
     auto_auth {
       method {
-        type = "token_file"
-        
+        type = "approle"
+    
         config = {
-          token_file_path = "/vault/token/.token"
+          role_id_file_path = "/vault/role/role_id"
+          secret_id_file_path = "/vault/role/.secret_id"
+          remove_secret_id_file_after_reading = false
+        }
+      }
+    
+      sink "file" {
+        config {
+          path = "/vault/token/.token
         }
       }
     }
