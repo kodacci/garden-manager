@@ -29,7 +29,7 @@ data:
     
       sink "file" {
         config {
-          path = "/vault/token/.token
+          path = "/vault/token/.token"
         }
       }
     }
