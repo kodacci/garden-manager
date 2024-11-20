@@ -1,14 +1,15 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: solr
+  name: {{ name }}
   namespace: {{ namespace }}
   labels:
+    app.kubernetes.io/name: garden-manager-{{ name }}-service-entry
     app.kubernetes.io/part-of: garden-manager
     app.kubernetes.io/component: core
 spec:
   hosts:
-    - {{ solr_host }}
+    - {{ host }}
   ports:
     - number: 80
       name: http

@@ -1,0 +1,38 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ name }}-rule
+  namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/name: garden-manager-{{ name }}-virtual-service
+    app.kubernetes.io/part-of: garden-manager
+    app.kubernetes.io/component: core
+spec:
+  exportTo:
+    - "."
+    - istio-system
+  hosts:
+    - {{ host }}
+  gateways:
+    - mesh
+    - {{ namespace }}/garden-manager-egress-gateway
+  http:
+      - match:
+        - gateways:
+            - mesh
+          port: 80
+        route:
+          - destination:
+              host: istio-egressgateway.istio-system.svc.cluster.local
+              subset: {{ name }}
+              port:
+                number: 80
+      - match:
+          - gateways:
+              - {{ namespace }}/garden-manager-egress-gateway
+            port: 80
+        route:
+          - destination:
+              host: {{ host }}
+              port:
+                number: 443

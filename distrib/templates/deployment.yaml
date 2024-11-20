@@ -22,10 +22,10 @@ spec:
       volumes:
         - name: logs-volume
           emptyDir:
-            sizeLimit: 500Mi
+            sizeLimit: 250Mi
         - name: fluentbit-config
           configMap:
-            name: core-fluent-bit-config
+            name: core-fluentbit-config
             items:
               - key: fluent-bit.conf
                 path: fluent-bit.conf
@@ -34,6 +34,21 @@ spec:
         - name: fluentbit-db
           emptyDir:
             sizeLimit: 50Mi
+        - name: vault-agent-config
+          configMap:
+            name: core-vault-agent
+            items:
+              - key: vault-agent-config.hcl
+                path: vault-agent-config.hcl
+        - name: application-yaml
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-token
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-role
+          secret:
+            secretName: vault-role
 
       containers:
         - name: garden-manager-core
@@ -46,37 +61,24 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: DATABASE_URL
-              value: jdbc:postgresql://{{ db_host }}:{{ db_port }}/garden-manager
-            - name: ROOT_LOGGING_LEVEL
-              value: INFO
-            - name: METRICS_APPLICATION_TAG
-              value: {{ metrics_application_tag }}
-            - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ namespace }}-secret
-                  key: db-username
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ namespace }}-secret
-                  key: db-password
           volumeMounts:
             - mountPath: /home/garden-manager/logs
               name: logs-volume
+            - mountPath: /application
+              name: application-yaml
+              readOnly: true
           readinessProbe:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: 3
+            initialDelaySeconds: 10
             periodSeconds: 3
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
             failureThreshold: 10
           resources:
@@ -101,7 +103,50 @@ spec:
               name: logs-volume
             - mountPath: /fluent-bit/etc
               name: fluentbit-config
+              readOnly: true
             - mountPath: /fluent-bit/db
               name: fluentbit-db
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 9090
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 9090
+            initialDelaySeconds: 25
+            periodSeconds: 5
+            failureThreshold: 10
+
+        - name: vault-agent
+          image: hashicorp/vault:1.18
+          args:
+            - agent
+            - -config=/vault/agent/vault-agent-config.hcl
+            - -log-level=info
+          env:
+            - name: VAULT_ADDR
+              value: {{ vault_address }}
+          volumeMounts:
+            - mountPath: /vault/agent
+              name: vault-agent-config
+            - mountPath: /vault/secrets/application
+              name: application-yaml
+            - mountPath: /vault/token
+              name: vault-token
+            - mountPath: /vault/role
+              name: vault-role
+              readOnly: true
+          resources:
+            requests:
+              cpu: 200m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 150Mi
+
       imagePullSecrets:
         - name: docker-registry-creds
