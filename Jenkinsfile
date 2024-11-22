@@ -63,13 +63,13 @@ pipeline {
                         }
 
                         recordCoverage(
-                                tools: [[parser: 'JACOCO', pattern: 'code-coverage/target/site/jacoco.xml']],
+                                tools: [[parser: 'JACOCO', pattern: 'code-coverage/target/site/jacoco-aggregate/jacoco.xml']],
                                 id: 'core_jacoco',
                                 name: 'Core JaCoCo Coverage',
                                 sourceCodeRetention: 'LAST_BUILD',
                                 sourceDirectories: [[path: '**/src/main/java']],
                                 qualityGates: [
-                                        [threshold: 80.0, metric: 'LINE', baseline: 'PROJECT', unstable: true]
+                                        [threshold: 80.0, metric: 'LINE', baseline: 'PROJECT', criticality: 'UNSTABLE']
                                 ]
                         )
                     } finally {
