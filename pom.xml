@@ -50,8 +50,8 @@
         <!--  Third party dependencies  -->
         <junit.version>5.10.2</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <spring.boot.version>3.3.4</spring.boot.version>
-        <spring.version>6.1.4</spring.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
+        <spring.version>6.2.0</spring.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.26.0</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
