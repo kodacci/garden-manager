@@ -61,6 +61,17 @@ pipeline {
                                 sh "./mvnw --log-file $logFileName verify -Dskip.jooq.generation"
                             }
                         }
+
+                        recordCoverage(
+                                tools: [[parser: 'JACOCO', pattern: 'code-coverage/target/site/jacoco.xml']],
+                                id: 'core_jacoco',
+                                name: 'Core JaCoCo Coverage',
+                                sourceCodeRetention: 'LAST_BUILD',
+                                sourceDirectories: [[path: '**/src/main/java']],
+                                qualityGates: [
+                                        [threshold: 80.0, metric: 'LINE', baseline: 'PROJECT', unstable: true]
+                                ]
+                        )
                     } finally {
                         archiveArtifacts(logFileName)
                         sh "rm $logFileName"
