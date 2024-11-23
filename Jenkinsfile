@@ -14,7 +14,7 @@ def buildImage(name, dockerFilePath, scope, version, buildNumber) {
 
     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
         echo "Building image with tag '$tag'"
-        def image = docker.build(tag, '-f ' + dockerFilePath)
+        def image = docker.build(tag, '-f ' + dockerFilePath + ' .')
 
         docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
             image.push()
