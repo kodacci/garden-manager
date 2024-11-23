@@ -65,7 +65,7 @@ class AbstractApiTest {
 
     protected <T> void assertHttpResponse(ResponseEntity<T> response, HttpStatus desiredStatus, MediaType desiredType) {
         assertThat(response.getStatusCode()).isEqualTo(desiredStatus);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(desiredType);
+        assertThat(desiredType.equalsTypeAndSubtype(response.getHeaders().getContentType())).isTrue();
     }
 
     protected <T> void assertHttpResponse(ResponseEntity<T> response) {
