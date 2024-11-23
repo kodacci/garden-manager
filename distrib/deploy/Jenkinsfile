@@ -12,14 +12,14 @@ def generateExtHttp(namespace, name, host) {
             "-f distrib/${name}-destination-rule.yaml "
 }
 
-def generateImageTag() {
+def generateImageTag(container) {
     def scope = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
             .trim()
             .tokenize('/')
             .last()
             .toLowerCase()
 
-    return 'pro.ra-tech/garden-manager/' + scope + '/garden-manager-core:latest'
+    return 'pro.ra-tech/garden-manager/' + scope + '/' + container + ':latest'
 }
 
 pipeline {
@@ -64,13 +64,14 @@ pipeline {
                     def solrApply = ""
                     def vaultApply = ""
 
-                    def imageTag = params.core_image ? params.core_image : generateImageTag()
+                    def coreImageTag = params.core_app_image ? params.core_app_image : generateImageTag('garden-manager-core')
+                    def dbMigrateImageTag = params.core_db_migrate_image ? params.core_db_migrate_image : generateImageTag('core-db-migrate')
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
 
                         // main app
-                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D image_tag=$imageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
+                        sh "jinja2 -D branch=$DEPLOY_GIT_SCOPE -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D image_tag=$coreImageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/service.yaml > distrib/service.yaml"
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort distrib/templates/network-policy.yaml > distrib/network-policy.yaml"
                         sh "jinja2 -D namespace=$namespace -D host=$host distrib/templates/ingress-gateway.yaml > distrib/ingress-gateway.yaml"
@@ -79,6 +80,9 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace distrib/templates/destination-rule.yaml > distrib/destination-rule.yaml"
                         sh "jinja2 -D namespace=$namespace -D solr_collection=$namespace distrib/templates/configmaps/fluentbit.yaml > distrib/fluentbit.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/egw-destination-rule.yaml > distrib/egw-destination-rule.yaml"
+
+                        // db-migrate
+                        sh "jinja2 -D namespace=$namespace -Dvault_address=http://${vaultHost} -D image_tag=$dbMigrateImageTag distrib/templates/core-db-migrate-job.yaml > distrib/core-db-migrate-job.yaml"
 
                         // database
                         sh "jinja2 -D namespace=$namespace -D db_host=$dbHost -D db_port=$dbPort -D db_address=$dbAddress distrib/templates/db/db-service-entry.yaml > distrib/db-service-entry.yaml"
@@ -91,7 +95,8 @@ pipeline {
 
                         // Vault
                         vaultApply = generateExtHttp(namespace, 'vault', vaultHost)
-                        sh "jinja2 -D namespace=$namespace -Dvault_addr=http://${vaultHost} distrib/templates/configmaps/vault-agent.yaml > distrib/vault-agent.yaml"
+                        sh "jinja2 -D namespace=$namespace -Dvault_addr=http://${vaultHost} distrib/templates/configmaps/core-vault-agent.yaml > distrib/core-vault-agent.yaml"
+                        sh "jinja2 -D namespace=$namespace -Dvault_addr=http://${vaultHost} distrib/templates/configmaps/db-migrate-vault-agent.yaml > distrib/db-migrate-vault-agent.yaml"
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
@@ -103,9 +108,11 @@ pipeline {
                         sh "kubectl delete gateway -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete networkpolicy -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete configmap -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete job -l app.kubernetes.io/component=core -n $namespace"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
-                                '-f distrib/vault-agent.yaml ' +
+                                '-f distrib/db-migrate-vault-agent.yaml ' +
+                                '-f distrib/core-vault-agent.yaml ' +
                                 '-f distrib/network-policy.yaml ' +
                                 '-f distrib/service.yaml ' +
                                 '-f distrib/ingress-gateway.yaml ' +
@@ -118,8 +125,16 @@ pipeline {
                                 '-f distrib/db-virtual-service.yaml ' +
                                 '-f distrib/db-destination-rule.yaml ' +
                                 solrApply +
-                                vaultApply +
-                                '-f distrib/deployment.yaml'
+                                vaultApply
+
+                        // Run db migrations job
+                        echo "Starting db migrations job"
+                        sh 'kubectl apply -f distrib/core-db-migrate-job.yaml'
+                        echo "Waiting for db migrations job to succeed"
+                        sh 'kubectl wait --for=condition=complete --timeout=3m -n garden-manager-test job/core-db-migrate'
+
+                        // Deploying main app
+                        sh 'kubectl -f distrib/deployment.yaml'
                     }
                 }
             }

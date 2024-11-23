@@ -39,13 +39,12 @@ spring:
   liquibase:
     change-log: db/changelog-root.yaml
   mvc:
-    throw-exception-if-no-handler-found: true
     problemdetails:
       enabled: true
-  http:
-    encoding:
-      force: true
-  basic:
-    enabled: false
   jooq:
     sql-dialect: Postgres
+
+server:
+  servlet:
+    encoding:
+      force: true

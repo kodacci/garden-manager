@@ -1,6 +1,29 @@
 def PROJECT_VERSION
 def DEPLOY_GIT_SCOPE
-def IMAGE_TAG
+def CORE_APP_IMAGE_TAG
+def CORE_DB_MIGRATE_IMAGE_TAG
+
+def genImageTag(name) {
+    return 'pro.ra-tech/garden-manager/' +
+            DEPLOY_GIT_SCOPE + '/' + name + ':' +
+            PROJECT_VERSION + '-' + currentBuild.number
+}
+
+def buildImage(name, dockerFilePath) {
+    def tag = genImageTag(name)
+
+    docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
+        echo "Building image with tag '$tag'"
+        def image = docker.build(tag, '-f ' + dockerFilePath)
+
+        docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
+            image.push()
+            image.push('latest')
+        }
+    }
+
+    return tag
+}
 
 pipeline {
     agent { label 'jenkins-agent1' }
@@ -69,7 +92,7 @@ pipeline {
                                 sourceCodeRetention: 'LAST_BUILD',
                                 sourceDirectories: [[path: '**/src/main/java']],
                                 qualityGates: [
-                                        [threshold: 80.0, metric: 'LINE', baseline: 'PROJECT', criticality: 'UNSTABLE']
+                                        [threshold: 80.0, metric: 'LINE', baseline: 'PROJECT', criticality: 'FAILURE']
                                 ]
                         )
                     } finally {
@@ -131,23 +154,24 @@ pipeline {
             }
         }
 
-        stage('Build docker image') {
+        stage('Build core db migrations docker image') {
             steps {
                 script {
-                    docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                        IMAGE_TAG = 'pro.ra-tech/garden-manager/' +
-                                DEPLOY_GIT_SCOPE +
-                                '/garden-manager-core:' +
-                                PROJECT_VERSION + '-' + currentBuild.number
+                    CORE_DB_MIGRATE_IMAGE_TAG = buildImage(
+                            'core-db-migrate',
+                            'distrib/docker/db-migrate/Dockerfile'
+                    )
+                }
+            }
+        }
 
-                        echo "Building image with tag '$IMAGE_TAG'"
-                        def image = docker.build(IMAGE_TAG)
-
-                        docker.withRegistry(SNAPSHOTS_DOCKER_REGISTRY_HOST, 'vault-nexus-deployer') {
-                            image.push()
-                            image.push('latest')
-                        }
-                    }
+        stage('Build core docker image') {
+            steps {
+                script {
+                    CORE_APP_IMAGE_TAG = buildImage(
+                            'garden-manager-core',
+                            'distrib/docker/core/Dockerfile'
+                    )
                 }
             }
         }
@@ -156,7 +180,14 @@ pipeline {
             steps {
                 script {
                     def path = BRANCH_NAME.replaceAll("/", "%2F")
-                    build(job: "Garden Manager Deploy Backend/$path", wait: false, parameters: [string(name: 'core_image', value: IMAGE_TAG)])
+                    build(
+                            job: "Garden Manager Deploy Backend/$path",
+                            wait: false,
+                            parameters: [
+                                    string(name: 'core_app_image', value: CORE_APP_IMAGE_TAG),
+                                    string(name: 'core_db_migrate_image', vaule: CORE_DB_MIGRATE_IMAGE_TAG)
+                            ]
+                    )
                 }
             }
         }

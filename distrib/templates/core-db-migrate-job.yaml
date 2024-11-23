@@ -1,0 +1,77 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: core-db-migrate
+  namespace: {{ namespace }}
+  labels:
+    app.kubernetes.io/name: db-migrate-job
+    app.kubernetes.io/component: core
+    app.kubernetes.io/part-of: garden-manager
+spec:
+  template:
+    spec:
+      metadata:
+        labels:
+          app: db-migrate
+      restartPolicy: Never
+
+      volumes:
+        - name: vault-agent-config
+          configMap:
+            name: db-migrate-vault-agent
+            items:
+              - key: vault-agent-config.hcl
+                path: vault-agent-config.hcl
+        - name: liquibase-props
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-token
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-role
+          secret:
+            secretName: vault-role
+
+      containers:
+        - name: db-migrate
+          image: snapshots.docker-registry.ra-tech.pro/{{ image_tag }}
+          volumeMounts:
+            - mountPath: /config/liquibase
+              name: liquibase-props
+              readOnly: true
+          resources:
+            requests:
+              cpu: 300m
+              memory: 300Mi
+            limits:
+              cpu: 500m
+              memory: 400Mi
+        - name: vault-agent
+          image: hashicorp/vault:1.18
+          args:
+            - agent
+            - -config=/vault/agent/vault-agent-config.hcl
+            - -log-level=info
+          env:
+            - name: VAULT_ADDR
+              value: { { vault_address } }
+          volumeMounts:
+            - mountPath: /vault/agent
+              name: vault-agent-config
+            - mountPath: /vault/secrets/liquibase
+              name: liquibase-props
+            - mountPath: /vault/token
+              name: vault-token
+            - mountPath: /vault/role
+              name: vault-role
+              readOnly: true
+          resources:
+            requests:
+              cpu: 200m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 150Mi
+
+      imagePullSecrets:
+        - name: docker-registry-creds
