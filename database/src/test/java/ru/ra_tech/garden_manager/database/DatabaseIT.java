@@ -18,5 +18,5 @@ import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
 @ActiveProfiles("test")
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public interface DatabaseTest {
+public interface DatabaseIT {
 }

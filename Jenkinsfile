@@ -3,14 +3,14 @@ def DEPLOY_GIT_SCOPE
 def CORE_APP_IMAGE_TAG
 def CORE_DB_MIGRATE_IMAGE_TAG
 
-def genImageTag(name) {
+static def genImageTag(name, scope, version, buildNumber) {
     return 'pro.ra-tech/garden-manager/' +
-            DEPLOY_GIT_SCOPE + '/' + name + ':' +
-            PROJECT_VERSION + '-' + currentBuild.number
+            scope + '/' + name + ':' +
+            version + '-' + buildNumber
 }
 
-def buildImage(name, dockerFilePath) {
-    def tag = genImageTag(name)
+def buildImage(name, dockerFilePath, scope, version, buildNumber) {
+    def tag = genImageTag(name, scope, version, buildNumber)
 
     docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
         echo "Building image with tag '$tag'"
@@ -159,7 +159,10 @@ pipeline {
                 script {
                     CORE_DB_MIGRATE_IMAGE_TAG = buildImage(
                             'core-db-migrate',
-                            'distrib/docker/db-migrate/Dockerfile'
+                            'distrib/docker/db-migrate/Dockerfile',
+                            DEPLOY_GIT_SCOPE,
+                            PROJECT_VERSION,
+                            currentBuild.number
                     )
                 }
             }
@@ -170,7 +173,10 @@ pipeline {
                 script {
                     CORE_APP_IMAGE_TAG = buildImage(
                             'garden-manager-core',
-                            'distrib/docker/core/Dockerfile'
+                            'distrib/docker/core/Dockerfile',
+                            DEPLOY_GIT_SCOPE,
+                            PROJECT_VERSION,
+                            currentBuild.number
                     )
                 }
             }

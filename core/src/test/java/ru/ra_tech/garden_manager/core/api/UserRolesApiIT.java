@@ -21,7 +21,7 @@ import static ru.ra_tech.garden_manager.database.schema.Tables.USERS;
 
 @DisplayName("User roles API test")
 @Slf4j
-class UserRolesApiTest extends AbstractApiTest {
+class UserRolesApiIT extends AbstractApiIT {
     private static final String BASE_PATH = "/api/v1/roles";
     private static final String USER_LOGIN = "rolesTestUser";
 

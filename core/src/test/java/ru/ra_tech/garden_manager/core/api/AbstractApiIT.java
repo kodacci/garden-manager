@@ -40,7 +40,7 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @Testcontainers
-class AbstractApiTest {
+class AbstractApiIT {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired

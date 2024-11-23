@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 import static ru.ra_tech.garden_manager.database.schema.Tables.USERS;
 
 @Slf4j
-class UserRepositoryTest implements DatabaseTest {
+class UserRepositoryIT implements DatabaseIT {
     @Autowired
     private UserRepository repo;
 
