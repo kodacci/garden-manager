@@ -3,8 +3,8 @@ FROM liquibase/liquibase:4.30
 
 LABEL authors="Andrey Ryabtsev"
 
-COPY db-migrate/src/main/resources/db ./
-COPY distrib/docker/db-migrate/entrypoint.sh ./
+COPY --chown=liquibase:liquibase db-migrate/src/main/resources/db ./
+COPY --chown=liquibase:liquibase distrib/docker/db-migrate/entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]
