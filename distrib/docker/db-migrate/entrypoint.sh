@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PROPS_FILE_PATH=/config/liquibase.properties
 echo "Liquibase properties file path: $PROPS_FILE_PATH"
 while [ ! -e $PROPS_FILE_PATH ]
