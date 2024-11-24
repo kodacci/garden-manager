@@ -8,4 +8,4 @@ do
   sleep 1
 done
 
-liquibase --defaults-file $PROPS_FILE_PATH --changelog-file db/changelog-root.yaml update
+liquibase --defaults-file $PROPS_FILE_PATH --changelog-file /liquibase/db/changelog-root.yaml update
