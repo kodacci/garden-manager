@@ -40,10 +40,10 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 300m
+              cpu: 1000m
               memory: 300Mi
             limits:
-              cpu: 500m
+              cpu: 1500m
               memory: 400Mi
         - name: vault-agent
           image: hashicorp/vault:1.18

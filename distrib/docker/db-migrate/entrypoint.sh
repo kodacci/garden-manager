@@ -13,7 +13,7 @@ done
 echo "Got liquibase props. Running liquibase ..."
 echo ""
 
-liquibase --defaults-file $PROPS_FILE_PATH --changelog-file db/changelog-root.yaml update
+liquibase --log-level=INFO --defaults-file $PROPS_FILE_PATH --changelog-file db/changelog-root.yaml update
 
 echo ""
 echo "Stopping istio-proxy sidecar to end job execution"
