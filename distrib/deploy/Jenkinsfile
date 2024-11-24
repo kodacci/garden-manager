@@ -135,7 +135,7 @@ pipeline {
                         sh 'kubectl wait --for=condition=complete --timeout=3m -n garden-manager-test job/core-db-migrate'
 
                         // Deploying main app
-                        sh 'kubectl -f distrib/deployment.yaml'
+                        sh 'kubectl apply -f distrib/deployment.yaml'
                     }
                 }
             }

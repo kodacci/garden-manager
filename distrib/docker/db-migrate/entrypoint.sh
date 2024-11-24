@@ -15,5 +15,7 @@ echo ""
 
 liquibase --defaults-file $PROPS_FILE_PATH --changelog-file db/changelog-root.yaml update
 
+echo ""
 echo "Stopping istio-proxy sidecar to end job execution"
-curl -X POST http://localhost:15020/quitquitquit
+echo ""
+curl -v -X POST http://localhost:15020/quitquitquit
