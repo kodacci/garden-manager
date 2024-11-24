@@ -102,7 +102,12 @@ pipeline {
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         sh 'kubectl version'
+
+                        echo "Deleting core deployment and pods"
                         sh "kubectl delete deployment -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout 5m -n $namespace"
+
+                        echo "Deleting other core manifests"
                         sh "kubectl delete service -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete virtualservice -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete destinationrule -l app.kubernetes.io/component=core -n $namespace"
@@ -110,6 +115,8 @@ pipeline {
                         sh "kubectl delete networkpolicy -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete configmap -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl delete job -l app.kubernetes.io/component=core -n $namespace"
+
+                        echo "Applying core manifests"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
                                 '-f distrib/db-migrate-vault-agent.yaml ' +
@@ -132,7 +139,7 @@ pipeline {
                         echo "Starting db migrations job"
                         sh 'kubectl apply -f distrib/core-db-migrate-job.yaml'
                         echo "Waiting for db migrations job to succeed"
-                        sh 'kubectl wait --for=condition=complete --timeout=5m -n garden-manager-test job/core-db-migrate'
+                        sh "kubectl wait --for=condition=complete --timeout=5m -n $namespace job/core-db-migrate"
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
