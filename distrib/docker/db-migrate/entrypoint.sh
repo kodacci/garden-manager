@@ -8,4 +8,8 @@ do
   sleep 1
 done
 
+echo "Got liquibase props"
+ls /liquibase
+ls /liquibase/db
+
 liquibase --defaults-file $PROPS_FILE_PATH --changelog-file /liquibase/db/changelog-root.yaml update
