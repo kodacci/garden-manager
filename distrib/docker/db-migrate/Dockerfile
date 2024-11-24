@@ -5,6 +5,6 @@ LABEL authors="Andrey Ryabtsev"
 
 COPY --chown=liquibase:liquibase db-migrate/src/main/resources/db ./
 COPY --chown=liquibase:liquibase distrib/docker/db-migrate/entrypoint.sh ./
-RUN chmod +x ./entrypoint.sh
+RUN chmod +x /liquibase/entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]
