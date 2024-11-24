@@ -132,7 +132,7 @@ pipeline {
                         echo "Starting db migrations job"
                         sh 'kubectl apply -f distrib/core-db-migrate-job.yaml'
                         echo "Waiting for db migrations job to succeed"
-                        sh 'kubectl wait --for=condition=complete --timeout=3m -n garden-manager-test job/core-db-migrate'
+                        sh 'kubectl wait --for=condition=complete --timeout=5m -n garden-manager-test job/core-db-migrate'
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
