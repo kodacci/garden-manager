@@ -11,5 +11,6 @@ done
 echo "Got liquibase props"
 ls /liquibase
 ls /liquibase/db
+ls -l /liquibase/db/changelog-root.yaml
 
 liquibase --defaults-file $PROPS_FILE_PATH --changelog-file /liquibase/db/changelog-root.yaml update
