@@ -18,7 +18,7 @@ import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
 @DisplayName("Users API test")
-class UsersApiTest extends AbstractApiTest {
+class UsersApiIT extends AbstractApiIT {
 
     private static final String USERS_API_URL = "/api/v1/users";
 

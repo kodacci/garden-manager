@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.3.5</version>
     </parent>
 
     <groupId>ru.ra-tech.garden-manager</groupId>
@@ -35,7 +35,7 @@
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
         <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
         <maven.release.plugin.version>3.0.0</maven.release.plugin.version>
-        <maven.failsafe.plugin.version>3.2.3</maven.failsafe.plugin.version>
+        <maven.failsafe.plugin.version>3.5.2</maven.failsafe.plugin.version>
         <maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
         <maven.install.plugin.version>3.1.1</maven.install.plugin.version>
         <maven.deploy.plugin.version>3.1.1</maven.deploy.plugin.version>
@@ -50,8 +50,8 @@
         <!--  Third party dependencies  -->
         <junit.version>5.10.2</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <spring.boot.version>3.3.4</spring.boot.version>
-        <spring.version>6.1.4</spring.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
+        <spring.version>6.2.0</spring.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.26.0</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
@@ -63,7 +63,7 @@
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.18.3</jooq.cordegen.manen.version>
         <jacoco.maven.plugin.version>0.8.11</jacoco.maven.plugin.version>
-        <testcontainers.version>1.20.1</testcontainers.version>
+        <testcontainers.version>1.20.4</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
@@ -349,9 +349,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven.failsafe.plugin.version}</version>
-                    <configuration>
-                        <skipTests>${skipTests}</skipTests>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -441,6 +438,21 @@
                         <configuration>
                             <propertyName>coverage.agent</propertyName>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

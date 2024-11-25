@@ -40,7 +40,7 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @Testcontainers
-class AbstractApiTest {
+class AbstractApiIT {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
@@ -65,7 +65,7 @@ class AbstractApiTest {
 
     protected <T> void assertHttpResponse(ResponseEntity<T> response, HttpStatus desiredStatus, MediaType desiredType) {
         assertThat(response.getStatusCode()).isEqualTo(desiredStatus);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(desiredType);
+        assertThat(desiredType.equalsTypeAndSubtype(response.getHeaders().getContentType())).isTrue();
     }
 
     protected <T> void assertHttpResponse(ResponseEntity<T> response) {

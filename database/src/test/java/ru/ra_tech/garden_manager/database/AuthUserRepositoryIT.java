@@ -27,14 +27,14 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = {
                 TestApplication.class,
-                AuthUserRepositoryTest.TestConfiguration.class,
+                AuthUserRepositoryIT.TestConfiguration.class,
                 DatabaseConfiguration.class
         }
 )
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class AuthUserRepositoryTest {
+class AuthUserRepositoryIT {
     private static final String TEST_USER_LOGIN = "test";
     @Configuration
     static class TestConfiguration {

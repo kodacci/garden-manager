@@ -27,7 +27,7 @@ import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.Tables.*;
 
 @DisplayName("Gardens API test")
-class GardensApiTest extends AbstractApiTest {
+class GardensApiIT extends AbstractApiIT {
     private static final String GARDENS_API_URL = "/api/v1/gardens";
 
     private UserDto owner = null;

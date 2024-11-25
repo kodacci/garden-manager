@@ -21,7 +21,7 @@ import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.Tables.USERS;
 
 @DisplayName("Authorization API test")
-class AuthApiTest extends AbstractApiTest {
+class AuthApiIT extends AbstractApiIT {
     private static final String AUTH_API_URL = "/api/v1/auth";
     private static final String LOGIN_URL = String.format("%s/login", AUTH_API_URL);
 
