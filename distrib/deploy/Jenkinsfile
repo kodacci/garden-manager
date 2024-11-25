@@ -1,5 +1,3 @@
-import org.mockito.internal.configuration.plugins.DefaultMockitoPlugins
-
 def DEPLOY_GIT_SCOPE
 def DEPLOY_NAMESPACE
 def NAMESPACE_APP_HOST
