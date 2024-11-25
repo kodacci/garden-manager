@@ -54,8 +54,8 @@ pipeline {
                         APP_DB_PORT = '3333'
                     } else {
                         DEPLOY_NAMESPACE = 'garden-manager-test'
-                        NAMESPACE_APP_HOST = 'garden-manager.cloud.ra-tech.pro'
-                        APP_DB_HOST = 'garden-manager.test.db.ra-tech.pro'
+                        NAMESPACE_APP_HOST = 'garden-manager.test.cloud.ra-tech.pro'
+                        APP_DB_HOST = 'garden-manager.db.ra-tech.pro'
                         APP_DB_PORT = '4444'
                     }
                     echo "Namespace to deploy app: $DEPLOY_NAMESPACE"
