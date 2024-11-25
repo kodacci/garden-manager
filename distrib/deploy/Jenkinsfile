@@ -1,4 +1,10 @@
+import org.mockito.internal.configuration.plugins.DefaultMockitoPlugins
+
 def DEPLOY_GIT_SCOPE
+def DEPLOY_NAMESPACE
+def NAMESPACE_APP_HOST
+def APP_DB_HOST
+def APP_DB_PORT
 
 def generateExtHttp(namespace, name, host) {
     sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/service-entry.yaml > distrib/${name}-service-entry.yaml"
@@ -40,24 +46,63 @@ pipeline {
             }
         }
 
-        stage('Deploy to test environment') {
-            when {
-                not {
-                    branch 'release/*'
-                }
-            }
-
+        stage('Determine stand specific params') {
             steps {
                 script {
-                    def namespace = 'garden-manager-test'
-                    def host = 'garden-manager.test.cloud.ra-tech.pro'
-                    def dbHost = 'garden-manager.db.ra-tech.pro'
+                    if (BRANCH_NAME.startsWith('release/')) {
+                        DEPLOY_NAMESPACE = 'garden-manager'
+                        NAMESPACE_APP_HOST = 'garden-manager.cloud.ra-tech.pro'
+                        APP_DB_HOST = 'garden-manager.db.ra-tech.pro'
+                        APP_DB_PORT = '3333'
+                    } else {
+                        DEPLOY_NAMESPACE = 'garden-manager-test'
+                        NAMESPACE_APP_HOST = 'garden-manager.cloud.ra-tech.pro'
+                        APP_DB_HOST = 'garden-manager.test.db.ra-tech.pro'
+                        APP_DB_PORT = '4444'
+                    }
+                    echo "Namespace to deploy app: $DEPLOY_NAMESPACE"
+                    echo "App host: $NAMESPACE_APP_HOST"
+                    echo "Database: $APP_DB_HOST:$APP_DB_PORT"
+                }
+            }
+        }
+
+        stage('Cleanup k8s namespace') {
+            steps {
+                script {
+                    def namespace = DEPLOY_NAMESPACE
+                    withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
+                        sh 'kubectl version'
+
+                        echo "Deleting core deployment and pods"
+                        sh "kubectl delete deployment -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout 10m -n $namespace"
+
+                        echo "Deleting other core manifests"
+                        sh "kubectl delete service -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete virtualservice -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete destinationrule -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete gateway -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete networkpolicy -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete configmap -l app.kubernetes.io/component=core -n $namespace"
+                        sh "kubectl delete job -l app.kubernetes.io/component=core -n $namespace"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to k8s') {
+            steps {
+                script {
+                    def namespace = DEPLOY_NAMESPACE
+                    def host = NAMESPACE_APP_HOST
+                    def dbHost = APP_DB_HOST
                     def dbAddress = sh(
                             encoding: 'UTF-8',
                             returnStdout: true,
                             script: """getent hosts garden-manager.db.ra-tech.pro | awk 'NR==1{ print \$1 }'"""
                     ).trim()
-                    def dbPort = '4444'
+                    def dbPort = APP_DB_PORT
                     def egressTcpPort = '9999'
                     def solrHost = 'solr.ra-tech.pro'
                     def vaultHost = 'vault.ra-tech.pro'
@@ -101,21 +146,6 @@ pipeline {
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
-                        sh 'kubectl version'
-
-                        echo "Deleting core deployment and pods"
-                        sh "kubectl delete deployment -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout 5m -n $namespace"
-
-                        echo "Deleting other core manifests"
-                        sh "kubectl delete service -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete virtualservice -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete destinationrule -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete gateway -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete networkpolicy -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete configmap -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl delete job -l app.kubernetes.io/component=core -n $namespace"
-
                         echo "Applying core manifests"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
