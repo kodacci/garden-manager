@@ -55,10 +55,10 @@ class UserRoleRepositoryIT implements DatabaseIT {
 
     @Test
     void shouldReturnAppFailureOnDbError() {
-        val dsl = mock(DSLContext.class);
-        when(dsl.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
+        val dslMock = mock(DSLContext.class);
+        when(dslMock.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
 
-        val roleRepo = new UserRoleRepository(dsl);
+        val roleRepo = new UserRoleRepository(dslMock);
         val res = roleRepo.exists(1);
 
         assertThat(res.isLeft()).isTrue();

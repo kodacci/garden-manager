@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class GardensController extends AbstractController implements GardensApi 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed("gardens.find")
-    public ResponseEntity<Object> findGarden(Long id) {
+    public ResponseEntity<Object> findGarden(@PathVariable Long id) {
         return toResponse(getUserId().flatMap(userId -> service.findGarden(id, userId)));
     }
 
@@ -46,7 +47,7 @@ public class GardensController extends AbstractController implements GardensApi 
     @Override
     @PostMapping(value = "/{id}/add_participant/{participantId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed("gardens.add-user")
-    public ResponseEntity<Object> addParticipant(Long id, Long participantId) {
+    public ResponseEntity<Object> addParticipant(@PathVariable Long id, @PathVariable Long participantId) {
         return toResponse(getUserId().flatMap(userId -> service.addParticipant(id, participantId, userId)));
     }
 }

@@ -33,10 +33,10 @@ class UserRepositoryIT implements DatabaseIT {
     @Test
     @DisplayName("Should return application failure on database error")
     void shouldReturnAppFailureOnError() {
-        val dsl = mock(DSLContext.class);
-        when(dsl.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
+        val dslMock = mock(DSLContext.class);
+        when(dslMock.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
 
-        val userRepo = new UserRepository(dsl);
+        val userRepo = new UserRepository(dslMock);
 
         val result = userRepo.checkDataConflict("test", Option.of("test@example.com"));
 

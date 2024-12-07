@@ -43,15 +43,15 @@ class UsersApiIT extends AbstractApiIT {
         val expected = new UserData(body.id(), request.login(), request.name(), request.email());
         assertThat(response.getBody()).isEqualTo(expected);
 
-        val record = getDsl().select(USERS.LOGIN, USERS.NAME, USERS.EMAIL)
+        val row = getDsl().select(USERS.LOGIN, USERS.NAME, USERS.EMAIL)
                 .from(USERS)
                 .where(USERS.ID.eq(body.id()))
                 .fetchOne();
 
-        assertThat(record).isNotNull();
-        assertThat(record.value1()).isEqualTo(expected.login());
-        assertThat(record.value2()).isEqualTo(expected.name());
-        assertThat(record.value3()).isEqualTo(expected.email());
+        assertThat(row).isNotNull();
+        assertThat(row.value1()).isEqualTo(expected.login());
+        assertThat(row.value2()).isEqualTo(expected.name());
+        assertThat(row.value3()).isEqualTo(expected.email());
     }
 
     @Test
