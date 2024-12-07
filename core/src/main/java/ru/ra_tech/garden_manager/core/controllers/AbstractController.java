@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.core.controllers;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractController {
+    @JsonSerialize
     private record EmptyResponse() {}
 
     private ResponseEntity<Object> toError(AppErrorResponse error) {

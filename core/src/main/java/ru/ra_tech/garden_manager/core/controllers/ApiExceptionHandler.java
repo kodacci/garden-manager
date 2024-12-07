@@ -1,10 +1,10 @@
 package ru.ra_tech.garden_manager.core.controllers;
 
-import jakarta.validation.ConstraintViolationException;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -27,20 +27,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @Nullable
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
-        val problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        val violations = ex.getConstraintViolations()
-                .stream()
-                .map(violation ->
-                        String.format("%s: '%s'", violation.getPropertyPath(), violation.getMessage())
-                )
-                .toList();
-        problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
-        problem.setProperty("validationErrors", violations);
+    private HttpHeaders getProblemHeaders() {
+        val headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return headers;
     }
 
     @Override
@@ -57,14 +48,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         val validations = BindErrorUtils.resolve(ex.getAllErrors()).values().stream().toList();
         problem.setProperty("validationErrors", validations);
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(ex, problem, getProblemHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @Nullable
     public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
         val problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+        return handleExceptionInternal(ex, problem, getProblemHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler(Exception.class)
@@ -73,6 +64,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         val problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         problem.setProperty(TIMESTAMP_PROP_NAME, timestamp());
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return handleExceptionInternal(ex, problem, getProblemHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }

@@ -38,12 +38,12 @@ class GardensApiIT extends AbstractApiIT {
         val user = new CreateUserDto(
                 "gardensTestUser", "Gardens Test User", null, "abc12345"
         );
-        val participant = new CreateUserDto(
+        val testParticipant = new CreateUserDto(
                 "gardenParticipant", "Garden Participant", null, "abc12345"
         );
 
         this.owner = writeUser(getDsl(), user);
-        this.participant = writeUser(getDsl(), participant);
+        this.participant = writeUser(getDsl(), testParticipant);
     }
 
     @AfterAll
