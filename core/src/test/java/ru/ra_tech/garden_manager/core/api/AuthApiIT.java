@@ -16,6 +16,8 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.dto.ProblemRes
 import ru.ra_tech.garden_manager.core.security.TokenType;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.*;
 import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
 import static ru.ra_tech.garden_manager.database.schema.Tables.USERS;

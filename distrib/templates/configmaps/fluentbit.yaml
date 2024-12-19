@@ -28,6 +28,14 @@ data:
       DB                /fluent-bit/db/tail.db
       Mem_Buf_Limit     10MB
       Refresh_Interval  10
+    
+    [FILTER]
+      Name modify
+      Match *
+      Add pod           ${POD_NAME}
+      Add namespace     ${POD_NAMESPACE}
+      Add pod_ip        ${POD_IP}
+      Add node          ${NODE_NAME}
       
     [OUTPUT]
       Name stdout

@@ -8,10 +8,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.dto.ProblemResponse;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.CreateUserRequest;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.UserData;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static ru.ra_tech.garden_manager.core.api.TestUtils.writeUser;
@@ -145,5 +148,22 @@ class UsersApiIT extends AbstractApiIT {
         assertThat(body.detail()).isEqualTo("Invalid request content.");
         assertThat(body.validationErrors()).hasSize(4);
         assertThat(body.validationErrors().get(0)).isInstanceOf(String.class);
+    }
+
+    @Test
+    @DisplayName("Should return UNAUTHORIZED on POST without auth token")
+    void shouldReturnUnauthorizedOnNoToken() {
+        val response = getRestTemplate().postForEntity(
+                String.format("%s/1", USERS_API_URL),
+                new RefreshRequest(UUID.randomUUID().toString()),
+                ProblemResponse.class
+        );
+
+        assertProblemResponse(response, HttpStatus.UNAUTHORIZED);
+
+        val body = response.getBody();
+        assertThat(body).isNotNull().isInstanceOf(ProblemResponse.class);
+        assertThat(body.title()).isEqualTo("Unauthorized");
+        assertThat(body.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }

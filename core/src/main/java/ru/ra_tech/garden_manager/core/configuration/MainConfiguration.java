@@ -2,6 +2,8 @@ package ru.ra_tech.garden_manager.core.configuration;
 
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -22,6 +24,7 @@ import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleReposit
 @Configuration
 @Import(DatabaseConfiguration.class)
 @EnableAspectJAutoProxy
+@Slf4j
 public class MainConfiguration {
     @Bean
     public UserService userService(UserRepository repo, PasswordEncoder passwordEncoder) {
@@ -50,5 +53,18 @@ public class MainConfiguration {
     @Bean
     public TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
+    }
+
+    @Bean
+    public MeterRegistryCustomizer<MeterRegistry> registryCustomizer(AppMonitoringProps props) {
+        log.info("Loaded application monitoring props: {}", props);
+
+        return registry -> registry.config().commonTags(
+                "app.name", props.appName(),
+                "app.version", props.appVersion(),
+                "pod.name", props.podName(),
+                "pod.namespace", props.podNamespace(),
+                "pod.node.name", props.nodeName()
+        );
     }
 }
