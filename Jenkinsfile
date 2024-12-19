@@ -191,7 +191,7 @@ pipeline {
                             wait: false,
                             parameters: [
                                     string(name: 'core_app_image', value: CORE_APP_IMAGE_TAG),
-                                    string(name: 'core_db_migrate_image', vaule: CORE_DB_MIGRATE_IMAGE_TAG)
+                                    string(name: 'core_db_migrate_image', value: CORE_DB_MIGRATE_IMAGE_TAG)
                             ]
                     )
                 }
