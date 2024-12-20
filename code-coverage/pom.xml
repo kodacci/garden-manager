@@ -50,6 +50,7 @@
                             <footer>Code coverage report of Garden Manager ${project.version}</footer>
                             <excludes>
                                 <exclude>**/database/schema/**/*</exclude>
+                                <exclude>**/core/MainApplication.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>

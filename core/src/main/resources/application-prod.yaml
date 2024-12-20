@@ -9,8 +9,3 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-
-management:
-  metrics:
-    tags:
-      application: ${METRICS_APPLICATION_TAG:garden-manager-core}
