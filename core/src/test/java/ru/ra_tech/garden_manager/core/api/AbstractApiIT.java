@@ -3,6 +3,7 @@ package ru.ra_tech.garden_manager.core.api;
 import lombok.Getter;
 import lombok.val;
 import org.jooq.DSLContext;
+import org.jooq.User;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +21,10 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.ra_tech.garden_manager.core.MainApplication;
+import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
+import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -84,18 +87,22 @@ class AbstractApiIT {
         getDsl().update(USERS).set(USERS.TOKENID, tokenId).execute();
     }
 
-    protected String generateToken(String login) {
+    protected String generateToken(JwtPrincipal principal) {
         val tokenId = UUID.randomUUID().toString();
         setUserTokenId(tokenId);
 
-        return jwtProvider.createTokenPair(login, tokenId)
+        return jwtProvider.createTokenPair(principal, tokenId)
                 .get()
                 .access();
     }
 
-    protected HttpHeaders generateAuthHeaders(String login) {
+    private JwtPrincipal toPrincipal(UserDto user) {
+        return new JwtPrincipal(user.id(), user.login(), user.name());
+    }
+
+    protected HttpHeaders generateAuthHeaders(UserDto user) {
         val headers = new HttpHeaders();
-        headers.setBearerAuth(generateToken(login));
+        headers.setBearerAuth(generateToken(toPrincipal(user)));
 
         return headers;
     }

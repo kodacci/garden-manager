@@ -67,7 +67,7 @@ class UsersApiIT extends AbstractApiIT {
         val created = writeUser(getDsl(), user);
         assertThat(created).isNotNull();
         val url = String.format("%s/%d", USERS_API_URL, created.id());
-        val entity = new HttpEntity<>(generateAuthHeaders(user.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(created));
 
         val response = getRestTemplate().exchange(url, HttpMethod.GET, entity, UserData.class);
 
@@ -101,10 +101,11 @@ class UsersApiIT extends AbstractApiIT {
         val user = new CreateUserDto(
                 "deleteUser", "Delete User", null, "abc12345"
         );
-        val id = writeUser(getDsl(), user).id();
+        val created = writeUser(getDsl(), user);
+        val id = created.id();
 
         val url = String.format("%s/%d", USERS_API_URL, id);
-        val entity = new HttpEntity<>(generateAuthHeaders(user.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(created));
         val response = getRestTemplate().exchange(url, HttpMethod.DELETE, entity, Object.class);
 
         assertHttpResponse(response);
@@ -118,10 +119,10 @@ class UsersApiIT extends AbstractApiIT {
         val user = new CreateUserDto(
                 "nonExistentAuth", "Some user", null, "abc12345"
         );
-        writeUser(getDsl(), user);
+        val created = writeUser(getDsl(), user);
 
         val url = String.format("%s/12345", USERS_API_URL);
-        val entity = new HttpEntity<>(generateAuthHeaders(user.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(created));
 
         val response = getRestTemplate().exchange(url, HttpMethod.DELETE, entity, ProblemResponse.class);
 

@@ -58,7 +58,7 @@ class GardensApiIT extends AbstractApiIT {
     void shouldAddNewGarden() {
         val garden = new CreateGardenRequest("Test garden", "Test garden address");
 
-        val entity = new HttpEntity<>(garden, generateAuthHeaders(owner.login()));
+        val entity = new HttpEntity<>(garden, generateAuthHeaders(owner));
         val response = getRestTemplate().exchange(GARDENS_API_URL, HttpMethod.POST, entity, GardenData.class);
         assertHttpResponse(response, HttpStatus.CREATED);
 
@@ -78,7 +78,7 @@ class GardensApiIT extends AbstractApiIT {
         );
         val repo = new GardenRepository(getDsl());
         val garden = repo.create(gardenData).get();
-        val entity = new HttpEntity<>(generateAuthHeaders(owner.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(owner));
 
         val url = String.format("%s/%d/add_participant/%d", GARDENS_API_URL, garden.id(), participant.id());
         val response = getRestTemplate().exchange(url, HttpMethod.POST, entity, GardenParticipantData[].class);
@@ -106,7 +106,7 @@ class GardensApiIT extends AbstractApiIT {
         );
         val repo = new GardenRepository(getDsl());
         val garden = repo.create(gardenData).get();
-        val entity = new HttpEntity<>(generateAuthHeaders(owner.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(owner));
         val response = getRestTemplate().exchange(
                 String.format("%s/%d", GARDENS_API_URL, garden.id()), HttpMethod.GET, entity, GardenData.class
         );
@@ -133,7 +133,7 @@ class GardensApiIT extends AbstractApiIT {
         val repo = new GardenRepository(getDsl());
         val garden1 = repo.create(gardenData1).get();
         val garden2 = repo.create(gardenData2).get();
-        val entity = new HttpEntity<>(generateAuthHeaders(user.login()));
+        val entity = new HttpEntity<>(generateAuthHeaders(user));
 
         val response = getRestTemplate().exchange(GARDENS_API_URL, HttpMethod.GET, entity, GardenData[].class);
 

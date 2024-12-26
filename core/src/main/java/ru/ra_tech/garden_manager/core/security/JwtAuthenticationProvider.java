@@ -50,6 +50,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public @Nullable Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.info("Authenticating {}", authentication.getPrincipal());
         val token = (JwtAuthenticationToken) authentication;
 
         return jwtProvider.getClaims(token.getCredentials())
