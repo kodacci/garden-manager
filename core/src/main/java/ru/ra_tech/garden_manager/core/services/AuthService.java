@@ -5,6 +5,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,8 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorRespon
 import ru.ra_tech.garden_manager.core.controllers.error_responses.EntityNotFoundResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
+import ru.ra_tech.garden_manager.core.security.CustomUserDetails;
+import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.security.TokenType;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
@@ -24,6 +27,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     private static final String USER_ENTITY = "User";
 
@@ -47,26 +51,36 @@ public class AuthService {
         return new ServerErrorResponse(failure);
     }
 
-    private Either<AppErrorResponse, JwtProvider.TokenPair> createTokenPair(String login) {
+    private Either<AppErrorResponse, JwtProvider.TokenPair> createTokenPair(JwtPrincipal principal) {
         val tokenId = UUID.randomUUID().toString();
 
-        return jwtProvider.createTokenPair(login, tokenId)
+        return jwtProvider.createTokenPair(principal, tokenId)
                 .mapLeft(this::toServerError)
                 .flatMap(pair ->
-                        repo.updateTokenId(login, tokenId)
+                        repo.updateTokenId(principal.login(), tokenId)
                                 .map(success -> pair)
                                 .mapLeft(this::toServerError)
                 );
+    }
+
+    public JwtPrincipal toPrincipal(CustomUserDetails user) {
+        return new JwtPrincipal(user.getId(), user.getUsername(), user.getName());
     }
 
     public Either<AppErrorResponse, LoginResponse> login(String login, String password) {
         return Try.of(() ->
                         authManager.authenticate(new UsernamePasswordAuthenticationToken(login, password))
                 )
+                .flatMap(
+                        auth -> Option.of(auth).map(
+                                nonNull -> (CustomUserDetails) nonNull.getPrincipal()
+                                ).toTry()
+                )
                 .toEither()
+                .peekLeft(throwable -> log.warn("Login error: ", throwable))
                 .mapLeft(this::toUnauthorized)
-                .flatMap(auth -> Option.of(auth).toEither(this::toUnauthorized))
-                .flatMap(auth -> createTokenPair(login))
+                .map(this::toPrincipal)
+                .flatMap(this::createTokenPair)
                 .map(LoginResponse::new);
     }
 
@@ -90,11 +104,19 @@ public class AuthService {
                 );
     }
 
+    private JwtPrincipal toPrincipal(Claims claims) {
+        return new JwtPrincipal(
+                Long.parseLong(claims.get("id").toString()),
+                claims.get("login").toString(),
+                claims.get("name").toString()
+        );
+    }
+
     public Either<AppErrorResponse, LoginResponse> refresh(String token) {
         return jwtProvider.getClaims(token)
                 .mapLeft(this::toUnauthorized)
                 .flatMap(this::validateClaims)
-                .flatMap(claims -> createTokenPair(claims.getSubject()))
+                .flatMap(claims -> createTokenPair(toPrincipal(claims)))
                 .map(LoginResponse::new);
     }
 

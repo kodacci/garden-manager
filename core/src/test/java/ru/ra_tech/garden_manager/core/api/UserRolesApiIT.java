@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import ru.ra_tech.garden_manager.core.controllers.roles.dto.UserRoleData;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
+import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +28,15 @@ class UserRolesApiIT extends AbstractApiIT {
 
     @Autowired
     private DSLContext dsl;
+    private UserDto user = null;
 
     @BeforeAll
     void beforeAll() {
-        val user = new CreateUserDto(
+        val newUser = new CreateUserDto(
                 USER_LOGIN, "User roles Test User", null, "abc12345"
         );
 
-        TestUtils.writeUser(dsl, user);
+        user = TestUtils.writeUser(dsl, newUser);
     }
 
     @AfterAll
@@ -48,7 +50,7 @@ class UserRolesApiIT extends AbstractApiIT {
         val response = getRestTemplate().exchange(
                 BASE_PATH,
                 HttpMethod.GET,
-                new HttpEntity<>(generateAuthHeaders(USER_LOGIN)),
+                new HttpEntity<>(generateAuthHeaders(user)),
                 UserRoleData[].class
         );
 
