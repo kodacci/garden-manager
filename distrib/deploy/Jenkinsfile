@@ -49,8 +49,8 @@ pipeline {
                 script {
                     if (BRANCH_NAME.startsWith('release/')) {
                         DEPLOY_NAMESPACE = 'garden-manager'
-                        NAMESPACE_APP_HOST = 'garden-manager.cloud.ra-tech.pro'
-                        APP_DB_HOST = 'garden-manager.db.ra-tech.pro'
+                        NAMESPACE_APP_HOST = 'api.garden-manager.cloud.ra-tech.pro'
+                        APP_DB_HOST = 'api.garden-manager.db.ra-tech.pro'
                         APP_DB_PORT = '3333'
                     } else {
                         DEPLOY_NAMESPACE = 'garden-manager-test'
