@@ -62,11 +62,11 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-build.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw --log-file $logFileName -DskipTests -Dskip.jooq.generation=true clean package"
+                            sh "./mvnw --log-file \"$logFileName\" -DskipTests -Dskip.jooq.generation=true clean package"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
-                        sh "rm $logFileName"
+                        sh "rm \"$logFileName\""
                     }
                     println("Build finished")
                 }
@@ -81,7 +81,7 @@ pipeline {
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                                sh "./mvnw --log-file $logFileName verify -Dskip.jooq.generation"
+                                sh "./mvnw --log-file \"$logFileName\" verify -Dskip.jooq.generation"
                             }
                         }
 
@@ -97,7 +97,7 @@ pipeline {
                         )
                     } finally {
                         archiveArtifacts(logFileName)
-                        sh "rm $logFileName"
+                        sh "rm \"$logFileName\""
                     }
                     println("Verification finished")
                 }
@@ -142,11 +142,11 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-deploy.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw --log-file $logFileName deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                            sh "./mvnw --log-file \"$logFileName\" deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
-                        sh "rm $logFileName"
+                        sh "rm \"$logFileName\""
                     }
 
                     println('Deploying to nexus finished')
