@@ -28,7 +28,7 @@ def generateImageTag(container) {
 }
 
 static def removeProtocol(url) {
-    return url.substring('http://'.length())
+    return url.substring('https://'.length())
 }
 
 pipeline {
