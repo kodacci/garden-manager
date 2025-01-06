@@ -5,7 +5,7 @@ def APP_DB_HOST
 def APP_DB_PORT
 def REGISTRY_HOST
 
-static def generateExtHttp(namespace, name, host) {
+def generateExtHttp(namespace, name, host) {
     sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/service-entry.yaml > distrib/${name}-service-entry.yaml"
     sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/virtual-service.yaml > distrib/${name}-virtual-service.yaml"
     sh "jinja2 -D namespace=${namespace} -D name=$name -D host=$host distrib/templates/ext-http/destination-rule.yaml > distrib/${name}-destination-rule.yaml"
@@ -17,7 +17,7 @@ static def generateExtHttp(namespace, name, host) {
             "-f distrib/${name}-destination-rule.yaml "
 }
 
-static def generateImageTag(container) {
+def generateImageTag(container) {
     def scope = sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
             .trim()
             .tokenize('/')
