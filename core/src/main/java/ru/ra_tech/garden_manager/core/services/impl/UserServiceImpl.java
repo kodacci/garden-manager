@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.core.services;
+package ru.ra_tech.garden_manager.core.services.impl;
 
 import io.vavr.collection.List;
 import io.vavr.control.Either;
@@ -12,13 +12,14 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.EntityNotFound
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.CreateUserRequest;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.UserData;
+import ru.ra_tech.garden_manager.core.services.api.UserService;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
 import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserServiceImpl implements UserService {
     private static final String USER_ENTITY = "User";
 
     private final UserRepository repo;

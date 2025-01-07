@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ra_tech.garden_manager.core.controllers.AbstractController;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest;
-import ru.ra_tech.garden_manager.core.services.GardenService;
+import ru.ra_tech.garden_manager.core.services.api.GardenService;
 
 @RequiredArgsConstructor
 @RestController
@@ -54,7 +54,10 @@ public class GardensController extends AbstractController implements GardensApi 
     }
 
     @Override
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(
+            value = "/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
+    )
     @Timed("gardens.delete")
     public ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id) {
         return toEmptyResponse(getUserId().flatMap(userId -> service.delete(id, userId)));

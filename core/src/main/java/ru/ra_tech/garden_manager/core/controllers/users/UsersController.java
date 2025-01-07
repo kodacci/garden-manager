@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ra_tech.garden_manager.core.controllers.AbstractController;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.CreateUserRequest;
-import ru.ra_tech.garden_manager.core.services.UserService;
+import ru.ra_tech.garden_manager.core.services.api.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")

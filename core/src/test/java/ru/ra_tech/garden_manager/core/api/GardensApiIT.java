@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.core.api;
 
+import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenData;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenParticipantData;
@@ -146,7 +149,7 @@ class GardensApiIT extends AbstractApiIT {
 
     @Test
     @DisplayName("Should delete user garden on DELETE on /api/v1/gardens")
-    void shouldDeleteGardens() {
+    void shouldDeleteGarden() {
         val userDto = new CreateUserDto(
                 "deleteGardenUser", "Delete Garden User", null, "abc12345"
         );
@@ -164,5 +167,35 @@ class GardensApiIT extends AbstractApiIT {
         );
 
         assertHttpResponse(response);
+    }
+
+    @Test
+    @DisplayName("Should not allow user to delete not his garden on DELETE on /api/v1/gardens")
+    void shouldNotDeleteNotOwnersGarden() {
+        val ownerDto = new CreateUserDto(
+                "ownerOfGarden", "Owner of Garden User", null, "abc12345"
+        );
+        val otherDto = new CreateUserDto(
+                "notOwnerOfGarden", "Not Owner of Garden User", null, "abc12345"
+        );
+        val ownerUser = writeUser(getDsl(), ownerDto);
+        val user = writeUser(getDsl(), otherDto);
+
+        val gardenData = new CreateGardenDto("Garden", "Address", ownerUser.id());
+        val repo = new GardenRepository(getDsl());
+        val garden = repo.create(gardenData).get();
+        repo.addParticipant(garden.id(), user.id(), UserRole.EXECUTOR);
+        val entity = new HttpEntity<>(generateAuthHeaders(user));
+
+        val response = getRestTemplate().exchange(
+                GARDENS_API_URL + '/' + garden.id(),
+                HttpMethod.DELETE, entity,
+                ProblemDetail.class
+        );
+
+        assertHttpResponse(response, HttpStatus.FORBIDDEN, MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getDetail())
+                .isEqualTo("Only owner can add participants or delete garden");
     }
 }

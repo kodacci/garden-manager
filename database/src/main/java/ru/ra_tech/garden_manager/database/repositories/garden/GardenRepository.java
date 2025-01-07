@@ -109,6 +109,7 @@ public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto
         return Try.of(
                 () -> makeSelectStep()
                         .where(GARDENS.OWNER.eq(id))
+                        .and(GARDENS.DELETED.eq(false))
                         .limit(GARDENS_LIMIT)
                         .fetch(GARDEN_MAPPER)
         )

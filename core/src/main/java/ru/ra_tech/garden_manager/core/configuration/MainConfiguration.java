@@ -11,10 +11,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
-import ru.ra_tech.garden_manager.core.services.AuthService;
-import ru.ra_tech.garden_manager.core.services.GardenService;
-import ru.ra_tech.garden_manager.core.services.UserRoleService;
-import ru.ra_tech.garden_manager.core.services.UserService;
+import ru.ra_tech.garden_manager.core.services.api.AuthService;
+import ru.ra_tech.garden_manager.core.services.api.UserRoleService;
+import ru.ra_tech.garden_manager.core.services.impl.AuthServiceImpl;
+import ru.ra_tech.garden_manager.core.services.api.GardenService;
+import ru.ra_tech.garden_manager.core.services.api.UserService;
+import ru.ra_tech.garden_manager.core.services.impl.GardenServiceImpl;
+import ru.ra_tech.garden_manager.core.services.impl.UserRoleServiceImpl;
+import ru.ra_tech.garden_manager.core.services.impl.UserServiceImpl;
 import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
@@ -29,7 +33,7 @@ import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleReposit
 public class MainConfiguration {
     @Bean
     public UserService userService(UserRepository repo, PasswordEncoder passwordEncoder) {
-        return new UserService(repo, passwordEncoder);
+        return new UserServiceImpl(repo, passwordEncoder);
     }
 
     @Bean
@@ -38,17 +42,17 @@ public class MainConfiguration {
             AuthenticationManager authManager,
             AuthUserRepository repo
     ) {
-        return new AuthService(jwtProvider, authManager, repo);
+        return new AuthServiceImpl(jwtProvider, authManager, repo);
     }
 
     @Bean
     public GardenService gardenService(GardenRepository gardenRepository, Transactional transactional) {
-        return new GardenService(gardenRepository, transactional);
+        return new GardenServiceImpl(gardenRepository, transactional);
     }
 
     @Bean
     public UserRoleService userRoleService(UserRoleRepository repo) {
-        return new UserRoleService(repo);
+        return new UserRoleServiceImpl(repo);
     }
 
     @Bean

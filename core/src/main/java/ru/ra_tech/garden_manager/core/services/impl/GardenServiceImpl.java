@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.core.services;
+package ru.ra_tech.garden_manager.core.services.impl;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -10,6 +10,7 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorRes
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenData;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenParticipantData;
+import ru.ra_tech.garden_manager.core.services.api.GardenService;
 import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.repositories.garden.CreateGardenDto;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenDto;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
-public class GardenService {
+public class GardenServiceImpl implements GardenService {
     private static final String GARDEN_ENTITY = "Garden";
 
     private final GardenRepository repo;
@@ -101,12 +102,7 @@ public class GardenService {
                             .mapLeft(this::toServerError)
                             .flatMap(option -> handleOption(option, id))
                             .flatMap(garden -> checkOwner(userId, garden.owner().id(), () -> garden))
-                            .flatMap(garden -> repo.deleteById(garden.id()).mapLeft(this::toServerError))
-                            .flatMap(
-                                    deleted -> Boolean.TRUE.equals(deleted)
-                                            ? Either.right(true)
-                                            : Either.left(new EntityNotFoundResponse(GARDEN_ENTITY, id))
-                            ),
+                            .flatMap(garden -> repo.deleteById(garden.id()).mapLeft(this::toServerError)),
                 this::toServerError
         );
     }
