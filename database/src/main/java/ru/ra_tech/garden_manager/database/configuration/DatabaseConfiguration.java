@@ -10,7 +10,10 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ru.ra_tech.garden_manager.database.ExceptionTranslator;
+import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
@@ -41,6 +44,11 @@ public class DatabaseConfiguration {
         config.setSQLDialect(SQLDialect.POSTGRES);
 
         return config;
+    }
+
+    @Bean
+    public Transactional transactional(PlatformTransactionManager manager) {
+        return new Transactional(manager);
     }
 
     @Bean

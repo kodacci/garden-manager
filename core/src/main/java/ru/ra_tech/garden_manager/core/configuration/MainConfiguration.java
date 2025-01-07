@@ -15,6 +15,7 @@ import ru.ra_tech.garden_manager.core.services.AuthService;
 import ru.ra_tech.garden_manager.core.services.GardenService;
 import ru.ra_tech.garden_manager.core.services.UserRoleService;
 import ru.ra_tech.garden_manager.core.services.UserService;
+import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
@@ -41,8 +42,8 @@ public class MainConfiguration {
     }
 
     @Bean
-    public GardenService gardenService(GardenRepository gardenRepository) {
-        return new GardenService(gardenRepository);
+    public GardenService gardenService(GardenRepository gardenRepository, Transactional transactional) {
+        return new GardenService(gardenRepository, transactional);
     }
 
     @Bean

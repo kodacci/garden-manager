@@ -143,4 +143,26 @@ class GardensApiIT extends AbstractApiIT {
         assertThat(body).isNotNull().isInstanceOf(GardenData[].class).hasSize(2);
         assertThat(Arrays.asList(body)).isEqualTo(Stream.of(garden1, garden2).map(GardenData::of).toList());
     }
+
+    @Test
+    @DisplayName("Should delete user garden on DELETE on /api/v1/gardens")
+    void shouldDeleteGardens() {
+        val userDto = new CreateUserDto(
+                "deleteGardenUser", "Delete Garden User", null, "abc12345"
+        );
+        val user = writeUser(getDsl(), userDto);
+
+        val gardenData = new CreateGardenDto("Garden", "Address", user.id());
+        val repo = new GardenRepository(getDsl());
+        val garden = repo.create(gardenData).get();
+        val entity = new HttpEntity<>(generateAuthHeaders(user));
+
+        val response = getRestTemplate().exchange(
+                GARDENS_API_URL + '/' + garden.id(),
+                HttpMethod.DELETE, entity,
+                String.class
+        );
+
+        assertHttpResponse(response);
+    }
 }
