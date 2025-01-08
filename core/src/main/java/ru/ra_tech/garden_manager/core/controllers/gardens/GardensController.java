@@ -60,6 +60,11 @@ public class GardensController extends AbstractController implements GardensApi 
     )
     @Timed("gardens.delete")
     public ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id) {
-        return toEmptyResponse(getUserId().flatMap(userId -> service.delete(id, userId)));
+        return toEmptyResponse(getUserId().flatMap(userId -> service.deleteGarden(id, userId)));
+    }
+
+    @Override
+    public ResponseEntity<Object> updateGarden(Long id, CreateGardenRequest update) {
+        return toResponse(getUserId().flatMap(userId -> service.updateGarden(id, userId, update)));
     }
 }

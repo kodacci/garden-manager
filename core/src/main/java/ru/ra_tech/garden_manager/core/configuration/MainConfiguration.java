@@ -21,8 +21,8 @@ import ru.ra_tech.garden_manager.core.services.impl.UserRoleServiceImpl;
 import ru.ra_tech.garden_manager.core.services.impl.UserServiceImpl;
 import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
+import ru.ra_tech.garden_manager.database.repositories.api.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
-import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
 

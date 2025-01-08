@@ -1,6 +1,5 @@
 package ru.ra_tech.garden_manager.core.api;
 
-import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,13 +10,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenData;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenParticipantData;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.UserData;
-import ru.ra_tech.garden_manager.database.repositories.garden.CreateGardenDto;
+import ru.ra_tech.garden_manager.database.repositories.garden.CreateGardenRequest;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenParticipantDto;
-import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepository;
+import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepositoryImpl;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
 import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
@@ -59,7 +57,7 @@ class GardensApiIT extends AbstractApiIT {
     @Test
     @DisplayName("Should add new garden on POST on /api/v1/gardens")
     void shouldAddNewGarden() {
-        val garden = new CreateGardenRequest("Test garden", "Test garden address");
+        val garden = new ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest("Test garden", "Test garden address");
 
         val entity = new HttpEntity<>(garden, generateAuthHeaders(owner));
         val response = getRestTemplate().exchange(GARDENS_API_URL, HttpMethod.POST, entity, GardenData.class);
@@ -76,10 +74,10 @@ class GardensApiIT extends AbstractApiIT {
     @Test
     @DisplayName("Should add new participant to garden on POST on /api/v1/gardens/${id}/add_participant/${userId}")
     void shouldAddNewParticipantToGarden() {
-        val gardenData = new CreateGardenDto(
+        val gardenData = new CreateGardenRequest(
                 "Test garden with participant", "Test garden address", owner.id()
         );
-        val repo = new GardenRepository(getDsl());
+        val repo = new GardenRepositoryImpl(getDsl());
         val garden = repo.create(gardenData).get();
         val entity = new HttpEntity<>(generateAuthHeaders(owner));
 
@@ -104,10 +102,10 @@ class GardensApiIT extends AbstractApiIT {
     @Test
     @DisplayName("Should get garden by id on GET on /api/v1/gardens/${id}")
     void shouldGetGardenById() {
-        val gardenData = new CreateGardenDto(
+        val gardenData = new CreateGardenRequest(
                 "Test garden by id", "Test garden address", owner.id()
         );
-        val repo = new GardenRepository(getDsl());
+        val repo = new GardenRepositoryImpl(getDsl());
         val garden = repo.create(gardenData).get();
         val entity = new HttpEntity<>(generateAuthHeaders(owner));
         val response = getRestTemplate().exchange(
@@ -130,10 +128,10 @@ class GardensApiIT extends AbstractApiIT {
         );
         val user = writeUser(getDsl(), userDto);
 
-        val gardenData1 = new CreateGardenDto("Test list gardens 1", "Address 1", user.id());
-        val gardenData2 = new CreateGardenDto("Test list gardens 2", "Address 2", user.id());
+        val gardenData1 = new CreateGardenRequest("Test list gardens 1", "Address 1", user.id());
+        val gardenData2 = new CreateGardenRequest("Test list gardens 2", "Address 2", user.id());
 
-        val repo = new GardenRepository(getDsl());
+        val repo = new GardenRepositoryImpl(getDsl());
         val garden1 = repo.create(gardenData1).get();
         val garden2 = repo.create(gardenData2).get();
         val entity = new HttpEntity<>(generateAuthHeaders(user));
@@ -155,8 +153,8 @@ class GardensApiIT extends AbstractApiIT {
         );
         val user = writeUser(getDsl(), userDto);
 
-        val gardenData = new CreateGardenDto("Garden", "Address", user.id());
-        val repo = new GardenRepository(getDsl());
+        val gardenData = new CreateGardenRequest("Garden", "Address", user.id());
+        val repo = new GardenRepositoryImpl(getDsl());
         val garden = repo.create(gardenData).get();
         val entity = new HttpEntity<>(generateAuthHeaders(user));
 
@@ -181,8 +179,8 @@ class GardensApiIT extends AbstractApiIT {
         val ownerUser = writeUser(getDsl(), ownerDto);
         val user = writeUser(getDsl(), otherDto);
 
-        val gardenData = new CreateGardenDto("Garden", "Address", ownerUser.id());
-        val repo = new GardenRepository(getDsl());
+        val gardenData = new CreateGardenRequest("Garden", "Address", ownerUser.id());
+        val repo = new GardenRepositoryImpl(getDsl());
         val garden = repo.create(gardenData).get();
         repo.addParticipant(garden.id(), user.id(), UserRole.EXECUTOR);
         val entity = new HttpEntity<>(generateAuthHeaders(user));
@@ -196,6 +194,6 @@ class GardensApiIT extends AbstractApiIT {
         assertHttpResponse(response, HttpStatus.FORBIDDEN, MediaType.APPLICATION_PROBLEM_JSON);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getDetail())
-                .isEqualTo("Only owner can add participants or delete garden");
+                .isEqualTo("Only owner can modify or delete garden");
     }
 }
