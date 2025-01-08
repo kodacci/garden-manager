@@ -85,4 +85,13 @@ public interface GardensApi extends ApiErrorResponses {
             @Positive @PathVariable
             Long participantId
     );
+
+    @Operation(summary = "Delete garden")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully deleted garden"
+            )
+    })
+    ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id);
 }

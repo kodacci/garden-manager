@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ra_tech.garden_manager.core.controllers.AbstractController;
-import ru.ra_tech.garden_manager.core.services.UserRoleService;
+import ru.ra_tech.garden_manager.core.services.api.UserRoleService;
 
 @RestController
 @RequestMapping("/api/v1/roles")

@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.core.services;
+package ru.ra_tech.garden_manager.core.services.impl;
 
 import io.jsonwebtoken.Claims;
 import io.vavr.control.Either;
@@ -19,6 +19,7 @@ import ru.ra_tech.garden_manager.core.security.CustomUserDetails;
 import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.security.TokenType;
+import ru.ra_tech.garden_manager.core.services.api.AuthService;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
@@ -28,7 +29,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
     private static final String USER_ENTITY = "User";
 
     private final JwtProvider jwtProvider;
@@ -63,7 +64,7 @@ public class AuthService {
                 );
     }
 
-    public JwtPrincipal toPrincipal(CustomUserDetails user) {
+    private JwtPrincipal toPrincipal(CustomUserDetails user) {
         return new JwtPrincipal(user.getId(), user.getUsername(), user.getName());
     }
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ra_tech.garden_manager.core.controllers.AbstractController;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
-import ru.ra_tech.garden_manager.core.services.AuthService;
+import ru.ra_tech.garden_manager.core.services.api.AuthService;
 
 @RestController
 @RequestMapping("/api/v1/auth")

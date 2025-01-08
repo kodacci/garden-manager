@@ -1,17 +1,18 @@
-package ru.ra_tech.garden_manager.core.services;
+package ru.ra_tech.garden_manager.core.services.impl;
 
 import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.roles.dto.UserRoleData;
+import ru.ra_tech.garden_manager.core.services.api.UserRoleService;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleDto;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-public class UserRoleService {
+public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository repo;
 
     private UserRoleData toData(UserRoleDto dto) {
