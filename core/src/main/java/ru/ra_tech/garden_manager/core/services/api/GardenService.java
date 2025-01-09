@@ -13,5 +13,6 @@ public interface GardenService {
     Either<AppErrorResponse, GardenData> findGarden(long id, long userId);
     Either<AppErrorResponse, List<GardenData>> listGardens(long userId);
     Either<AppErrorResponse, List<GardenParticipantData>> addParticipant(long gardenId, long participantId, long userId);
-    Either<AppErrorResponse, Boolean> delete(long id, long userId);
+    Either<AppErrorResponse, Boolean> deleteGarden(long id, long userId);
+    Either<AppErrorResponse, GardenData> updateGarden(long id, long userId, CreateGardenRequest update);
 }

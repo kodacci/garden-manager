@@ -94,4 +94,19 @@ public interface GardensApi extends ApiErrorResponses {
             )
     })
     ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id);
+
+    @Operation(summary = "Update garden")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully updated garden",
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = GardenData.class)
+                            )
+                    }
+            )
+    })
+    ResponseEntity<Object> updateGarden(@Positive @PathVariable Long id, @RequestBody CreateGardenRequest update);
 }

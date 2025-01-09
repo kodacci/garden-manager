@@ -9,6 +9,7 @@ import org.jooq.Record8;
 import org.jooq.SelectOnConditionStep;
 import org.springframework.lang.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.AbstractRWRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
 import ru.ra_tech.garden_manager.database.schema.tables.records.GardensRecord;
 import ru.ra_tech.garden_manager.failure.AppFailure;
@@ -24,11 +25,11 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Gardens.GARDENS;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 import static ru.ra_tech.garden_manager.failure.DatabaseFailure.DatabaseFailureCode.GARDEN_REPOSITORY_FAILURE;
 
-public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto, GardenDto, GardensRecord> {
+public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGardenRequest, GardenDto, GardensRecord> implements GardenRepository {
     private static final int GARDENS_LIMIT = 1000;
     private static final int GARDENS_PARTICIPANTS_LIMIT = 100;
 
-    public GardenRepository(DSLContext dsl) {
+    public GardenRepositoryImpl(DSLContext dsl) {
         super(dsl, GARDENS);
     }
 
@@ -82,7 +83,7 @@ public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto
     }
 
     @Override
-    public Either<AppFailure, GardenDto> create(CreateGardenDto garden) {
+    public Either<AppFailure, GardenDto> create(CreateGardenRequest garden) {
         return Try.of(
                 () -> getContext().insertInto(GARDENS)
                         .set(GARDENS.NAME, garden.name())
@@ -178,5 +179,18 @@ public class GardenRepository extends AbstractRWRepository<Long, CreateGardenDto
                 .toEither()
                 .mapLeft(this::toFailure)
                 .map(List::ofAll);
+    }
+
+    @Override
+    public Either<AppFailure, Option<GardenDto>> update(Long id, CreateGardenRequest update) {
+        return Try.of(
+                () -> getContext().update(GARDENS)
+                        .set(GARDENS.NAME, update.name())
+                        .set(GARDENS.ADDRESS, update.address())
+                        .execute()
+        )
+                .toEither()
+                .mapLeft(this::toFailure)
+                .flatMap(rows -> findById(id));
     }
 }
