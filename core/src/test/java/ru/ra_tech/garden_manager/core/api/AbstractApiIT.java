@@ -103,6 +103,7 @@ class AbstractApiIT {
     protected HttpHeaders generateAuthHeaders(UserDto user) {
         val headers = new HttpHeaders();
         headers.setBearerAuth(generateToken(toPrincipal(user)));
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return headers;
     }
