@@ -25,6 +25,8 @@ import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.services.CustomUserDetailsService;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 
+import java.time.Duration;
+
 @Configuration
 public class WebSecurityConfiguration {
     @Bean
@@ -52,8 +54,11 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
-    public JwtProvider jwtAuthenticationProvider() {
-        return new JwtProvider();
+    public JwtProvider jwtAuthenticationProvider(AppSecurityProps securityProps) {
+        return new JwtProvider(
+                Duration.ofSeconds(securityProps.refreshTokenExpTimeoutSec()),
+                Duration.ofSeconds(securityProps.accessTokenExpTimeoutSec())
+        );
     }
 
     @Bean

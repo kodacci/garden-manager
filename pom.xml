@@ -43,15 +43,14 @@
         <maven.project.info.reports.plugin.version>3.4.3</maven.project.info.reports.plugin.version>
         <nexus.staging.maven.plugin.version>1.6.13</nexus.staging.maven.plugin.version>
         <nxrm3.maven.plugin.version>1.0.6</nxrm3.maven.plugin.version>
-        <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
         <sonar.maven.plugin.version>3.10.0.2594</sonar.maven.plugin.version>
 
         <!--  Third party dependencies  -->
-        <junit.version>5.10.2</junit.version>
         <assertj.version>3.24.2</assertj.version>
-        <spring.boot.version>3.4.0</spring.boot.version>
-        <spring.version>6.2.0</spring.version>
+        <spring.boot.version>3.4.1</spring.boot.version>
+        <spring.version>6.2.1</spring.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.26.0</liquibase.version>
         <hikaricp.version>5.0.1</hikaricp.version>
@@ -67,7 +66,6 @@
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
         <http.client5.version>5.2.1</http.client5.version>
-        <junit4.version>4.13.2</junit4.version>
         <sonar.jacoco.plugin>1.3.0.1538</sonar.jacoco.plugin>
         <log4j.version>2.24.0</log4j.version>
 
@@ -105,12 +103,6 @@
             </dependency>
 
             <!--     Test       -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
@@ -287,6 +279,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
@@ -307,11 +304,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
