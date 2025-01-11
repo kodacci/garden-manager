@@ -68,6 +68,7 @@
         <http.client5.version>5.2.1</http.client5.version>
         <sonar.jacoco.plugin>1.3.0.1538</sonar.jacoco.plugin>
         <log4j.version>2.24.0</log4j.version>
+        <aspectj.version>1.9.22.1</aspectj.version>
 
         <!--    Vars    -->
         <coverage.agent> </coverage.agent>
@@ -273,6 +274,11 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${findbugs.jsr305.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -32,48 +32,36 @@ public class GardensController extends AbstractController implements GardensApi 
 
     @Override
     @PostMapping("")
-    @Timed("gardens.create")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "create-garden", "version", "1"})
     public ResponseEntity<Object> createGarden(CreateGardenRequest request) {
         return toResponse(getUserId().flatMap(userId -> service.createGarden(request, userId)), HttpStatus.CREATED);
     }
 
     @Override
     @GetMapping(value = "/{id}")
-    @Timed("gardens.find")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "find-garden", "version", "1"})
     public ResponseEntity<Object> findGarden(@PathVariable Long id) {
         return toResponse(getUserId().flatMap(userId -> service.findGarden(id, userId)));
     }
 
     @Override
     @GetMapping(value = "")
-    @Timed("gardens.list")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "list-gardens", "version", "1"})
     public ResponseEntity<Object> listGardens() {
         return toResponse(getUserId().flatMap(service::listGardens));
     }
 
     @Override
     @PostMapping(value = "/{id}/add_participant/{participantId}", produces = APPLICATION_JSON_VALUE)
-    @Timed("gardens.add-user")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "add-participants", "version", "1"})
     public ResponseEntity<Object> addParticipant(@PathVariable Long id, @PathVariable Long participantId) {
         return toResponse(getUserId().flatMap(userId -> service.addParticipant(id, participantId, userId)));
     }
 
     @Override
     @DeleteMapping(value = "/{id}")
-    @Timed("gardens.delete")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "delete-garden", "version", "1"})
     public ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id) {
         return toEmptyResponse(getUserId().flatMap(userId -> service.deleteGarden(id, userId)));
     }
 
     @Override
     @PutMapping(value = "/{id}")
-    @Timed("gardens.update")
-    @Counted(value = "api.call", extraTags = {"controller", "gardens", "method", "update-garden", "version", "1"})
     public ResponseEntity<Object> updateGarden(@Positive @PathVariable Long id, @RequestBody CreateGardenRequest update) {
         return toResponse(getUserId().flatMap(userId -> service.updateGarden(id, userId, update)));
     }

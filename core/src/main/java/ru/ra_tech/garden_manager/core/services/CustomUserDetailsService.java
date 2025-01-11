@@ -2,23 +2,21 @@ package ru.ra_tech.garden_manager.core.services;
 
 import io.vavr.control.Option;
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.ra_tech.garden_manager.core.security.CustomUserDetails;
+import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final AuthUserRepository repo;
-
-    public CustomUserDetailsService(AuthUserRepository repo) {
-        this.repo = repo;
-    }
 
     private UserDetails handleFailure(AppFailure failure) {
         val cause = failure.getCause();

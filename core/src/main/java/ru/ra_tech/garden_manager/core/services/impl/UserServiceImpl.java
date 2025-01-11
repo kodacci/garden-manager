@@ -13,8 +13,8 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorRes
 import ru.ra_tech.garden_manager.core.controllers.users.dto.CreateUserRequest;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.UserData;
 import ru.ra_tech.garden_manager.core.services.api.UserService;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRepository;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 @RequiredArgsConstructor

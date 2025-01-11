@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
+import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepositoryImpl;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.user.UserRepositoryImpl;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,27 +27,27 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = {
                 TestApplication.class,
-                AuthUserRepositoryIT.TestConfiguration.class,
+                AuthUserRepositoryImplIT.TestConfiguration.class,
                 DatabaseConfiguration.class
         }
 )
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class AuthUserRepositoryIT {
+class AuthUserRepositoryImplIT {
     private static final String TEST_USER_LOGIN = "test";
     @Configuration
     static class TestConfiguration {
         @Bean
-        public AuthUserRepository authUserRepository(DSLContext dsl) {
-            return new AuthUserRepository(dsl);
+        public AuthUserRepositoryImpl authUserRepository(DSLContext dsl) {
+            return new AuthUserRepositoryImpl(dsl);
         }
     }
 
     @Autowired
-    private AuthUserRepository authRepo;
+    private AuthUserRepositoryImpl authRepo;
     @Autowired
-    private UserRepository userRepo;
+    private UserRepositoryImpl userRepo;
 
     @Autowired
     private DSLContext ctx;
@@ -63,7 +63,7 @@ class AuthUserRepositoryIT {
         when(dsl.select(USERS.ID, USERS.LOGIN, USERS.PASSWORD, USERS.TOKENID, USERS.NAME))
                 .thenThrow(new RuntimeException("Dummy exception"));
 
-        val repo = new AuthUserRepository(dsl);
+        val repo = new AuthUserRepositoryImpl(dsl);
 
         val result = repo.findById(TEST_USER_LOGIN);
         assertThat(result.isLeft()).isTrue();

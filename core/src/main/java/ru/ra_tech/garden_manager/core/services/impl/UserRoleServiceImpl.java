@@ -6,8 +6,8 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorRespon
 import ru.ra_tech.garden_manager.core.controllers.error_responses.ServerErrorResponse;
 import ru.ra_tech.garden_manager.core.controllers.roles.dto.UserRoleData;
 import ru.ra_tech.garden_manager.core.services.api.UserRoleService;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRoleRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleDto;
-import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
 
 import java.util.List;
 

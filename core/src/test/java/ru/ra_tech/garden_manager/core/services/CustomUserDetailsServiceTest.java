@@ -4,7 +4,7 @@ import io.vavr.control.Either;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
+import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepositoryImpl;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 class CustomUserDetailsServiceTest {
     @Test
     void shouldThrowOnError() {
-        val repo = mock(AuthUserRepository.class);
+        val repo = mock(AuthUserRepositoryImpl.class);
         when(repo.findById(anyString()))
                 .thenReturn(Either.left(new DatabaseFailure(
                         DatabaseFailure.DatabaseFailureCode.AUTH_USER_REPOSITORY_FAILURE,

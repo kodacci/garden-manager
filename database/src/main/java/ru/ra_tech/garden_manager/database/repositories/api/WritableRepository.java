@@ -1,4 +1,4 @@
-package ru.ra_tech.garden_manager.database.repositories;
+package ru.ra_tech.garden_manager.database.repositories.api;
 
 import io.vavr.control.Either;
 import ru.ra_tech.garden_manager.failure.AppFailure;

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.user.UserRepositoryImpl;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,9 +18,9 @@ import static org.mockito.Mockito.when;
 import static ru.ra_tech.garden_manager.database.schema.Tables.USERS;
 
 @Slf4j
-class UserRepositoryIT implements DatabaseIT {
+class UserRepositoryImplIT implements DatabaseIT {
     @Autowired
-    private UserRepository repo;
+    private UserRepositoryImpl repo;
 
     @Autowired
     private DSLContext dsl;
@@ -36,7 +36,7 @@ class UserRepositoryIT implements DatabaseIT {
         val dslMock = mock(DSLContext.class);
         when(dslMock.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
 
-        val userRepo = new UserRepository(dslMock);
+        val userRepo = new UserRepositoryImpl(dslMock);
 
         val result = userRepo.checkDataConflict("test", Option.of("test@example.com"));
 
@@ -47,7 +47,7 @@ class UserRepositoryIT implements DatabaseIT {
                 .isEqualTo(DatabaseFailure.DatabaseFailureCode.USER_REPOSITORY_FAILURE.toString());
         assertThat(failure.getDetail()).isEqualTo("Database access error");
         assertThat(failure.getMessage()).isEqualTo("Dummy exception");
-        assertThat(failure.getSource()).isEqualTo(UserRepository.class.getName());
+        assertThat(failure.getSource()).isEqualTo(UserRepositoryImpl.class.getName());
     }
 
     @Test

@@ -14,9 +14,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import ru.ra_tech.garden_manager.database.ExceptionTranslator;
 import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.repositories.api.GardenRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRoleRepository;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenRepositoryImpl;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
-import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
+import ru.ra_tech.garden_manager.database.repositories.user.UserRepositoryImpl;
+import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepositoryImpl;
 
 import javax.sql.DataSource;
 
@@ -63,11 +65,11 @@ public class DatabaseConfiguration {
 
     @Bean
     public UserRepository userRepository(DSLContext dsl) {
-        return new UserRepository(dsl);
+        return new UserRepositoryImpl(dsl);
     }
 
     @Bean
     public UserRoleRepository userRoleRepository(DSLContext dsl) {
-        return new UserRoleRepository(dsl);
+        return new UserRoleRepositoryImpl(dsl);
     }
 }

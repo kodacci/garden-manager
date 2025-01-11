@@ -57,5 +57,5 @@ app:
     pod-namespace: ${POD_NAMESPACE:core-local-test}
     node-name: ${NODE_NAME:core-local-test}
   security:
-    refresh-token-exp-timeout-sec: 1800
-    access-token-exp-timeout-sec: 3600
+    refresh-token-exp-timeout-sec: ${REFRESH_TOKEN_EXP_TIMEOUT_SEC:3600}
+    access-token-exp-timeout-sec: ${ACCESS_TOKEN_EXP_TIMEOUT_SEC:600}

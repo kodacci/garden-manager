@@ -10,13 +10,11 @@ import ru.ra_tech.garden_manager.database.repositories.garden.GardenUsersDto;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
-public interface GardenRepository {
-    Either<AppFailure, Option<GardenDto>> findById(Long id);
-    Either<AppFailure, GardenDto> create(CreateGardenRequest garden);
+public interface GardenRepository extends ReadableRepository<Long, Option<GardenDto>>,
+        WritableRepository<Long, CreateGardenRequest, GardenDto> {
     Either<AppFailure, List<GardenDto>> listByUserId(long id);
     Either<AppFailure, Option<GardenUsersDto>> getGardenUsers(long gardenId);
     Either<AppFailure, Boolean> addParticipant(long gardenId, long userId, UserRole role);
     Either<AppFailure, List<GardenParticipantDto>> listParticipants(long gardenId);
-    Either<AppFailure, Boolean> deleteById(Long id);
     Either<AppFailure, Option<GardenDto>> update(Long id, CreateGardenRequest update);
 }

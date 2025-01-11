@@ -5,13 +5,11 @@ import lombok.val;
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +21,8 @@ import ru.ra_tech.garden_manager.core.security.JwtAuthenticationProcessingFilter
 import ru.ra_tech.garden_manager.core.security.JwtAuthenticationProvider;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.services.CustomUserDetailsService;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
+import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepositoryImpl;
 
 import java.time.Duration;
 
@@ -33,7 +32,7 @@ public class WebSecurityConfiguration {
     public AuthenticationManager authenticationManager(
             PasswordEncoder encoder,
             UserDetailsService service,
-            AuthUserRepository userRepo,
+            AuthUserRepositoryImpl userRepo,
             JwtProvider jwtProvider
     ) {
         val dao = new DaoAuthenticationProvider();
@@ -45,7 +44,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public AuthUserRepository authUserRepository(DSLContext dsl) {
-        return new AuthUserRepository(dsl);
+        return new AuthUserRepositoryImpl(dsl);
     }
 
     @Bean

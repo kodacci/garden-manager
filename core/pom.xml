@@ -79,6 +79,10 @@
             <artifactId>log4j-layout-template-json</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
 
         <!--    INTERNAL    -->
         <dependency>

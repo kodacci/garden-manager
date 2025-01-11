@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.database.repositories.user;
 
+import io.micrometer.core.annotation.Timed;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -7,6 +8,7 @@ import lombok.val;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import ru.ra_tech.garden_manager.database.repositories.AbstractRWRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRepository;
 import ru.ra_tech.garden_manager.database.schema.tables.records.UsersRecord;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 import ru.ra_tech.garden_manager.failure.AppFailure;
@@ -15,9 +17,10 @@ import java.util.Objects;
 
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
-public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, UserDto, UsersRecord> {
+public class UserRepositoryImpl extends AbstractRWRepository<Long, CreateUserDto, UserDto, UsersRecord>
+        implements UserRepository {
 
-    public UserRepository(DSLContext dsl) {
+    public UserRepositoryImpl(DSLContext dsl) {
         super(dsl, USERS);
     }
 
@@ -34,10 +37,23 @@ public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, Us
     }
 
     @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "user", "method", "find-by-id"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Option<UserDto>> findById(Long id) {
         return find(USERS.ID.eq(id));
     }
 
+    @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "user", "method", "check-data-conflict"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Boolean> checkDataConflict(String login, Option<String> email) {
         val condition = email.fold(
                 () -> USERS.LOGIN.eq(login),
@@ -66,6 +82,12 @@ public class UserRepository extends AbstractRWRepository<Long, CreateUserDto, Us
     }
 
     @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "user", "method", "create"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, UserDto> create(CreateUserDto user) {
         return Try.of(
                 () -> getContext().insertInto(USERS)

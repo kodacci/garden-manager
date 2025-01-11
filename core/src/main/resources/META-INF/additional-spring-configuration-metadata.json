@@ -41,13 +41,13 @@
       "name": "app.security.refresh-token-exp-timeout-sec",
       "type": "java.lang.Integer",
       "description": "Application refresh token expiration timeout in seconds",
-      "defaultValue": 1800
+      "defaultValue": 3600
     },
     {
       "name": "app.security.access-token-exp-timeout-sec",
       "type": "java.lang.Integer",
       "description": "Application access token expiration timeout in seconds",
-      "defaultValue": 3600
+      "defaultValue": 600
     }
   ]
 }
