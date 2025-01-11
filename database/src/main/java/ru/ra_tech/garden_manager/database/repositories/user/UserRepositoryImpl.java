@@ -39,7 +39,7 @@ public class UserRepositoryImpl extends AbstractRWRepository<Long, CreateUserDto
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user", "method", "find-by-id"},
+            extraTags = {"repository_name", "user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -50,7 +50,7 @@ public class UserRepositoryImpl extends AbstractRWRepository<Long, CreateUserDto
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user", "method", "check-data-conflict"},
+            extraTags = {"repository_name", "user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -84,7 +84,7 @@ public class UserRepositoryImpl extends AbstractRWRepository<Long, CreateUserDto
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user", "method", "create"},
+            extraTags = {"repository_name", "user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )

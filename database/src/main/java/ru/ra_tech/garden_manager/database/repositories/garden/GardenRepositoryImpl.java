@@ -87,7 +87,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "create"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -112,7 +112,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "find-by-id"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -123,7 +123,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "list-by-user-id"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -143,7 +143,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "get-garden-users"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -171,7 +171,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "add-participant"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -196,7 +196,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "list-participants"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -226,7 +226,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "garden", "method", "update"},
+            extraTags = {"repository_name", "garden"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )

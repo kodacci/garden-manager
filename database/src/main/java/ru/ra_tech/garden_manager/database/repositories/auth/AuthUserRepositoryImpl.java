@@ -26,7 +26,7 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "auth-user", "method", "find-by-id"},
+            extraTags = {"repository_name", "auth-user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -51,7 +51,7 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "auth-user", "method", "exists"},
+            extraTags = {"repository_name", "auth-user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -69,7 +69,7 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "auth-user", "method", "update-token-id"},
+            extraTags = {"repository_name", "auth-user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -88,7 +88,7 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "auth-user", "method", "clear-session"},
+            extraTags = {"repository_name", "auth-user"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )

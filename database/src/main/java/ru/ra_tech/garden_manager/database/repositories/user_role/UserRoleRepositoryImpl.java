@@ -31,7 +31,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user-role", "method", "find-all"},
+            extraTags = {"repository_name", "user-role"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -49,7 +49,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user-role", "method", "find-by-id"},
+            extraTags = {"repository_name", "user-role"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
@@ -67,7 +67,7 @@ public class UserRoleRepositoryImpl implements UserRoleRepository {
     @Override
     @Timed(
             value = "repository.call",
-            extraTags = {"repository_name", "user-role", "method", "exists"},
+            extraTags = {"repository_name", "user-role"},
             histogram = true,
             percentiles = {0.90, 0.95, 0.99}
     )
