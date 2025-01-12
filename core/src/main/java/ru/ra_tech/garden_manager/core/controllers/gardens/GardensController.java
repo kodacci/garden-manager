@@ -1,6 +1,4 @@
 package ru.ra_tech.garden_manager.core.controllers.gardens;
-import io.micrometer.core.annotation.Counted;
-import io.micrometer.core.annotation.Timed;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
