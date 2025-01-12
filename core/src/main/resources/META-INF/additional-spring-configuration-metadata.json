@@ -4,6 +4,11 @@
       "name": "app.monitoring",
       "description": "Application monitoring properties",
       "sourceType": "ru.ra_tech.garden_manager.core.configuration.AppMonitoringProps"
+    },
+    {
+      "name": "app.security",
+      "description": "Application security settings",
+      "sourceType": "ru.ra_tech.garden_manager.core.configuration.AppSecurityProps"
     }
   ],
   "properties": [
@@ -31,6 +36,18 @@
       "name": "app.monitoring.node-name",
       "type": "java.lang.String",
       "description": "Application node name monitoring common tag"
+    },
+    {
+      "name": "app.security.refresh-token-exp-timeout-sec",
+      "type": "java.lang.Integer",
+      "description": "Application refresh token expiration timeout in seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "app.security.access-token-exp-timeout-sec",
+      "type": "java.lang.Integer",
+      "description": "Application access token expiration timeout in seconds",
+      "defaultValue": 600
     }
   ]
 }

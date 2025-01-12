@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.database.repositories.garden;
 
+import io.micrometer.core.annotation.Timed;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -25,7 +26,8 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Gardens.GARDENS;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 import static ru.ra_tech.garden_manager.failure.DatabaseFailure.DatabaseFailureCode.GARDEN_REPOSITORY_FAILURE;
 
-public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGardenRequest, GardenDto, GardensRecord> implements GardenRepository {
+public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGardenRequest, GardenDto, GardensRecord>
+        implements GardenRepository {
     private static final int GARDENS_LIMIT = 1000;
     private static final int GARDENS_PARTICIPANTS_LIMIT = 100;
 
@@ -83,6 +85,12 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     }
 
     @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, GardenDto> create(CreateGardenRequest garden) {
         return Try.of(
                 () -> getContext().insertInto(GARDENS)
@@ -102,10 +110,23 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     }
 
     @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Option<GardenDto>> findById(Long id) {
         return selectGarden(id);
     }
 
+    @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, List<GardenDto>> listByUserId(long id) {
         return Try.of(
                 () -> makeSelectStep()
@@ -119,6 +140,13 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
                 .map(List::ofAll);
     }
 
+    @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Option<GardenUsersDto>> getGardenUsers(long gardenId) {
         return Try.of(
                 () -> getContext().select(
@@ -140,6 +168,13 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
                 .map(Option::of);
     }
 
+    @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Boolean> addParticipant(long gardenId, long userId, UserRole role) {
         return Try.of(
                 () -> getContext().insertInto(GARDENS_PARTICIPANTS)
@@ -158,6 +193,13 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
                 .map(count -> count > 0);
     }
 
+    @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, List<GardenParticipantDto>> listParticipants(long gardenId) {
         return Try.of(
                 () -> getContext().select(
@@ -182,6 +224,12 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
     }
 
     @Override
+    @Timed(
+            value = "repository.call",
+            extraTags = {"repository_name", "garden"},
+            histogram = true,
+            percentiles = {0.90, 0.95, 0.99}
+    )
     public Either<AppFailure, Option<GardenDto>> update(Long id, CreateGardenRequest update) {
         return Try.of(
                 () -> getContext().update(GARDENS)

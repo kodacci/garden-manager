@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.ra_tech.garden_manager.database.repositories.user.CreateUserDto;
 import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.user.UserRepositoryImpl;
 
 public class TestUtils {
     private TestUtils() {}
@@ -14,7 +14,7 @@ public class TestUtils {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     static UserDto writeUser(DSLContext dsl, CreateUserDto user) {
-        val repo = new UserRepository(dsl);
+        val repo = new UserRepositoryImpl(dsl);
         val dto = new CreateUserDto(user.login(), user.name(), user.email(), passwordEncoder.encode(user.password()));
 
         return repo.create(dto).get();

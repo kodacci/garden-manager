@@ -1,5 +1,6 @@
 package ru.ra_tech.garden_manager.core.configuration;
 
+import io.micrometer.core.aop.CountedAspect;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,10 @@ import ru.ra_tech.garden_manager.core.services.impl.UserRoleServiceImpl;
 import ru.ra_tech.garden_manager.core.services.impl.UserServiceImpl;
 import ru.ra_tech.garden_manager.database.Transactional;
 import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
+import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.api.GardenRepository;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
-import ru.ra_tech.garden_manager.database.repositories.user.UserRepository;
-import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.UserRoleRepository;
 
 @Configuration
 @Import(DatabaseConfiguration.class)
@@ -59,6 +60,9 @@ public class MainConfiguration {
     public TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
     }
+
+    @Bean
+    public CountedAspect countedAspect(MeterRegistry registry) { return new CountedAspect(registry); }
 
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> registryCustomizer(AppMonitoringProps props) {

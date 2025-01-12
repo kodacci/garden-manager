@@ -20,8 +20,8 @@ import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 import ru.ra_tech.garden_manager.core.security.JwtProvider;
 import ru.ra_tech.garden_manager.core.security.TokenType;
 import ru.ra_tech.garden_manager.core.services.api.AuthService;
+import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 import java.util.Objects;

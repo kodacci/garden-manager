@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
+import ru.ra_tech.garden_manager.database.repositories.api.ReadableRepository;
+import ru.ra_tech.garden_manager.database.repositories.api.WritableRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 import static org.jooq.impl.DSL.field;

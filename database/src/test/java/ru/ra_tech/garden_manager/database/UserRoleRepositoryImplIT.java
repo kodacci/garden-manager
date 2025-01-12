@@ -5,7 +5,7 @@ import lombok.val;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepository;
+import ru.ra_tech.garden_manager.database.repositories.user_role.UserRoleRepositoryImpl;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,13 +13,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Slf4j
-class UserRoleRepositoryIT implements DatabaseIT {
+class UserRoleRepositoryImplIT implements DatabaseIT {
     private static final int ADMIN_ID = 1;
     private static final int CHIEF_ID = 2;
     private static final int EXECUTOR_ID = 3;
 
     @Autowired
-    private UserRoleRepository repo;
+    private UserRoleRepositoryImpl repo;
     @Autowired
     private DSLContext dsl;
 
@@ -58,7 +58,7 @@ class UserRoleRepositoryIT implements DatabaseIT {
         val dslMock = mock(DSLContext.class);
         when(dslMock.selectCount()).thenThrow(new RuntimeException("Dummy exception"));
 
-        val roleRepo = new UserRoleRepository(dslMock);
+        val roleRepo = new UserRoleRepositoryImpl(dslMock);
         val res = roleRepo.exists(1);
 
         assertThat(res.isLeft()).isTrue();
@@ -67,6 +67,6 @@ class UserRoleRepositoryIT implements DatabaseIT {
         assertThat(failure.getCode())
                 .isEqualTo(DatabaseFailure.DatabaseFailureCode.USER_ROLE_REPOSITORY_FAILURE.toString());
         assertThat(failure.getMessage()).contains("Dummy exception");
-        assertThat(failure.getSource()).isEqualTo(UserRoleRepository.class.getName());
+        assertThat(failure.getSource()).isEqualTo(UserRoleRepositoryImpl.class.getName());
     }
 }

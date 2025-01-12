@@ -8,8 +8,8 @@ import lombok.val;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
-import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserRepository;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
 import java.util.Objects;
