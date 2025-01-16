@@ -235,6 +235,7 @@ public class GardenRepositoryImpl extends AbstractRWRepository<Long, CreateGarde
                 () -> getContext().update(GARDENS)
                         .set(GARDENS.NAME, update.name())
                         .set(GARDENS.ADDRESS, update.address())
+                        .where(GARDENS.ID.eq(id))
                         .execute()
         )
                 .toEither()
