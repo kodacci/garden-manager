@@ -75,11 +75,13 @@ class AuthUserRepositoryImplIT {
         assertThat(failure.getMessage()).isEqualTo("Dummy exception");
     }
 
-    private void addUser() {
-        userRepo.create(new CreateUserDto(
-                TEST_USER_LOGIN, "Test User", null, "abc12345"
-        ))
+    private void addUser(String login) {
+        userRepo.create(new CreateUserDto(login, "Test User", null, "abc12345"))
                 .peekLeft(failure -> log.error("Error creating user:", failure.getCause()));
+    }
+
+    private void addUser() {
+        addUser(TEST_USER_LOGIN);
     }
 
     @Test
@@ -96,5 +98,13 @@ class AuthUserRepositoryImplIT {
         result = authRepo.exists(TEST_USER_LOGIN);
         assertThat(result.isRight()).isTrue();
         assertThat(result.get()).isTrue();
+    }
+
+    @Test
+    void shouldNotFindDeletedUser() {
+        addUser("deleted");
+        ctx.update(USERS).set(USERS.DELETED, true).execute();
+
+        assertThat(authRepo.findById("deleted").get().isEmpty()).isTrue();
     }
 }
