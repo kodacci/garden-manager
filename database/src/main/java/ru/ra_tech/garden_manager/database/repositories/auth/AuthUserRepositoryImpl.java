@@ -40,7 +40,7 @@ public class AuthUserRepositoryImpl implements AuthUserRepository {
                                 USERS.NAME
                         )
                         .from(USERS)
-                        .where(USERS.LOGIN.eq(login))
+                        .where(USERS.LOGIN.eq(login)).and(USERS.DELETED.eq(false))
                         .fetchOneInto(AuthUserDto.class)
                 )
                 .toEither()
