@@ -156,7 +156,7 @@ pipeline {
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         println "Applying istio operator"
-                        sh 'istioctl install -f distrib/istio-operator.yaml'
+                        sh 'istioctl install -y -f distrib/istio-operator.yaml'
 
                         println "Applying core manifests"
                         sh 'kubectl apply ' +
