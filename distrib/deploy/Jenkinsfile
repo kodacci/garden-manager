@@ -122,6 +122,8 @@ pipeline {
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
+                        // istio operator
+                        dh "jinjs3 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
 
                         // main app
                         sh "jinja2 -D namespace=$namespace -D registry=$registry -D image_tag=$coreImageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
@@ -153,6 +155,9 @@ pipeline {
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
+                        println "Applying istio operator"
+                        sh 'kubectl apply -f distrib/istio-operator.yaml'
+
                         println "Applying core manifests"
                         sh 'kubectl apply ' +
                                 '-f distrib/fluentbit.yaml ' +
