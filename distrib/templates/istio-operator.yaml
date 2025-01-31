@@ -4,9 +4,8 @@ metadata:
   name: garden-manager-istio-operator
   namespace: {{ namespace }}
   labels:
-    app.ra-tech.pro/part-of: garden-manager
-#    app.kubernetes.io/part-of: garden-manager
-#    app.kubernetes.io/component: istio
+    app.kubernetes.io/part-of: garden-manager
+    app.kubernetes.io/component: istio
 spec:
   components:
     base:
@@ -25,9 +24,10 @@ spec:
         enabled: true
         namespace: {{ namespace }}
         label:
-          istio: garden-manager-egressgateway
-          app.kubernetes.io/part-of: garden-manager
-          app.kubernetes.io/component: istio-egressgw
+#          istio: garden-manager-egressgateway
+          app.ra-tech.pro/part-of: garden-manager
+#          app.kubernetes.io/part-of: garden-manager
+#          app.kubernetes.io/component: istio-egressgw
         k8s:
           replicaCount: 1
           service:
