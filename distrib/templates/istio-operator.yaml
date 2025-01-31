@@ -16,7 +16,7 @@ spec:
       enabled: false
     ztunnel:
       enabled: false
-    istioRemote:
+    istiodRemote:
       enabled: false
     egressGateways:
       - name: garden-manager-egressgw
