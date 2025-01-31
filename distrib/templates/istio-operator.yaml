@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: istio
 spec:
   components:
-    egressGateway:
+    egressGateways:
       - name: garden-manager-egressgw
         enabled: true
         namespace: {{ namespace }}
