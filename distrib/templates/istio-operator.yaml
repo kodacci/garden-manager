@@ -19,6 +19,7 @@ spec:
       enabled: false
     istiodRemote:
       enabled: false
+    ingressGateways: {}
     egressGateways:
       - name: garden-manager-egressgw
         enabled: true
