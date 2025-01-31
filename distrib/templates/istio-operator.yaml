@@ -8,6 +8,16 @@ metadata:
     app.kubernetes.io/component: istio
 spec:
   components:
+    base:
+      enabled: false
+    pilot:
+      enabled: false
+    cni:
+      enabled: false
+    ztunnel:
+      enabled: false
+    istioRemote:
+      enabled: false
     egressGateways:
       - name: garden-manager-egressgw
         enabled: true
