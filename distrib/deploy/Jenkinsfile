@@ -123,7 +123,7 @@ pipeline {
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
                         // istio operator
-                        sh "jinjs3 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
 
                         // main app
                         sh "jinja2 -D namespace=$namespace -D registry=$registry -D image_tag=$coreImageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
