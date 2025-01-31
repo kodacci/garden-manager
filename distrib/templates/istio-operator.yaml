@@ -4,8 +4,9 @@ metadata:
   name: garden-manager-istio-operator
   namespace: {{ namespace }}
   labels:
-    app.kubernetes.io/part-of: garden-manager
-    app.kubernetes.io/component: istio
+    app.ra-tech.pro/part-of: garden-manager
+#    app.kubernetes.io/part-of: garden-manager
+#    app.kubernetes.io/component: istio
 spec:
   components:
     base:
