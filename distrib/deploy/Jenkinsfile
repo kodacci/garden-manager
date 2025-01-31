@@ -35,7 +35,7 @@ pipeline {
     agent { label 'jenkins-agent1' }
 
     parameters {
-        string(name: 'core_image', description: 'Core image tag to use in deploy')
+        string(name: 'core_app_image', description: 'Core image tag to use in deploy')
         string(name: 'core_db_migrate_image', description: 'Core db migrations image')
     }
 
@@ -156,7 +156,7 @@ pipeline {
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         println "Applying istio operator"
-                        sh 'kubectl apply -f distrib/istio-operator.yaml'
+                        sh 'istioctl install -f distrib/istio-operator.yaml'
 
                         println "Applying core manifests"
                         sh 'kubectl apply ' +
