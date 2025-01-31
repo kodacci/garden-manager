@@ -18,31 +18,31 @@ spec:
           app.kubernetes.io/component: istio-egressgw
         k8s:
           replicaCount: 1
-        strategy:
-          type: Recreate
-        service:
-          ports:
-            - name: tcp
-              port: 9999
-              targetPort: 9999
-            - name: http
-              port: 80
-              targetPort: 18080
-            - name: https
-              port: 443
-              targetPort: 10443
-        resources:
-          requests:
-            cpu: 200m
-            memory: 128Mi
-          limits:
-            cpu: 300m
-            memory: 256Mi
-        readinessProbe:
-          httpGet:
-            path: /healthz/ready
-            port: 15021
-            scheme: HTTP
-          initialDelaySeconds: 3
-          periodSeconds: 2
-          failureThreshold: 30
+          strategy:
+            type: Recreate
+          service:
+            ports:
+              - name: tcp
+                port: 9999
+                targetPort: 9999
+              - name: http
+                port: 80
+                targetPort: 18080
+              - name: https
+                port: 443
+                targetPort: 10443
+          resources:
+            requests:
+              cpu: 200m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: 15021
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 2
+            failureThreshold: 30
