@@ -32,8 +32,7 @@ spec:
           replicaCount: 1
           strategy:
             type: Recreate
-          hpaSpec:
-            disabled: true
+          hpaSpec: null
           service:
             ports:
               - name: tcp
