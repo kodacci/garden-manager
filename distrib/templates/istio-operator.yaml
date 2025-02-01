@@ -34,6 +34,8 @@ spec:
 #          strategy:
 #            type: Recreate
           hpaSpec:
+            minReplicas: 1
+            maxReplicas: 1
           service:
             ports:
               - name: tcp
