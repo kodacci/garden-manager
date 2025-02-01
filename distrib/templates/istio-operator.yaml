@@ -30,6 +30,10 @@ spec:
 #          app.kubernetes.io/component: istio-egressgw
         k8s:
           replicaCount: 1
+          strategy:
+            type: Recreate
+          hpaSpec:
+            disabled: true
           service:
             ports:
               - name: tcp
