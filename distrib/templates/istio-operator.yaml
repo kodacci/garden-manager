@@ -56,3 +56,6 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 2
             failureThreshold: 30
+  values:
+    global:
+      istioNamespace: istio-system
