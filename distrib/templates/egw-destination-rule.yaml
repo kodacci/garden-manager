@@ -7,11 +7,10 @@ metadata:
     app.kubernetes.io/part-of: garden-manager
     app.kubernetes.io/component: core
 spec:
-  host: istio-egressgateway.istio-system.svc.cluster.local
+  host: garden-manager-egressgw.{{ namespace }}.svc.cluster.local
   subsets:
     - name: solr
     - name: vault
     - name: garden-manager-database
   exportTo:
     - "."
-    - istio-system

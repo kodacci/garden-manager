@@ -4,9 +4,12 @@ metadata:
   name: garden-manager-database
   namespace: {{ namespace }}
   labels:
+    app.kubernetes.io/name: garden-manager-database
     app.kubernetes.io/part-of: garden-manager
     app.kubernetes.io/component: core
 spec:
+  exportTo:
+    - "."
   hosts:
     - {{ db_host }}
   addresses:

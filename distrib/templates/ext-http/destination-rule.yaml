@@ -18,4 +18,3 @@ spec:
           sni: {{ host }}
   exportTo:
     - "."
-    - istio-system
