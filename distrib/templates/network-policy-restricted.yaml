@@ -28,6 +28,9 @@ spec:
               kubernetes.io/metadata.name: {{ namespace }}
         - namespaceSelector:
             matchLabels:
+              kubernetes.io/metadata.name: istio-system
+        - namespaceSelector:
+            matchLabels:
               kubernetes.io/metadata.name: kube-system
         - podSelector:
             matchLabels:
