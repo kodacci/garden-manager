@@ -177,7 +177,7 @@ pipeline {
                                 '-f distrib/egressgw-role-binding.yaml ' +
                                 '-f distrib/egressgw-deployment.yaml'
 
-                        sh "kubectl wait --for=condition=create --timeout=1m -n $namespace pods -l app=garden-manager-egressgw"
+                        sh "kubectl wait --for=create --timeout=1m -n $namespace pods -l app=garden-manager-egressgw"
                         sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-egressgw"
 
                         println "Applying core manifests"
@@ -207,7 +207,7 @@ pipeline {
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
-                        sh "kubectl wait --for=condition=create --timeout=1m -n $namespace pods -l app=garden-manager-core"
+                        sh "kubectl wait --for=create --timeout=1m -n $namespace pods -l app=garden-manager-core"
                         sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-core"
                     }
                 }
