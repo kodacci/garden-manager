@@ -136,8 +136,8 @@ pipeline {
                         sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-deployment.yaml > distrib/egressgw-deployment.yaml"
                         sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-service.yaml > distrib/egressgw-service.yaml"
                         sh "jinja2 -D namespace=$namespace distrib/templates/istio/egressgw-service-account.yaml > distrib/egressgw-service-account.yaml"
-                        sh "jinja2 -D namespace=$namespace distrib/template/istio/egressgw-role.yaml > distrib/egressgw-role.yaml"
-                        sh "jinja2 -D namespace=$namespace distrib/template/istio/egressgw-role-binding.yaml > distrib/egressgw-role-binding.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/istio/egressgw-role.yaml > distrib/egressgw-role.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/istio/egressgw-role-binding.yaml > distrib/egressgw-role-binding.yaml"
 
                         // main app
                         sh "jinja2 -D namespace=$namespace -D registry=$registry -D image_tag=$coreImageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
