@@ -7,8 +7,6 @@ metadata:
     app.kubernetes.io/part-of: garden-manager
     app.kubernetes.io/component: core
 spec:
-  exportTo:
-    - "."
   selector:
     istio: egressgateway
   servers:
