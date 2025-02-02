@@ -70,7 +70,7 @@ spec:
             sources:
               - serviceAccountToken:
                   audience: istio-ca
-                  expirationsSeconds: 43200
+                  expirationSeconds: 43200
                   path: istio-token
         - name: config-volume
           configMap:
