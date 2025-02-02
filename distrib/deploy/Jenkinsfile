@@ -169,8 +169,6 @@ pipeline {
                     }
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
-//                        println "Applying istio operator"
-//                        sh 'istioctl install -y -f distrib/istio-operator.yaml'
                         println "Applying istio egress gateway manifests"
                         sh 'kubectl apply ' +
                                 '-f distrib/egressgw-service.yaml ' +
@@ -179,6 +177,7 @@ pipeline {
                                 '-f distrib/egressgw-role-binding.yaml ' +
                                 '-f distrib/egressgw-deployment.yaml'
 
+                        sh "kubectl wait --for=condition=create --timeout=1m -n $namespace pods -l app=garden-manager-egressgw"
                         sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-egressgw"
 
                         println "Applying core manifests"
@@ -208,6 +207,7 @@ pipeline {
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
+                        sh "kubectl wait --for=condition=create --timeout=1m -n $namespace pods -l app=garden-manager-core"
                         sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-core"
                     }
                 }
