@@ -31,3 +31,6 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: kube-system
+        - podSelector:
+            matchLabels:
+              istio: egressgateway

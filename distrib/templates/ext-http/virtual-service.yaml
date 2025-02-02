@@ -10,7 +10,6 @@ metadata:
 spec:
   exportTo:
     - "."
-    - istio-system
   hosts:
     - {{ host }}
   gateways:
@@ -23,7 +22,7 @@ spec:
           port: 80
         route:
           - destination:
-              host: istio-egressgateway.istio-system.svc.cluster.local
+              host: garden-manager-egressgw.{{ namespace }}.svc.cluster.local
               subset: {{ name }}
               port:
                 number: 80

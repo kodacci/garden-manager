@@ -130,8 +130,7 @@ pipeline {
 
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
-                        // istio operator
-//                        sh "jinja2 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
+
                         // Istio egress gateway
                         sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-deployment.yaml > distrib/egressgw-deployment.yaml"
                         sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-service.yaml > distrib/egressgw-service.yaml"
