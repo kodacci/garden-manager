@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: db-migrate
+        app.kubernetes.io/component: core
+        app.kubernetes.io/part-of: garden-manager
+        app.network.policy: restricted
     spec:
       restartPolicy: Never
       volumes:
