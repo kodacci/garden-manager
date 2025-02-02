@@ -18,6 +18,7 @@ spec:
       istio: egressgateway
       sidecar.istio.io/inject: "false"
       istio.io/rev: 1-18-2
+      app.network.policy: egress
   strategy:
     type: Recreate
   template:
@@ -33,6 +34,7 @@ spec:
         istio: egressgateway
         sidecar.istio.io/inject: "false"
         istio.io/rev: 1-18-2
+        app.network.policy: egress
     spec:
       affinity:
         nodeAffinity:

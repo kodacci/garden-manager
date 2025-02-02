@@ -12,6 +12,10 @@ spec:
   selector:
     matchLabels:
       app: garden-manager-core
+      app.kubernetes.io/name: garden-manager-core
+      app.kubernetes.io/component: core
+      app.kubernetes.io/part-of: garden-manager
+      app.network.policy: restricted
   strategy:
     type: Recreate
   template:
@@ -21,6 +25,7 @@ spec:
         app.kubernetes.io/name: garden-manager-core
         app.kubernetes.io/component: core
         app.kubernetes.io/part-of: garden-manager
+        app.network.policy: restricted
     spec:
       volumes:
         - name: logs-volume
