@@ -79,6 +79,14 @@ pipeline {
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         sh 'kubectl version'
 
+                        println "Deleting istio components"
+                        sh "kubectl delete deployment -l app.kubernetes.io/component=istio-egressgw -n $namespace"
+                        sh "kubectl wait --for=delete pod -l app=garden-manager-egressgw -n $namespace"
+                        sh "kubectl delete service -l app.kubernetes.io/component=istio-egressgw -n $namespace"
+                        sh "kubectl delete role -l app.kubernetes.io/component=istio-egressgw -n $namespace"
+                        sh "kubectl delete rolebinding -l app.kubernetes.io/component=istio-egressgw -n $namespace"
+                        sh "kubectl delete serviceaccount -l app.kubernetes.io/component=istio-egressgw -n $namespace"
+
                         println "Deleting core deployment and pods"
                         sh "kubectl delete deployment -l app.kubernetes.io/component=core -n $namespace"
                         sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout 10m -n $namespace"
@@ -123,7 +131,13 @@ pipeline {
                     withPythonEnv('Python-3') {
                         sh 'pip install -U jinja2-cli'
                         // istio operator
-                        sh "jinja2 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
+//                        sh "jinja2 -D namespace=$namespace distrib/templates/istio-operator.yaml > distrib/istio-operator.yaml"
+                        // Istio egress gateway
+                        sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-deployment.yaml > distrib/egressgw-deployment.yaml"
+                        sh "jinja2 -D namespace=$namespace -D egress_tcp_port=$egressTcpPort distrib/templates/istio/egressgw-service.yaml > distrib/egressgw-service.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/templates/istio/egressgw-service-account.yaml > distrib/egressgw-service-account.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/template/istio/egressgw-role.yaml > distrib/egressgw-role.yaml"
+                        sh "jinja2 -D namespace=$namespace distrib/template/istio/egressgw-role-binding.yaml > distrib/egressgw-role-binding.yaml"
 
                         // main app
                         sh "jinja2 -D namespace=$namespace -D registry=$registry -D image_tag=$coreImageTag -Dvault_address=http://${vaultHost} distrib/templates/deployment.yaml > distrib/deployment.yaml"
@@ -156,7 +170,7 @@ pipeline {
 
                     withKubeConfig([credentialsId: 'jenkins-k8s-cert', serverUrl: KUBERNETES_API_URL, namespace: namespace]) {
                         println "Applying istio operator"
-                        sh 'istioctl install -y -f distrib/istio-operator.yaml'
+//                        sh 'istioctl install -y -f distrib/istio-operator.yaml'
 
                         println "Applying core manifests"
                         sh 'kubectl apply ' +
@@ -185,6 +199,7 @@ pipeline {
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
+                        sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-core"
                     }
                 }
             }

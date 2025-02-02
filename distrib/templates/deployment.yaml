@@ -18,6 +18,9 @@ spec:
     metadata:
       labels:
         app: garden-manager-core
+        app.kubernetes.io/name: garden-manager-core
+        app.kubernetes.io/component: core
+        app.kubernetes.io/part-of: garden-manager
     spec:
       volumes:
         - name: logs-volume
