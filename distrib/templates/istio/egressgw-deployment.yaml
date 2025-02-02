@@ -53,7 +53,7 @@ spec:
           name: workload-certs
         - configMap:
             name: istio-ca-root-cert
-          name: istio-ca-cert
+          name: istiod-ca-cert
         - downwardAPI:
             items:
               - fieldRef:
