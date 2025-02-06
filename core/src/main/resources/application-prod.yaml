@@ -9,3 +9,8 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
+
+app:
+  security:
+    refresh-token-exp-timeout-sec: ${REFRESH_TOKEN_EXP_TIMEOUT_SEC}
+    access-token-exp-timeout-sec: ${ACCESS_TOKEN_EXP_TIMEOUT_SEC}

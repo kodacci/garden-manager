@@ -47,10 +47,10 @@ data:
       destination = "/vault/secrets/application/.env"
       error_on_missing_key = true
       contents = <<EOT
-    [[- with secret "ra-tech-kv/data/{{namespace}}/environment" -]]
-    [[- range $key, $value := .Data.data -]]
+    [[- with secret "ra-tech-kv/data/{{namespace}}/environment" ]]
+    [[- range $key, $value := .Data.data ]]
     [[ $key ]]="[[ $value ]]"
-    [[- end -]]
-    [[- end -]]
+    [[- end ]]
+    [[- end ]]
     EOT
     }
