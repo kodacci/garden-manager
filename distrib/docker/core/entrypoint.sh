@@ -8,13 +8,6 @@ do
   sleep 1
 done
 
-echo "Environment file found, applying ..."
+echo "Environment file found, starting main app ..."
 
-set -a
-source .env
-set +a
-env
-
-echo "Starting main app ..."
-
-java -jar /home/garden-manager/garden-manager-core.jar
+env -S "$(cat $ENV_PATH)" java -jar /home/garden-manager/garden-manager-core.jar
