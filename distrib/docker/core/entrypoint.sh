@@ -1,13 +1,13 @@
 #!/bin/bash
 
-CONFIG_PATH=/application/application.yaml
-echo "Configuration file path: $CONFIG_PATH"
-while [ ! -e $CONFIG_PATH ]
+ENV_PATH=/application/.env
+echo "Configuration file path: $ENV_PATH"
+while [ ! -e $ENV_PATH ]
 do
-  echo "Waiting for configuration file $CONFIG_PATH"
+  echo "Waiting application environment $ENV_PATH"
   sleep 1
 done
 
-echo "Configuration file found, executing main app ..."
+echo "Environment file found, starting main app ..."
 
-java -jar /home/garden-manager/garden-manager-core.jar --spring.config.location=$CONFIG_PATH
+env -S "$(cat $ENV_PATH)" java -jar /home/garden-manager/garden-manager-core.jar

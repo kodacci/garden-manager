@@ -40,9 +40,17 @@ data:
       role = "metrics_only"
     }
     
-    # Render application.yaml from vault
+    # Render env file from vault
     template {
-      contents = {{ '"{{ with secret \\"ra-tech-kv/data/garden-manager-test/application\\" }}{{ .Data.data.config }}{{ end }}"' }}
-      destination = "/vault/secrets/application/application.yaml"
+      left_delimiter = "[["
+      right_delimiter = "]]"
+      destination = "/vault/secrets/application/.env"
       error_on_missing_key = true
+      contents = <<EOT
+    [[- with secret "ra-tech-kv/data/{{namespace}}/environment" ]]
+    [[- range $key, $value := .Data.data ]]
+    [[ $key ]]="[[ $value ]]"
+    [[- end ]]
+    [[- end ]]
+    EOT
     }
