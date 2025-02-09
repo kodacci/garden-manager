@@ -142,7 +142,7 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-deploy.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw -X --log-file \"$logFileName\" deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                            sh "./mvnw --log-file \"$logFileName\" deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
