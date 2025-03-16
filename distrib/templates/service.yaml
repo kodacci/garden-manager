@@ -11,11 +11,11 @@ spec:
   selector:
     app: garden-manager-core
   ports:
-    - name: http-rest-api
+    - name: core-rest-api
       protocol: TCP
       port: 8080
       targetPort: core-rest-api
-    - name: http-actuator
+    - name: core-actuator
       protocol: TCP
       port: 8081
       targetPort: core-actuator
