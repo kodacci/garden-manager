@@ -73,10 +73,10 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 200m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 200m
+              cpu: 50m
               memory: 150Mi
 
       imagePullSecrets:

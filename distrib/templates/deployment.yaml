@@ -111,10 +111,10 @@ spec:
             failureThreshold: 10
           resources:
             requests:
-              cpu: 250
+              cpu: 250m
               memory: 1Gi
             limits:
-              cpu: 250
+              cpu: 250m
               memory: 1Gi
 
         - name: fluentbit
