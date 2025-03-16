@@ -27,8 +27,8 @@ spec:
         app.kubernetes.io/part-of: garden-manager
         app.network.policy: restricted
         sidecar.istio.io/proxyCPU: '100m'
-        sidecar.istio.io/proxyCPULimit: '150m'
-        sidecar.istio.io/proxyMemory: '128Mi'
+        sidecar.istio.io/proxyCPULimit: '100m'
+        sidecar.istio.io/proxyMemory: '256Mi'
         sidecar.istio.io/proxyMemoryLimit: '256Mi'
     spec:
       volumes:
@@ -99,33 +99,33 @@ spec:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: 10
-            periodSeconds: 3
+            initialDelaySeconds: 40
+            periodSeconds: 5
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 15
+            initialDelaySeconds: 40
             periodSeconds: 5
             failureThreshold: 10
           resources:
             requests:
-              cpu: 1
-              memory: 2Gi
+              cpu: 500m
+              memory: 1Gi
             limits:
-              cpu: 1.5
-              memory: 3Gi
+              cpu: 500m
+              memory: 1Gi
 
         - name: fluentbit
           image: fluent/fluent-bit:3.1.4
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 150m
-              memory: 200Mi
+              cpu: 50m
+              memory: 100Mi
           env:
             - name: POD_NAME
               valueFrom:
@@ -155,16 +155,16 @@ spec:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 20
-            periodSeconds: 3
-            failureThreshold: 10
+            initialDelaySeconds: 40
+            periodSeconds: 5
+            failureThreshold: 15
           livenessProbe:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 25
+            initialDelaySeconds: 40
             periodSeconds: 5
-            failureThreshold: 10
+            failureThreshold: 15
 
         - name: vault-agent
           image: hashicorp/vault:1.18
@@ -187,10 +187,10 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 200m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 200m
+              cpu: 50m
               memory: 150Mi
 
       imagePullSecrets:
