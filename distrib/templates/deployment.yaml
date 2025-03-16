@@ -99,14 +99,14 @@ spec:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: 10
-            periodSeconds: 3
+            initialDelaySeconds: 40
+            periodSeconds: 5
             failureThreshold: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 15
+            initialDelaySeconds: 40
             periodSeconds: 5
             failureThreshold: 10
           resources:
@@ -155,16 +155,16 @@ spec:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 20
-            periodSeconds: 3
-            failureThreshold: 10
+            initialDelaySeconds: 40
+            periodSeconds: 5
+            failureThreshold: 15
           livenessProbe:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 25
+            initialDelaySeconds: 40
             periodSeconds: 5
-            failureThreshold: 10
+            failureThreshold: 15
 
         - name: vault-agent
           image: hashicorp/vault:1.18
