@@ -205,6 +205,7 @@ pipeline {
                         println "Starting db migrations job"
                         sh 'kubectl apply -f distrib/core-db-migrate-job.yaml'
                         println "Waiting for db migrations job to succeed"
+                        sleep time: 3, unit: 'SECONDS'
                         sh "kubectl wait --for=condition=complete --timeout=5m -n $namespace job/core-db-migrate"
 
                         // Deploying main app
