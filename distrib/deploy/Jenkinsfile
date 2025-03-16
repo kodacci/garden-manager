@@ -90,7 +90,7 @@ pipeline {
 
                         println "Deleting core deployment and pods"
                         sh "kubectl delete deployment -l app.kubernetes.io/component=core -n $namespace"
-                        sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout 10m -n $namespace"
+                        sh "kubectl wait --for=delete pod -l app=garden-manager-core --timeout=10m -n $namespace"
 
                         println "Deleting other core manifests"
                         sh "kubectl delete service -l app.kubernetes.io/component=core -n $namespace"
@@ -206,12 +206,12 @@ pipeline {
                         sh 'kubectl apply -f distrib/core-db-migrate-job.yaml'
                         println "Waiting for db migrations job to succeed"
                         sleep time: 3, unit: 'SECONDS'
-                        sh "kubectl wait --for=condition=complete --timeout=5m -n $namespace job/core-db-migrate"
+                        sh "kubectl wait --for=condition=complete --timeout=10m -n $namespace job/core-db-migrate"
 
                         // Deploying main app
                         sh 'kubectl apply -f distrib/deployment.yaml'
                         sleep time: 3, unit: 'SECONDS'
-                        sh "kubectl wait --for=condition=ready --timeout=5m -n $namespace pods -l app=garden-manager-core"
+                        sh "kubectl wait --for=condition=ready --timeout=10m -n $namespace pods -l app=garden-manager-core"
                     }
                 }
             }
