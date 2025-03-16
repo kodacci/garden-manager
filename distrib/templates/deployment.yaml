@@ -27,8 +27,8 @@ spec:
         app.kubernetes.io/part-of: garden-manager
         app.network.policy: restricted
         sidecar.istio.io/proxyCPU: '100m'
-        sidecar.istio.io/proxyCPULimit: '150m'
-        sidecar.istio.io/proxyMemory: '128Mi'
+        sidecar.istio.io/proxyCPULimit: '100m'
+        sidecar.istio.io/proxyMemory: '256Mi'
         sidecar.istio.io/proxyMemoryLimit: '256Mi'
     spec:
       volumes:
@@ -111,20 +111,20 @@ spec:
             failureThreshold: 10
           resources:
             requests:
-              cpu: 1
-              memory: 2Gi
+              cpu: 250
+              memory: 1Gi
             limits:
-              cpu: 1.5
-              memory: 3Gi
+              cpu: 250
+              memory: 1Gi
 
         - name: fluentbit
           image: fluent/fluent-bit:3.1.4
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 150m
+              cpu: 50m
               memory: 200Mi
           env:
             - name: POD_NAME
@@ -187,10 +187,10 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 200m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 200m
+              cpu: 50m
               memory: 150Mi
 
       imagePullSecrets:
