@@ -15,7 +15,7 @@ spec:
       app.kubernetes.io/name: garden-manager-egressgw
       app.kubernetes.io/component: istio-egressgw
       app.kubernetes.io/part-of: garden-manager
-      istio: egressgateway
+      istio: {{ namespace }}-egressgateway
       sidecar.istio.io/inject: "false"
       istio.io/rev: 1-18-2
       app.network.policy: egress
@@ -31,7 +31,7 @@ spec:
         app.kubernetes.io/name: garden-manager-egressgw
         app.kubernetes.io/component: istio-egressgw
         app.kubernetes.io/part-of: garden-manager
-        istio: egressgateway
+        istio: {{ namespace }}-egressgateway
         sidecar.istio.io/inject: "false"
         istio.io/rev: 1-18-2
         app.network.policy: egress
@@ -93,10 +93,10 @@ spec:
           image: docker.io/istio/proxyv2:1.18.2
           resources:
             limits:
-              cpu: 200m
-              memory: 512Mi
+              cpu: 150m
+              memory: 128Mi
             requests:
-              cpu: 100m
+              cpu: 150m
               memory: 128Mi
           ports:
             - containerPort: {{ egress_tcp_port }}
