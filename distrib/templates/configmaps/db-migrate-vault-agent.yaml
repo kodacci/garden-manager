@@ -42,7 +42,13 @@ data:
     
     # Render liquibase.properties from vault
     template {
-      contents = {{ '"{{ with secret \\"ra-tech-kv/data/garden-manager-test/db-migrate\\" }}{{ .Data.data.liquibase }}{{ end }}"' }}
+      left_delimiter = "[["
+      right_delimiter = "]]"
       destination = "/vault/secrets/liquibase/liquibase.properties"
       error_on_missing_key = true
+      contents = <<EOT
+    [[- with secret "ra-tech-kv/data/{{ namespace }}/db-migrate" ]]
+    [[- .Data.data.liquibase ]]
+    [[- end ]]
+    EOT
     }
