@@ -26,6 +26,10 @@ public class MdcSetterFilter extends OncePerRequestFilter {
         if (rqUid != null) {
             MDC.put("rqUid", rqUid);
         }
+        val rqTm = request.getHeader("rqTm");
+        if (rqTm != null) {
+            MDC.put("rqTm", rqTm);
+        }
 
         val auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
@@ -35,9 +39,11 @@ public class MdcSetterFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);
-
-        log.debug("Clearing MDC");
-        MDC.clear();
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            log.debug("Clearing MDC");
+            MDC.clear();
+        }
     }
 }
