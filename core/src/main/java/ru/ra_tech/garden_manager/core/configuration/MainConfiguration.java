@@ -6,6 +6,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
@@ -31,6 +32,10 @@ import ru.ra_tech.garden_manager.database.repositories.api.UserRoleRepository;
 @Import(DatabaseConfiguration.class)
 @EnableAspectJAutoProxy
 @Slf4j
+@ComponentScan({
+        "ru.ra_tech.garden_manager.core.controllers",
+        "ru.ra_tech.garden_manager.core.filter"
+})
 public class MainConfiguration {
     @Bean
     public UserService userService(UserRepository repo, PasswordEncoder passwordEncoder) {

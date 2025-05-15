@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import ru.ra_tech.garden_manager.core.controllers.ApiErrorResponses;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginResponse;
@@ -33,7 +35,10 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> login(@Valid @RequestBody LoginRequest request);
+    ResponseEntity<Object> login(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @Valid @RequestBody LoginRequest request
+    );
 
     @Operation(summary = "Refresh token")
     @ApiResponses(value = {
@@ -48,7 +53,10 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> refresh(@Valid @RequestBody RefreshRequest request);
+    ResponseEntity<Object> refresh(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @Valid @RequestBody RefreshRequest request
+    );
 
     @Operation(summary = "Logout")
     @ApiResponses(value = {
@@ -63,5 +71,5 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> logout();
+    ResponseEntity<Object> logout(@NotEmpty @RequestHeader("rqUid") String rqUid);
 }

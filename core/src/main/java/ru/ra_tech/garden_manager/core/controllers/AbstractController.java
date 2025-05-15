@@ -5,6 +5,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,20 +24,21 @@ public abstract class AbstractController {
     private record EmptyResponse() {}
 
     private ResponseEntity<Object> toError(AppErrorResponse error) {
+        MDC.clear();
         val headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
         Optional.ofNullable(error.getThrowable())
-                .ifPresent(ex -> log.error("Error while handling request:", ex));
+                .ifPresent(ex -> log.error("Error while handling request: {}", ex.getMessage()));
 
         return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
     }
 
     protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result, HttpStatus status) {
         return result.fold(
-                    this::toError,
-                    data -> new ResponseEntity<>(data, status)
-                );
+                this::toError,
+                data -> { MDC.clear(); return new ResponseEntity<>(data, status); }
+        );
     }
 
     protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result) {
@@ -46,7 +48,7 @@ public abstract class AbstractController {
     protected <T> ResponseEntity<Object> toEmptyResponse(Either<? extends  AppErrorResponse, T> result) {
         return result.fold(
                 this::toError,
-                data -> new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK)
+                data -> { MDC.clear(); return new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK); }
         );
     }
 

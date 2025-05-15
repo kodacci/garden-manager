@@ -4,6 +4,7 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
@@ -27,7 +28,9 @@ class ApiExceptionHandlerIT extends AbstractApiIT {
         when(authService.login(anyString(), anyString())).thenThrow(new RuntimeException(message));
 
         val request = new LoginRequest("test", "abc12345");
-        val response = getRestTemplate().postForEntity(LOGIN_URL, request, ProblemResponse.class);
+        val response = getRestTemplate().postForEntity(
+                LOGIN_URL, new HttpEntity<>(request, generateTraceHeaders()), ProblemResponse.class
+        );
 
         assertProblemResponse(response, HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -43,7 +46,9 @@ class ApiExceptionHandlerIT extends AbstractApiIT {
         val message = "Dummy exception";
         when(authService.login(anyString(), anyString())).thenThrow(new AuthenticationException(message) {});
         val request = new LoginRequest("test", "abc12345");
-        val response = getRestTemplate().postForEntity(LOGIN_URL, request, ProblemResponse.class);
+        val response = getRestTemplate().postForEntity(
+                LOGIN_URL, new HttpEntity<>(request, generateTraceHeaders()), ProblemResponse.class
+        );
 
         assertProblemResponse(response, HttpStatus.UNAUTHORIZED);
 
