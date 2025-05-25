@@ -34,8 +34,8 @@ public class MdcSetterFilter extends OncePerRequestFilter {
         val auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             val principal = auth.getPrincipal();
-            if (principal instanceof JwtPrincipal) {
-                MDC.put("userId", Long.toString(((JwtPrincipal) principal).id()));
+            if (principal instanceof JwtPrincipal jwtPrincipal) {
+                MDC.put("userId", Long.toString(jwtPrincipal.id()));
             }
         }
 
