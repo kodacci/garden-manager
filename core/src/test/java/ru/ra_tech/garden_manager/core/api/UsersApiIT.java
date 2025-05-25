@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.dto.ProblemResponse;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.CreateUserRequest;
@@ -36,7 +37,9 @@ class UsersApiIT extends AbstractApiIT {
         val request = new CreateUserRequest(
                 "tester", "Testov Tester", "test@example.com", "abc12345"
         );
-        val response = getRestTemplate().postForEntity(USERS_API_URL, request, UserData.class);
+        val response = getRestTemplate().postForEntity(
+                USERS_API_URL, new HttpEntity<>(request, generateTraceHeaders()), UserData.class
+        );
 
         assertHttpResponse(response, HttpStatus.CREATED);
 
@@ -85,9 +88,13 @@ class UsersApiIT extends AbstractApiIT {
                 "duplicateUser", "Duplicate user", null, "abc12345"
         );
 
-        getRestTemplate().postForEntity(USERS_API_URL, user, UserData.class);
+        getRestTemplate().postForEntity(
+                USERS_API_URL, new HttpEntity<>(user, generateTraceHeaders()), UserData.class
+        );
 
-        val response = getRestTemplate().postForEntity(USERS_API_URL, user, ProblemResponse.class);
+        val response = getRestTemplate().postForEntity(
+                USERS_API_URL, new HttpEntity<>(user, generateTraceHeaders()), ProblemResponse.class
+        );
         assertHttpResponse(response, HttpStatus.CONFLICT, MediaType.APPLICATION_PROBLEM_JSON);
 
         val body = response.getBody();
@@ -139,7 +146,9 @@ class UsersApiIT extends AbstractApiIT {
     void shouldReturnErrorOnAddingInvalidUser() {
         val user = new CreateUserRequest("a", null, "not-email", "123");
 
-        val response = getRestTemplate().postForEntity(USERS_API_URL, user, ProblemResponse.class);
+        val response = getRestTemplate().postForEntity(
+                USERS_API_URL, new HttpEntity<>(user, generateTraceHeaders()), ProblemResponse.class
+        );
         assertProblemResponse(response, HttpStatus.BAD_REQUEST);
 
         val body = response.getBody();
@@ -156,7 +165,7 @@ class UsersApiIT extends AbstractApiIT {
     void shouldReturnUnauthorizedOnNoToken() {
         val response = getRestTemplate().postForEntity(
                 String.format("%s/1", USERS_API_URL),
-                new RefreshRequest(UUID.randomUUID().toString()),
+                new HttpEntity<>(new RefreshRequest(UUID.randomUUID().toString()), generateTraceHeaders()),
                 ProblemResponse.class
         );
 

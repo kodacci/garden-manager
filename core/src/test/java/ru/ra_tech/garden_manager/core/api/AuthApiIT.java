@@ -56,7 +56,8 @@ class AuthApiIT extends AbstractApiIT {
         writeUser(getDsl(), user);
 
         val request = new LoginRequest(user.login(), user.password());
-        val response = getRestTemplate().postForEntity(LOGIN_URL, request, LoginResponse.class);
+        val entity = new HttpEntity<>(request, generateTraceHeaders());
+        val response = getRestTemplate().postForEntity(LOGIN_URL, entity, LoginResponse.class);
 
         assertHttpResponse(response);
 
@@ -81,13 +82,13 @@ class AuthApiIT extends AbstractApiIT {
         writeUser(getDsl(), user);
 
         val request = new LoginRequest(user.login(), user.password());
-        val tokens = getRestTemplate().postForEntity(LOGIN_URL, request, LoginResponse.class).getBody();
+        val tokens = getRestTemplate().postForEntity(LOGIN_URL, new HttpEntity<>(request, generateTraceHeaders()), LoginResponse.class).getBody();
         assertThat(tokens).isNotNull();
         assertThat(tokens.accessToken()).isNotNull().isInstanceOf(String.class);
 
         val headers = new HttpHeaders();
         headers.setBearerAuth(tokens.accessToken());
-        val entity = new HttpEntity<>(headers);
+        val entity = new HttpEntity<>(generateTraceHeaders(headers));
 
         val response = getRestTemplate().postForEntity(
                 String.format("%s/logout", AUTH_API_URL), entity, LogoutResponse.class
@@ -106,13 +107,16 @@ class AuthApiIT extends AbstractApiIT {
         writeUser(getDsl(), user);
 
         val request = new LoginRequest(user.login(), user.password());
-        val tokens = getRestTemplate().postForEntity(LOGIN_URL, request, LoginResponse.class).getBody();
+        val tokens = getRestTemplate().postForEntity(
+                LOGIN_URL, new HttpEntity<>(request, generateTraceHeaders()), LoginResponse.class
+        )
+                .getBody();
         assertThat(tokens).isNotNull();
         assertThat(tokens.refreshToken()).isNotNull().isInstanceOf(String.class);
 
         val response = getRestTemplate().postForEntity(
                 String.format("%s/refresh", AUTH_API_URL),
-                new RefreshRequest(tokens.refreshToken()),
+                new HttpEntity<>(new RefreshRequest(tokens.refreshToken()), generateTraceHeaders()),
                 LoginResponse.class
         );
 
@@ -130,7 +134,9 @@ class AuthApiIT extends AbstractApiIT {
     void shouldRejectAuth() {
         val url = String.format("http://localhost:%d%s", getServletCtx().getWebServer().getPort(), LOGIN_URL);
         val request = new LoginRequest("nonExistent", "abc12345");
-        val response = getCustomRestTemplate().postForEntity(url, request, ProblemResponse.class);
+        val response = getCustomRestTemplate().postForEntity(
+                url, new HttpEntity<>(request, generateTraceHeaders()), ProblemResponse.class
+        );
 
         assertProblemResponse(response, HttpStatus.UNAUTHORIZED);
 

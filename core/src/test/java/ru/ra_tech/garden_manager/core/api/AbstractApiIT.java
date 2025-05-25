@@ -27,6 +27,8 @@ import ru.ra_tech.garden_manager.database.configuration.DatabaseConfiguration;
 import ru.ra_tech.garden_manager.database.repositories.user.UserDto;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,6 +106,21 @@ class AbstractApiIT {
         val headers = new HttpHeaders();
         headers.setBearerAuth(generateToken(toPrincipal(user)));
         headers.setContentType(MediaType.APPLICATION_JSON);
+        generateTraceHeaders(headers);
+
+        return headers;
+    }
+
+    protected HttpHeaders generateTraceHeaders() {
+        val headers = new HttpHeaders();
+        generateTraceHeaders(headers);
+
+        return headers;
+    }
+
+    protected HttpHeaders generateTraceHeaders(HttpHeaders headers) {
+        headers.set("RqUID", UUID.randomUUID().toString());
+        headers.set("RqTm", OffsetDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
         return headers;
     }

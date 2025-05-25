@@ -7,16 +7,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import ru.ra_tech.garden_manager.core.controllers.ApiErrorResponses;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.CreateGardenRequest;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenData;
 import ru.ra_tech.garden_manager.core.controllers.gardens.dto.GardenParticipantData;
+
+import java.time.OffsetDateTime;
 
 @Validated
 @Tag(name = "Gardens")
@@ -34,7 +39,11 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> createGarden(@RequestBody CreateGardenRequest request);
+    ResponseEntity<Object> createGarden(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
+            @RequestBody CreateGardenRequest request
+    );
 
     @Operation(summary = "Find garden by id")
     @ApiResponses(value = {
@@ -49,7 +58,11 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> findGarden(@Positive @PathVariable Long id);
+    ResponseEntity<Object> findGarden(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
+            @Positive @PathVariable Long id
+    );
 
     @Operation(summary = "List user related gardens")
     @ApiResponses(value = {
@@ -64,7 +77,10 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> listGardens();
+    ResponseEntity<Object> listGardens(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm
+    );
 
     @Operation(summary = "Add participant to garden")
     @ApiResponses(value = {
@@ -80,10 +96,10 @@ public interface GardensApi extends ApiErrorResponses {
             )
     })
     ResponseEntity<Object> addParticipant(
-            @Positive @PathVariable
-            Long id,
-            @Positive @PathVariable
-            Long participantId
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
+            @Positive @PathVariable Long id,
+            @Positive @PathVariable Long participantId
     );
 
     @Operation(summary = "Delete garden")
@@ -93,7 +109,11 @@ public interface GardensApi extends ApiErrorResponses {
                     description = "Successfully deleted garden"
             )
     })
-    ResponseEntity<Object> deleteGarden(@Positive @PathVariable Long id);
+    ResponseEntity<Object> deleteGarden(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
+            @Positive @PathVariable Long id
+    );
 
     @Operation(summary = "Update garden")
     @ApiResponses(value = {
@@ -108,5 +128,10 @@ public interface GardensApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> updateGarden(@Positive @PathVariable Long id, @RequestBody CreateGardenRequest update);
+    ResponseEntity<Object> updateGarden(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
+            @Positive @PathVariable Long id,
+            @RequestBody CreateGardenRequest update
+    );
 }
