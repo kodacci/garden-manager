@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,8 @@ import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LogoutResponse;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
+
+import java.time.OffsetDateTime;
 
 @Validated
 @Tag(name = "Authorization")
@@ -37,6 +40,7 @@ public interface AuthApi extends ApiErrorResponses {
     })
     ResponseEntity<Object> login(
             @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
             @Valid @RequestBody LoginRequest request
     );
 
@@ -55,6 +59,7 @@ public interface AuthApi extends ApiErrorResponses {
     })
     ResponseEntity<Object> refresh(
             @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm,
             @Valid @RequestBody RefreshRequest request
     );
 
@@ -71,5 +76,8 @@ public interface AuthApi extends ApiErrorResponses {
                     }
             )
     })
-    ResponseEntity<Object> logout(@NotEmpty @RequestHeader("rqUid") String rqUid);
+    ResponseEntity<Object> logout(
+            @NotEmpty @RequestHeader("rqUid") String rqUid,
+            @NotNull @RequestHeader("rqTm") OffsetDateTime rqTm
+    );
 }

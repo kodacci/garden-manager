@@ -5,7 +5,6 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +15,8 @@ import ru.ra_tech.garden_manager.core.controllers.error_responses.AppErrorRespon
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
 import ru.ra_tech.garden_manager.core.security.JwtPrincipal;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Slf4j
@@ -23,9 +24,16 @@ public abstract class AbstractController {
     @JsonSerialize
     private record EmptyResponse() {}
 
-    private ResponseEntity<Object> toError(AppErrorResponse error) {
-        MDC.clear();
+    private HttpHeaders generateTraceHeaders(String rqUid, OffsetDateTime rqTm) {
         val headers = new HttpHeaders();
+        headers.set("rqUID", rqUid);
+        headers.set("rqTm", rqTm.format(DateTimeFormatter.ISO_DATE_TIME));
+
+        return headers;
+    }
+
+    private ResponseEntity<Object> toError(AppErrorResponse error, String rqUid, OffsetDateTime rqTm) {
+        val headers = generateTraceHeaders(rqUid, rqTm);
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
         Optional.ofNullable(error.getThrowable())
@@ -34,21 +42,36 @@ public abstract class AbstractController {
         return new ResponseEntity<>(error.getBody(), headers, error.getStatusCode());
     }
 
-    protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result, HttpStatus status) {
+    protected <T> ResponseEntity<Object> toResponse(
+            Either<? extends AppErrorResponse, T> result,
+            HttpStatus status,
+            String rqUid,
+            OffsetDateTime rqTm
+    ) {
         return result.fold(
-                this::toError,
-                data -> { MDC.clear(); return new ResponseEntity<>(data, status); }
+                error -> toError(error, rqUid, rqTm),
+                data -> new ResponseEntity<>(data, status)
         );
     }
 
-    protected <T> ResponseEntity<Object> toResponse(Either<? extends AppErrorResponse, T> result) {
-        return toResponse(result, HttpStatus.OK);
+    protected <T> ResponseEntity<Object> toResponse(
+            Either<? extends AppErrorResponse, T> result,
+            String rqUid,
+            OffsetDateTime rqTm
+    ) {
+        return toResponse(result, HttpStatus.OK, rqUid, rqTm);
     }
 
-    protected <T> ResponseEntity<Object> toEmptyResponse(Either<? extends  AppErrorResponse, T> result) {
+    protected <T> ResponseEntity<Object> toEmptyResponse(
+            Either<? extends  AppErrorResponse, T> result,
+            String rqUid,
+            OffsetDateTime rqTm
+    ) {
+        val headers = generateTraceHeaders(rqUid, rqTm);
+
         return result.fold(
-                this::toError,
-                data -> { MDC.clear(); return new ResponseEntity<>(new EmptyResponse(), HttpStatus.OK); }
+                error -> toError(error, rqUid, rqTm),
+                data -> new ResponseEntity<>(new EmptyResponse(), headers, HttpStatus.OK)
         );
     }
 

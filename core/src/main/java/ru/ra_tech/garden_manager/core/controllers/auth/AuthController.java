@@ -15,6 +15,8 @@ import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.RefreshRequest;
 import ru.ra_tech.garden_manager.core.services.api.AuthService;
 
+import java.time.OffsetDateTime;
+
 @RestController
 @RequestMapping(
         value = "/api/v1/auth",
@@ -31,11 +33,12 @@ public class AuthController extends AbstractController implements AuthApi {
     @Timed("auth.login")
     public ResponseEntity<Object> login(
             @RequestHeader("rqUid") String rqUid,
+            @RequestHeader("rqTm") OffsetDateTime rqTm,
             @RequestBody LoginRequest request
     ) {
         log.info("Authenticating user {}", request.login());
 
-        return toResponse(service.login(request.login(), request.password()));
+        return toResponse(service.login(request.login(), request.password()), rqUid, rqTm);
     }
 
     @Override
@@ -43,20 +46,26 @@ public class AuthController extends AbstractController implements AuthApi {
     @Timed("auth.refresh")
     public ResponseEntity<Object> refresh(
             @RequestHeader("rqUid") String rqUid,
+            @RequestHeader("rqTm") OffsetDateTime rqTm,
             @RequestBody RefreshRequest request
     ) {
         log.info("Refreshing user token");
 
-        return toResponse(service.refresh(request.refreshToken()));
+        return toResponse(service.refresh(request.refreshToken()), rqUid, rqTm);
     }
 
     @Override
     @PostMapping(value = "/logout", consumes = MediaType.ALL_VALUE)
     @Timed("auth.logout")
-    public ResponseEntity<Object> logout(@RequestHeader("rqUid") String rqUid) {
+    public ResponseEntity<Object> logout(
+            @RequestHeader("rqUid") String rqUid,
+            @RequestHeader("rqTm") OffsetDateTime rqTm
+    ) {
         return toResponse(
                 getUserId().peek(userId -> log.info("Logging out for {}", userId))
-                        .flatMap(service::logout)
+                        .flatMap(service::logout),
+                rqUid,
+                rqTm
         );
     }
 }
