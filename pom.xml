@@ -61,7 +61,7 @@
         <jooq.version>3.20.4</jooq.version>
         <jjwt.version>0.11.5</jjwt.version>
         <jooq.cordegen.manen.version>3.20.4</jooq.cordegen.manen.version>
-        <jacoco.maven.plugin.version>0.8.11</jacoco.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.8.13</jacoco.maven.plugin.version>
         <testcontainers.version>1.21.0</testcontainers.version>
         <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
         <mockito.version>5.8.0</mockito.version>
