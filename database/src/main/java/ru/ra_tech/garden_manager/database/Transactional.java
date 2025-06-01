@@ -9,6 +9,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -24,7 +25,16 @@ public class Transactional {
     }
 
     public <R, F> Either<F, R> execute(TransactionCallback<Either<F, R>> callback, Function<AppFailure, F> failureMapper) {
-        return Try.of(() -> trx.execute(callback))
+        return Try.of(
+            () -> Optional.ofNullable(
+                    trx.execute(
+                            status -> Optional.ofNullable(callback.doInTransaction(status))
+                                    .map(res -> res.peekLeft(failure -> status.setRollbackOnly()))
+                                    .orElse(Either.right(null))
+                            )
+                    )
+                    .orElse(Either.right(null))
+        )
                 .getOrElseGet(throwable -> Either.left(failureMapper.apply(toFailure(throwable))));
     }
 }
