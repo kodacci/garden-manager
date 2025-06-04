@@ -3,10 +3,10 @@ package ru.ra_tech.garden_manager.core.api;
 import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.ra_tech.garden_manager.core.controllers.auth.dto.LoginRequest;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.dto.ProblemResponse;
 import ru.ra_tech.garden_manager.core.services.api.AuthService;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 class ApiExceptionHandlerIT extends AbstractApiIT {
     private static final String LOGIN_URL = "/api/v1/auth/login";
 
-    @MockBean
+    @MockitoBean
     private AuthService authService;
 
     @Test()

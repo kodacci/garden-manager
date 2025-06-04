@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.core.controllers.error_responses;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 
 import java.net.URI;
 

@@ -6,7 +6,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.failure.DatabaseFailure;
 import ru.ra_tech.garden_manager.failure.AppFailure;

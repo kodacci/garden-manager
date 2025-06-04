@@ -8,7 +8,7 @@ import io.vavr.control.Try;
 import org.jooq.DSLContext;
 import org.jooq.Record8;
 import org.jooq.SelectOnConditionStep;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.AbstractRWRepository;
 import ru.ra_tech.garden_manager.database.repositories.api.GardenRepository;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;

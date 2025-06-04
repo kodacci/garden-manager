@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.failure;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 @RequiredArgsConstructor
 public abstract class AbstractFailure implements AppFailure {

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenParticipantDto;
 import ru.ra_tech.garden_manager.database.repositories.user_role.UserRole;
 

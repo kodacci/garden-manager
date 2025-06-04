@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 import ru.ra_tech.garden_manager.core.controllers.users.dto.UserData;
 import ru.ra_tech.garden_manager.database.repositories.garden.GardenDto;
 
