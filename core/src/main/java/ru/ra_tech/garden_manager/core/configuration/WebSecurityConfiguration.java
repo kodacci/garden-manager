@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -36,9 +35,8 @@ public class WebSecurityConfiguration {
             AuthUserRepositoryImpl userRepo,
             JwtProvider jwtProvider
     ) {
-        val dao = new DaoAuthenticationProvider();
+        val dao = new DaoAuthenticationProvider(service);
         dao.setPasswordEncoder(encoder);
-        dao.setUserDetailsService(service);
 
         return new ProviderManager(dao, new JwtAuthenticationProvider(userRepo, jwtProvider));
     }

@@ -15,16 +15,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import ru.ra_tech.garden_manager.core.controllers.error_responses.UnauthorizedResponse;
 
 import java.io.IOException;
-
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 public class JwtAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
     private static final String API_URL_PATTERN = "/api/**";
@@ -36,12 +34,15 @@ public class JwtAuthenticationProcessingFilter extends AbstractAuthenticationPro
 
     static {
         REQUEST_MATCHER = new AndRequestMatcher(
-                antMatcher(API_URL_PATTERN),
+                PathPatternRequestMatcher.withDefaults().matcher(API_URL_PATTERN),
                 new NegatedRequestMatcher(
-                        new OrRequestMatcher(antMatcher(LOGIN_URL_PATTERN), antMatcher(REFRESH_URL_PATTERN))
+                        new OrRequestMatcher(
+                                PathPatternRequestMatcher.withDefaults().matcher(LOGIN_URL_PATTERN),
+                                PathPatternRequestMatcher.withDefaults().matcher(REFRESH_URL_PATTERN)
+                        )
                 ),
                 new NegatedRequestMatcher(
-                        new AntPathRequestMatcher(CREATE_USER_PATTERN, HttpMethod.POST.toString())
+                        PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, CREATE_USER_PATTERN)
                 )
         );
     }
