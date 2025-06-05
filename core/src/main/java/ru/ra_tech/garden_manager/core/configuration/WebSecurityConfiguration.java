@@ -36,9 +36,8 @@ public class WebSecurityConfiguration {
             AuthUserRepositoryImpl userRepo,
             JwtProvider jwtProvider
     ) {
-        val dao = new DaoAuthenticationProvider();
+        val dao = new DaoAuthenticationProvider(service);
         dao.setPasswordEncoder(encoder);
-        dao.setUserDetailsService(service);
 
         return new ProviderManager(dao, new JwtAuthenticationProvider(userRepo, jwtProvider));
     }
