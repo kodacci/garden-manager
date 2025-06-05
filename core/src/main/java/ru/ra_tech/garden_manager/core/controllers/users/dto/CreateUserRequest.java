@@ -3,7 +3,7 @@ package ru.ra_tech.garden_manager.core.controllers.users.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 
 public record CreateUserRequest(
         @NotNull @Size(min = 3, max = 255)

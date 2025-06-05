@@ -1,6 +1,6 @@
 package ru.ra_tech.garden_manager.database.repositories.auth;
 
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 
 public record AuthUserDto(
         long id,

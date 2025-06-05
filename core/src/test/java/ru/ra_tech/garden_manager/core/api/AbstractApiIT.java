@@ -3,7 +3,6 @@ package ru.ra_tech.garden_manager.core.api;
 import lombok.Getter;
 import lombok.val;
 import org.jooq.DSLContext;
-import org.jooq.User;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,9 +54,10 @@ class AbstractApiIT {
     @Autowired
     private ServletWebServerApplicationContext servletCtx;
 
-    private final RestTemplate customRestTemplate = new RestTemplate();
+    private final RestTemplate customRestTemplate;
 
-    {
+    public AbstractApiIT() {
+        customRestTemplate = new RestTemplate();
         customRestTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         customRestTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override

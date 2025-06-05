@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.database.repositories.api;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 

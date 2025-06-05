@@ -2,7 +2,7 @@ package ru.ra_tech.garden_manager.failure;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
+import javax.annotation.Nullable;
 
 @Getter
 public class DatabaseFailure extends AbstractFailure {
