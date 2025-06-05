@@ -40,7 +40,7 @@ pipeline {
                         PROJECT_VERSION = sh(
                                 encoding: 'UTF-8',
                                 returnStdout: true,
-                                script: './mvnw help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
+                                script: './mvnw --global-settings \$GLOBAL_MVN_SETTINGS help:evaluate "-Dexpression=project.version" -B -Dsytle.color=never -q -DforceStdout'
                         ).trim()
                         DEPLOY_GIT_SCOPE =
                                 sh(encoding: 'UTF-8', returnStdout: true, script: 'git name-rev --name-only HEAD')
@@ -62,7 +62,7 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-build.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw --log-file \"$logFileName\" -DskipTests -Dskip.jooq.generation=true clean package"
+                            sh "./mvnw --global-settings \$GLOBAL_MVN_SETTINGS --log-file \"$logFileName\" -DskipTests -Dskip.jooq.generation=true clean package"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
@@ -81,7 +81,7 @@ pipeline {
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
                             docker.withServer(DOCKER_HOST, 'jenkins-client-cert') {
-                                sh "./mvnw --log-file \"$logFileName\" verify -Dskip.jooq.generation"
+                                sh "./mvnw --global-settings \$GLOBAL_MVN_SETTINGS --log-file \"$logFileName\" verify -Dskip.jooq.generation"
                             }
                         }
 
@@ -112,7 +112,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('Sonar RA-Tech') {
                     withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                        sh './mvnw sonar:sonar -Dskip.jooq.generation -DskipTests'
+                        sh './mvnw --global-settings \$GLOBAL_MVN_SETTINGS sonar:sonar -Dskip.jooq.generation -DskipTests'
                     }
                 }
             }
@@ -142,7 +142,7 @@ pipeline {
                     def logFileName = env.BUILD_TAG + '-deploy.log'
                     try {
                         withMaven(globalMavenSettingsConfig: 'maven-config-ra-tech') {
-                            sh "./mvnw --log-file \"$logFileName\" deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
+                            sh "./mvnw --global-settings \$GLOBAL_MVN_SETTINGS --log-file \"$logFileName\" deploy -Drevision=$PROJECT_VERSION-$DEPLOY_GIT_SCOPE-SNAPSHOT -DskipTests -Dskip.jooq.generation"
                         }
                     } finally {
                         archiveArtifacts(logFileName)
