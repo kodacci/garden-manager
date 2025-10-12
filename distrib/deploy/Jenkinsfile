@@ -166,6 +166,7 @@ pipeline {
                         sh "jinja2 distrib/templates/istio/egressgw-service-account.yaml $varsPath > distrib/egressgw-service-account.yaml"
                         sh "jinja2 distrib/templates/istio/egressgw-role.yaml $varsPath > distrib/egressgw-role.yaml"
                         sh "jinja2 distrib/templates/istio/egressgw-role-binding.yaml $varsPath > distrib/egressgw-role-binding.yaml"
+                        sh "jinja2 distrib/templates/configmaps/egress-vault-agent.yaml $varsPath > distrib/egress-vault-agent.yaml"
 
                         // main app
                         sh "jinja2 -D image_tag=$coreImageTag distrib/templates/deployment.yaml $varsPath > distrib/deployment.yaml"
