@@ -40,11 +40,11 @@ spec:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution: null
           requiredDuringSchedulingIgnoredDuringExecution: null
-      securityContext:
-        fsGroup: 1337
-        runAsGroup: 1337
-        runAsNonRoot: true
-        runAsUser: 1337
+#      securityContext:
+#        fsGroup: 1337
+#        runAsGroup: 1337
+#        runAsNonRoot: true
+#        runAsUser: 1337
       serviceAccountName: garden-manager-egressgw-service-account
       volumes:
         - emptyDir: {}
