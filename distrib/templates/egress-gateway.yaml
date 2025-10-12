@@ -17,12 +17,10 @@ spec:
       hosts:
         - {{ db.host }}
     - port:
-        number: 443
-        name: https
-        protocol: HTTPS
+        number: 80
+        name: http
+        protocol: HTTP
       hosts:
         - {{ solr.host }}
         - {{ vault.host }}
         - {{ elasticsearch.host }}
-      tls:
-        mode: PASSTHROUGH

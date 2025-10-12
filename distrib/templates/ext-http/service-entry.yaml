@@ -13,9 +13,6 @@ spec:
   hosts:
     - {{ host }}
   ports:
-    - number: 80
-      name: http
-      protocol: HTTP
     - number: 443
       name: https
       protocol: HTTPS
