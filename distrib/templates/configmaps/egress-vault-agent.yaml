@@ -28,7 +28,7 @@ data:
           remove_secret_id_file_after_reading = false
         }
       }
-      
+    
       sink "file" {
         config {
           path = "/vault/token/.token"
@@ -37,7 +37,7 @@ data:
     }
     
     listener "tcp" {
-      address = "0.0.0.0:8200
+      address = "0.0.0.0:8200"
       tls_disable = true
       role = "metrics_only"
     }
