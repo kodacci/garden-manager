@@ -204,6 +204,7 @@ pipeline {
                         println "Applying istio egress gateway manifests"
                         sh 'kubectl apply ' +
                                 '-f distrib/network-policy-egress.yaml ' +
+                                '-f distrib/egress-vault-agent.yaml ' +
                                 '-f distrib/egressgw-service.yaml ' +
                                 '-f distrib/egressgw-service-account.yaml ' +
                                 '-f distrib/egressgw-role.yaml ' +
