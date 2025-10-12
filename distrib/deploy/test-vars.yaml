@@ -20,10 +20,10 @@ egress:
 
 core:
   requests:
-    cpu: 300
+    cpu: 300m
     memory: 1Gi
   limits:
-    cpu: 400
+    cpu: 400m
     memory: 1Gi
   readinessProbe:
     initialDelaySeconds: 180
