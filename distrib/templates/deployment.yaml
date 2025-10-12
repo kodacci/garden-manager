@@ -26,10 +26,10 @@ spec:
         app.kubernetes.io/component: core
         app.kubernetes.io/part-of: garden-manager
         app.network.policy: restricted
-        sidecar.istio.io/proxyCPU: '100m'
-        sidecar.istio.io/proxyCPULimit: '100m'
-        sidecar.istio.io/proxyMemory: '128Mi'
-        sidecar.istio.io/proxyMemoryLimit: '128Mi'
+        sidecar.istio.io/proxyCPU: {{ core.istio.requests.cpu }}
+        sidecar.istio.io/proxyCPULimit: {{ core.istio.limits.cpu }}
+        sidecar.istio.io/proxyMemory: {{ core.istio.requests.memory }}
+        sidecar.istio.io/proxyMemoryLimit: {{ core.istio.limits.memory }}
     spec:
       volumes:
         - name: logs-volume
@@ -99,33 +99,33 @@ spec:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: 180
-            periodSeconds: 5
-            failureThreshold: 30
+            initialDelaySeconds: {{ core.readinessProbe.initialDelaySecond }}
+            periodSeconds: {{ core.readinessProbe.periodSeconds }}
+            failureThreshold: {{ core.readinessProbe.failureThreshold }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 180
-            periodSeconds: 10
-            failureThreshold: 15
+            initialDelaySeconds: {{ core.livenessProbe.initialDelaySecond }}
+            periodSeconds: {{ core.livenessProbe.periodSeconds }}
+            failureThreshold: {{ core.livenessProbe.failureThreshold }}
           resources:
             requests:
-              cpu: 300m
-              memory: 700Mi
+              cpu: {{ core.requests.cpu }}
+              memory: {{ core.request.memory }}
             limits:
-              cpu: 300m
-              memory: 700Mi
+              cpu: {{ core.limits.cpu }}
+              memory: {{ core.requests.memory }}
 
         - name: fluentbit
           image: fluent/fluent-bit:3.1.4
           resources:
             requests:
-              cpu: 50m
-              memory: 100Mi
+              cpu: {{ core.fluentbit.requests.cpu }}
+              memory: {{ core.fluentbit.requests.memory }}
             limits:
-              cpu: 50m
-              memory: 100Mi
+              cpu: {{ core.fluentbit.limits.cpu }}
+              memory: {{ core.fluentbit.limits.memory }}
           env:
             - name: POD_NAME
               valueFrom:
@@ -155,14 +155,14 @@ spec:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 40
+            initialDelaySeconds: 120
             periodSeconds: 5
             failureThreshold: 15
           livenessProbe:
             httpGet:
               path: /api/v1/health
               port: 9090
-            initialDelaySeconds: 40
+            initialDelaySeconds: 120
             periodSeconds: 5
             failureThreshold: 15
 
@@ -174,7 +174,7 @@ spec:
             - -log-level=info
           env:
             - name: VAULT_ADDR
-              value: {{ vault_address }}
+              value: {{ vault.url }}
           volumeMounts:
             - mountPath: /vault/agent
               name: vault-agent-config
@@ -187,11 +187,11 @@ spec:
               readOnly: true
           resources:
             requests:
-              cpu: 50m
-              memory: 100Mi
+              cpu: {{ core.vault.requests.cpu }}
+              memory: {{ core.vault.requests.memory }}
             limits:
-              cpu: 50m
-              memory: 150Mi
+              cpu: {{ core.vault.requests.cpu }}
+              memory: {{ core.vault.limits.memory }}
 
       imagePullSecrets:
         - name: docker-registry-creds

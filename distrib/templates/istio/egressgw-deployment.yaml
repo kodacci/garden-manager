@@ -93,11 +93,11 @@ spec:
           image: docker.io/istio/proxyv2:1.18.2
           resources:
             limits:
-              cpu: 150m
-              memory: 128Mi
+              cpu: {{ egress.limits.cpu }}
+              memory: {{ egress.limits.memory }}
             requests:
-              cpu: 150m
-              memory: 128Mi
+              cpu: {{ egress.requests.cpu }}
+              memory: {{ egress.requests.memory }}
           ports:
             - containerPort: {{ egress_tcp_port }}
               protocol: TCP
@@ -215,3 +215,41 @@ spec:
             - name: egressgateway-ca-certs
               mountPath: /etc/istio/egressgateway-ca-certs
               readOnly: true
+            - name: ra-tech-certs
+              mountPath: /tls
+              readOnly: true
+
+        - name: vault-agent
+          image: hashicorp/vault:1.18
+          args:
+            - agent
+            - -config=/vault/agent/vault-agent-config.hcl
+            - -log-level=info
+          securityContext:
+            capabilities:
+              add:
+                - CAP_SETFCAP
+          env:
+            - name: VAULT_ADDR
+              value: {{ vault.tls_url }}
+          volumeMounts:
+            - mountPath: /vault/agent
+              name: vault-agent-config
+              readOnly: true
+            - mountPath: /vault/token
+              name: vault-token
+            - mountPath: /vault/role
+              name: vault-role
+              readOnly: true
+            - name: ra-tech-certs
+              mountPath: /vault/secrets/certs
+            - name: ra-tech-ca
+              mountPath: /tls
+              readOnly: true
+          resources:
+            requests:
+              cpu: {{ egress.vault.requests.cpu }}
+              memory: {{ egress.vault.requests.memory }}
+            limits:
+              cpu: {{ egress.vault.limits.cpu }}
+              memory: {{ egress.vault.limits.memory }}

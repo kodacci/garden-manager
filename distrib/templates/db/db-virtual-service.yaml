@@ -10,7 +10,7 @@ spec:
   exportTo:
     - "."
   hosts:
-    - {{ db_host }}
+    - {{ db.host }}
   gateways:
     - mesh
     - {{ namespace }}/garden-manager-egress-gateway
@@ -18,7 +18,7 @@ spec:
     - match:
       - gateways:
           - mesh
-        port: {{ db_port }}
+        port: {{ db.port }}
         destinationSubnets:
           - {{ db_address }}/32
       route:
@@ -34,7 +34,7 @@ spec:
         port: {{ egress_tcp_port }}
       route:
         - destination:
-            host: {{ db_host }}
+            host: {{ db.host }}
             port:
-              number: {{ db_port }}
+              number: {{ db.port }}
           weight: 100

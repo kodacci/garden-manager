@@ -11,7 +11,7 @@ data:
   vault-agent-config.hcl: |
     exit_after_auth = false
     vault {
-      address = "{{ vault_addr }}"
+      address = "{{ vault.url }}"
     }
     
     pid_file = "/vault/pidfile"
@@ -47,7 +47,7 @@ data:
       destination = "/vault/secrets/application/.env"
       error_on_missing_key = true
       contents = <<EOT
-    [[- with secret "ra-tech-kv/data/{{namespace}}/environment" ]]
+    [[- with secret "ra-tech-kv/data/{{ namespace }}/environment" ]]
     [[- range $key, $value := .Data.data ]]
     [[ $key ]]="[[ $value ]]"
     [[- end ]]
