@@ -112,7 +112,7 @@ spec:
           resources:
             requests:
               cpu: {{ core.requests.cpu }}
-              memory: {{ core.request.memory }}
+              memory: {{ core.requests.memory }}
             limits:
               cpu: {{ core.limits.cpu }}
               memory: {{ core.requests.memory }}
