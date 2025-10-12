@@ -5,6 +5,8 @@ def APP_DB_HOST
 def APP_DB_PORT
 def REGISTRY_HOST
 def JINJA2_VARS_FILE_PATH
+def ESCAPED_JOB_NAME
+def MARKDOWN_ESCAPE_CHARS = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'] as Set
 
 def generateExtHttp(name, host, extHttpsPort, varsPath, useMtls) {
     sh "jinja2 -D name=$name -D host=$host -Dext_https_port=$extHttpsPort distrib/templates/ext-http/service-entry.yaml $varsPath > distrib/${name}-service-entry.yaml"
@@ -36,8 +38,21 @@ static def removeProtocol(url) {
     return url.substring('https://'.length())
 }
 
+def escapeMd(input, escapeChars) {
+    def builder = new StringBuilder()
+
+    input.each { ch ->
+        if (escapeChars.contains(ch)) {
+            builder.append('\\')
+        }
+        builder.append(ch)
+    }
+
+    return builder.toString()
+}
+
 pipeline {
-    agent { label 'jenkins-agent1' }
+    agent { label 'linux' }
 
     parameters {
         string(name: 'core_app_image', description: 'Core image tag to use in deploy')
@@ -48,6 +63,9 @@ pipeline {
         stage('Determine git scope') {
             steps {
                 script {
+                    ESCAPED_JOB_NAME = escapeMd(JOB_NAME, MARKDOWN_ESCAPE_CHARS)
+                    raTechNotify(message: "🚀 Job *${ESCAPED_JOB_NAME}* started 🚀", markdown: true)
+
                     DEPLOY_GIT_SCOPE = BRANCH_NAME.tokenize('/').last().toLowerCase()
                     println "Git branch scope: '${DEPLOY_GIT_SCOPE}'"
                 }
@@ -227,6 +245,23 @@ pipeline {
                         sh "kubectl wait --for=condition=ready --timeout=10m -n $namespace pods -l app=garden-manager-core"
                     }
                 }
+            }
+        }
+    }
+    post {
+        success {
+            script{
+                raTechNotify(message: "✅ Job *${ESCAPED_JOB_NAME}* completed successfully ✅", markdown: true)
+            }
+        }
+        failure {
+            script {
+                raTechNotify(message: "❌ Job *${ESCAPED_JOB_NAME}* failed ❌", markdown: true)
+            }
+        }
+        aborted {
+            script {
+                raTechNotify(message: "✋ Job *${ESCAPED_JOB_NAME}* aborted ✋", markdown: true)
             }
         }
     }
