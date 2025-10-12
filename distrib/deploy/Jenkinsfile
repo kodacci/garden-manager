@@ -157,7 +157,7 @@ pipeline {
                     def dbMigrateImageTag = params.core_db_migrate_image ? params.core_db_migrate_image : generateImageTag('core-db-migrate')
 
                     withPythonEnv('Python-3') {
-                        sh 'pip install -U jinja2-cli'
+                        sh 'pip install -U jinja2-cli pyyaml'
 
                         // Istio egress gateway
                         sh "jinja2 distrib/templates/istio/egressgw-deployment.yaml $varsPath > distrib/egressgw-deployment.yaml"
