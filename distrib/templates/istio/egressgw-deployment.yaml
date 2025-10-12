@@ -88,6 +88,32 @@ spec:
           secret:
             optional: true
             secretName: istio-egressgateway-ca-certs
+
+        #         RA-TECH CERTS
+        - name: ra-tech-ca
+          configMap:
+            name: ra-tech-ca
+            items:
+              - key: ca.pem
+                path: ca.pem
+        - name: ra-tech-certs
+          emptyDir:
+            sizeLimit: 1Mi
+
+        #        VAULT
+        - name: vault-agent-config
+          configMap:
+            name: egress-vault-agent
+            items:
+              - key: vault-agent-config.hcl
+                path: vault-agent-config.hcl
+        - name: vault-token
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: vault-role
+          secret:
+            secretName: vault-role
+
       containers:
         - name: istio-proxy
           image: docker.io/istio/proxyv2:1.18.2
