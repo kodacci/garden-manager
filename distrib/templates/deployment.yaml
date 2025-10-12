@@ -99,14 +99,14 @@ spec:
             httpGet:
                 path: /actuator/health/readiness
                 port: 8081
-            initialDelaySeconds: {{ core.readinessProbe.initialDelaySecond }}
+            initialDelaySeconds: {{ core.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ core.readinessProbe.periodSeconds }}
             failureThreshold: {{ core.readinessProbe.failureThreshold }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: {{ core.livenessProbe.initialDelaySecond }}
+            initialDelaySeconds: {{ core.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ core.livenessProbe.periodSeconds }}
             failureThreshold: {{ core.livenessProbe.failureThreshold }}
           resources:
