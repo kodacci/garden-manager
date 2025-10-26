@@ -12,5 +12,6 @@ spec:
     - name: solr
     - name: vault
     - name: garden-manager-database
+    - name: elasticsearch
   exportTo:
     - "."

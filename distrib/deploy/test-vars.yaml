@@ -1,0 +1,100 @@
+host: api.garden-manager.test.cloud.ra-tech.pro
+namespace: garden-manager-test
+registry: snapshots.docker-registry.ra-tech.pro
+egress_tcp_port: 9999
+
+egress:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  vault:
+    requests:
+      cpu: 150m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 128Mi
+
+core:
+  requests:
+    cpu: 300m
+    memory: 1Gi
+  limits:
+    cpu: 400m
+    memory: 1Gi
+  readinessProbe:
+    initialDelaySeconds: 180
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    initialDelaySeconds: 250
+    periodSeconds: 10
+    failureThreshold: 5
+
+  istio:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 50m
+      memory: 128Mi
+
+  fluentbit:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  vault:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+db_migrate:
+  requests:
+    cpu: 500m
+    memory: 400Mi
+  limits:
+    cpu: 500m
+    memory: 400Mi
+
+  istio:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 50m
+      memory: 128Mi
+
+  vault:
+    requests:
+      cpu: 150m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 128Mi
+
+db:
+  host: garden-manager.db.ra-tech.pro
+  port: 4444
+
+vault:
+  url: http://vault.ra-tech.pro
+  tls_url: https://vault.ra-tech.pro
+  host: vault.ra-tech.pro
+
+elasticsearch:
+  host: elasticsearch.ra-tech.pro
+  index: garden-manager-test-logs
+
+solr:
+  host: solr.ra-tech.pro
+  collection: garden-manager-test

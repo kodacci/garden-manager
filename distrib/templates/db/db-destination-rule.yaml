@@ -7,6 +7,6 @@ metadata:
     app.kubernetes.io/part-of: garden-manager
     app.kubernetes.io/component: core
 spec:
-  host: {{ db_host }}
+  host: {{ db.host }}
   exportTo:
     - "."

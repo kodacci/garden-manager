@@ -10,5 +10,5 @@ spec:
   ports:
     - name: tcp
       protocol: TCP
-      port: {{ db_port }}
-      targetPort: {{ db_port }}
+      port: {{ db.port }}
+      targetPort: {{ db.port }}
