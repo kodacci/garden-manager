@@ -27,3 +27,4 @@ application-local.yaml
 .DS_Store
 logs/*
 core/logs/*
+.vscode/*
