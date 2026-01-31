@@ -1,9 +1,9 @@
 package ru.ra_tech.garden_manager.core.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwe;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +11,13 @@ import lombok.val;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 import ru.ra_tech.garden_manager.failure.JwtFailure;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
 
 @RequiredArgsConstructor
 public class JwtProvider {
-    private static final Key SECRET = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final SecretKey SECRET = Jwts.SIG.HS256.key().build();
 
     private final Duration validRefreshDuration;
     private final Duration validAccessDuration;
@@ -26,18 +26,18 @@ public class JwtProvider {
 
     private Either<AppFailure, String> createToken(JwtPrincipal principal, String tokenId, TokenType type, Duration expDuration) {
         return Try.of(() -> {
-            val claims = Jwts.claims().setSubject(principal.login()).setId(tokenId);
-            claims.put("role", "GARDEN_USER");
-            claims.put("type", type.toString());
-            claims.put("login", principal.login());
-            claims.put("name", principal.name());
-            claims.put("id", principal.id());
-
             val now = new Date();
+
             return Jwts.builder()
-                    .setClaims(claims)
-                    .setIssuedAt(now)
-                    .setExpiration(Date.from(now.toInstant().plus(expDuration)))
+                    .subject(principal.login())
+                    .id(tokenId)
+                    .issuedAt(now)
+                    .expiration(Date.from(now.toInstant().plus(expDuration)))
+                    .claim("role", "GARDEN_USER")
+                    .claim("type", type.toString())
+                    .claim("login", principal.login())
+                    .claim("name", principal.name())
+                    .claim("id", principal.id())
                     .signWith(SECRET)
                     .compact();
 
@@ -61,11 +61,11 @@ public class JwtProvider {
 
     public Either<AppFailure, Claims> getClaims(String token) {
         return Try.of(() ->
-                Jwts.parserBuilder()
-                        .setSigningKey(SECRET)
+                Jwts.parser()
+                        .verifyWith(SECRET)
                         .build()
-                        .parseClaimsJws(token)
-                        .getBody()
+                        .parseSignedClaims(token)
+                        .getPayload()
         )
                 .toEither()
                 .mapLeft(this::toFailure);

@@ -5,9 +5,10 @@ import lombok.val;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
 @Getter
+@AutoConfigureTestRestTemplate
 @SpringBootTest(
         classes = {
                 MainApplication.class,

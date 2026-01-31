@@ -61,17 +61,16 @@ public class WebSecurityConfiguration {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtFilter(
-            AuthenticationManager authManager,
-            ObjectMapper mapper
+            AuthenticationManager authManager
     ) {
-        return new JwtAuthenticationProcessingFilter(authManager, mapper);
+        return new JwtAuthenticationProcessingFilter(authManager, new ObjectMapper());
     }
 
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             JwtAuthenticationProcessingFilter jwtFilter
-    ) throws Exception {
+    ) {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
