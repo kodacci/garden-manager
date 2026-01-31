@@ -35,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 
 @Getter
+@AutoConfigureTestRestTemplate
 @SpringBootTest(
         classes = {
                 MainApplication.class,
@@ -45,7 +46,6 @@ import static ru.ra_tech.garden_manager.database.schema.tables.Users.USERS;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @Testcontainers
-@AutoConfigureTestRestTemplate
 class AbstractApiIT {
     @Autowired
     private TestRestTemplate restTemplate;
