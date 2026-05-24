@@ -178,7 +178,49 @@ Coverage reports are aggregated in the `code-coverage` module.
 
 ### CI/CD
 
-The project includes a `Jenkinsfile` for continuous integration setup.
+The project includes a comprehensive `Jenkinsfile` for continuous integration and deployment:
+
+#### Automated Build Pipeline
+- **Automated Testing**: All tests (unit and integration) run automatically on each build
+- **Code Coverage Thresholds**: Build fails if coverage drops below configured thresholds
+- **Quality Gates**: Integrated SonarQube analysis for code quality checks
+- **Dependency Scanning**: Automated vulnerability checks for dependencies
+- **Multi-stage Build**: Optimized Docker image creation with layer caching
+
+#### Deployment
+
+**Kubernetes Deployment**
+The application is designed for cloud-native deployment on Kubernetes:
+
+```yaml
+# Deployment features
+- Pod autoscaling based on CPU/memory metrics
+- Rolling updates with zero downtime
+- Health checks (liveness and readiness probes)
+- Resource limits and requests
+- ConfigMaps for external configuration
+- Secrets management for sensitive data
+```
+
+**Service Mesh Integration**
+- Compatible with Istio/Linkerd for advanced traffic management
+- mTLS between services
+- Circuit breakers and retry policies
+- Distributed tracing support
+- Traffic splitting for canary deployments
+
+**Secrets Management**
+- Kubernetes Secrets for database credentials
+- JWT signing keys stored securely
+- Support for external secret managers (HashiCorp Vault, AWS Secrets Manager)
+- Automatic secret rotation capabilities
+
+**Observability**
+- **Logs Aggregation**: Structured JSON logging ready for ELK/EFK stack
+- **Metrics**: Prometheus-compatible metrics endpoints
+- **Distributed Tracing**: OpenTelemetry/Jaeger integration
+- **Monitoring Dashboards**: Pre-configured Grafana dashboards
+- **Alerting**: Alert rules for critical events and performance degradation
 
 ## Security
 
