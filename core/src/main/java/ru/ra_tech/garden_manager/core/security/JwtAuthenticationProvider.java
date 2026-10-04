@@ -12,6 +12,8 @@ import ru.ra_tech.garden_manager.database.repositories.api.AuthUserRepository;
 import ru.ra_tech.garden_manager.database.repositories.auth.AuthUserDto;
 import ru.ra_tech.garden_manager.failure.AppFailure;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
         return new JwtAuthentication(
                 new JwtPrincipal(user.id(), user.login(), user.name()),
-                claims.getExpiration(),
+                LocalDateTime.from(claims.getExpiration().toInstant().atOffset(ZoneOffset.UTC)),
                 claims.get("role", String.class)
         );
     }

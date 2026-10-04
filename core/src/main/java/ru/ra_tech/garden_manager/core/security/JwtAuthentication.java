@@ -6,19 +6,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.Date;
 
 public class JwtAuthentication implements Authentication {
     @Serial
     private static final long serialVersionUID = 2024_01_06_22_00_00L;
 
     private final JwtPrincipal principal;
-    private final Date expiration;
+    private final LocalDateTime expiration;
     private boolean isAuthenticated;
     private final List<GrantedAuthority> authorities;
 
-    public JwtAuthentication(JwtPrincipal principal, Date expiration, String role) {
+    public JwtAuthentication(JwtPrincipal principal, LocalDateTime expiration, String role) {
         this.principal = principal;
         this.expiration = expiration;
         isAuthenticated = true;
@@ -47,7 +48,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return isAuthenticated && expiration.after(new Date());
+        return isAuthenticated && expiration.isAfter(LocalDateTime.now(ZoneOffset.UTC));
     }
 
     @Override

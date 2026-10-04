@@ -4,8 +4,9 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.OffsetDateTime;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,7 +17,7 @@ class JwtAuthenticationTest {
 
     private JwtAuthentication getAuthentication() {
         val principal = mock(JwtPrincipal.class);
-        val expire = new Date(OffsetDateTime.now().plusHours(1).toEpochSecond() * 1000);
+        val expire = LocalDateTime.now().plusHours(1);
 
         return new JwtAuthentication(principal, expire, TEST_ROLE);
     }
@@ -54,7 +55,7 @@ class JwtAuthenticationTest {
     @DisplayName("Should return unauthenticated after expiration date")
     void shouldReturnUnauthAfterExp() {
         val principal = mock(JwtPrincipal.class);
-        val expire = new Date(OffsetDateTime.now().minusMinutes(1).toEpochSecond() * 1000);
+        val expire = LocalDateTime.now(ZoneOffset.UTC).minusMinutes(1);
         val auth = new JwtAuthentication(principal, expire, TEST_ROLE);
 
         assertThat(auth.isAuthenticated()).isFalse();
