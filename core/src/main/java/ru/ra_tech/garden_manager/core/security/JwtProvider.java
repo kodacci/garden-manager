@@ -1,8 +1,6 @@
 package ru.ra_tech.garden_manager.core.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwe;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -13,6 +11,8 @@ import ru.ra_tech.garden_manager.failure.JwtFailure;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -26,13 +26,13 @@ public class JwtProvider {
 
     private Either<AppFailure, String> createToken(JwtPrincipal principal, String tokenId, TokenType type, Duration expDuration) {
         return Try.of(() -> {
-            val now = new Date();
+            val now = ZonedDateTime.now(ZoneOffset.UTC);
 
             return Jwts.builder()
                     .subject(principal.login())
                     .id(tokenId)
-                    .issuedAt(now)
-                    .expiration(Date.from(now.toInstant().plus(expDuration)))
+                    .issuedAt(Date.from(now.toInstant()))
+                    .expiration(Date.from(now.plus(expDuration).toInstant()))
                     .claim("role", "GARDEN_USER")
                     .claim("type", type.toString())
                     .claim("login", principal.login())

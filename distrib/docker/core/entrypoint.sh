@@ -10,4 +10,4 @@ done
 
 echo "Environment file found, starting main app ..."
 
-env -S "$(cat $ENV_PATH)" java -jar /home/garden-manager/garden-manager-core.jar
+env -S "$(cat $ENV_PATH)" java -jar /home/garden-manager/garden-manager-core.jar --enable-native-access=ALL-UNNAMED
